@@ -20,7 +20,7 @@ class template1Markup {
 
 		// Check if WooCommerce is active
 		if (!class_exists('WooCommerce')) {
-			echo '<div class="shopglut-error">' . esc_html__('WooCommerce is required for this cart layout.', 'shopglut') . '</div>';
+			echo '<div class="shopglut-error">' . esc_html__('WooCommerce is required for this module.', 'shopglut') . '</div>';
 			return;
 		}
 
