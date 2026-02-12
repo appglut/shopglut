@@ -123,7 +123,7 @@ class template1Markup {
 				return $default;
 			};
 
-			$text_color = $get_value($prefix . 'text_color', '#ffffff');
+			$text_color = $get_value($prefix . 'text_color', '#ffff');
 			$bg_color = $get_value($prefix . 'bg_color', '#ff0000');
 			$font_size = intval($get_value($prefix . 'font_size', 12));
 			$font_weight = $get_value($prefix . 'font_weight', '700');
