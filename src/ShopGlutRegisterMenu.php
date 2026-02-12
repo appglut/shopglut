@@ -990,6 +990,9 @@ class ShopGlutRegisterMenu {
 		?>
 		<div class="wrap shopglut-wishlist-integration">
 			<style>
+                .shopglut-wishlist-integration{
+                    margin:5px 2px 0px 0px;
+                }
 				.shopglut-wishlist-integration .shopglut-wishlist-header {
 					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 					color: #ffffff;
@@ -1471,7 +1474,36 @@ class ShopGlutRegisterMenu {
     	if ( $plugin_exists && ! $is_active ) :
     		// Plugin installed but not active
     		?>
-    		<div class="wrap">
+    		<div class="wrap shopglut-checkout-integration">
+    			<style>
+                    .shopglut-checkout-integration{
+                        margin:5px 5px 0px 0px;
+                    }
+    				.shopglut-checkout-integration .shopglut-checkout-header {
+    					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    					color: #ffffff;
+    					padding: 40px;
+    					text-align: center;
+    					border-radius: 8px;
+    					margin: 38px 0 30px 0;
+    				}
+    				.shopglut-checkout-integration .shopglut-checkout-header h1 {
+    					color: #ffffff;
+    					margin: 0 0 10px 0;
+    					font-size: 32px;
+    				}
+    				.shopglut-checkout-integration .shopglut-checkout-header p {
+    					color: rgba(255,255,255,0.9);
+    					margin: 0;
+    					font-size: 16px;
+    				}
+    			</style>
+
+    			<div class="shopglut-checkout-header">
+    				<h1>🛒 <?php esc_html_e( 'ShopGlut Checkout Editor Integration', 'shopglut' ); ?></h1>
+    				<p><?php esc_html_e( 'Powerful WooCommerce checkout field editor with drag & drop support', 'shopglut' ); ?></p>
+    			</div>
+
     			<div style="max-width: 700px; margin: 40px auto;">
     				<div class="shopglut-checkoutglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
     					<div style="font-size: 64px; margin-bottom: 20px;">
@@ -1498,7 +1530,33 @@ class ShopGlutRegisterMenu {
     	<?php elseif ( ! $plugin_exists && ! $is_active ) : ?>
     		// Plugin not installed
     		?>
-    		<div class="wrap">
+    		<div class="wrap shopglut-checkout-integration">
+    			<style>
+    				.shopglut-checkout-integration .shopglut-checkout-header {
+    					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    					color: #ffffff;
+    					padding: 40px;
+    					text-align: center;
+    					border-radius: 8px;
+    					margin: 30px 0 30px 0;
+    				}
+    				.shopglut-checkout-integration .shopglut-checkout-header h1 {
+    					color: #ffffff;
+    					margin: 0 0 10px 0;
+    					font-size: 32px;
+    				}
+    				.shopglut-checkout-integration .shopglut-checkout-header p {
+    					color: rgba(255,255,255,0.9);
+    					margin: 0;
+    					font-size: 16px;
+    				}
+    			</style>
+
+    			<div class="shopglut-checkout-header">
+    				<h1>🛒 <?php esc_html_e( 'ShopGlut Checkout Editor Integration', 'shopglut' ); ?></h1>
+    				<p><?php esc_html_e( 'Powerful WooCommerce checkout field editor with drag & drop support', 'shopglut' ); ?></p>
+    			</div>
+
     			<div style="max-width: 700px; margin: 40px auto;">
     				<div class="shopglut-checkoutglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
     					<div style="font-size: 64px; margin-bottom: 20px;">

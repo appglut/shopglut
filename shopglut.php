@@ -24,7 +24,7 @@ define( 'SHOPGLUT_DIRNAME', dirname( plugin_basename( __FILE__ ) ) );
 define( 'SHOPGLUT_SLUG', dirname( plugin_basename( __FILE__ ) ) );
 
 // Pro upgrade URLs
-define( 'SHOPGLUT_PRICING_URL', 'https://appglut.com' );
+define( 'SHOPGLUT_PRICING_URL', 'https://www.appglut.com' );
 define( 'SHOPGLUT_PRO_URL', 'https://appglut.com' );
 define( 'SHOPGLUT_UPGRADE_URL', 'https://appglut.com' );
 
