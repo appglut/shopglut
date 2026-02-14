@@ -661,7 +661,7 @@ if (!$layout_data) {
 $layout_template = $layout_data->layout_template;
 
 // Load template class - use absolute path
-$ordercompletepage_dir = \'/media/books-audio/wordpress-sites/shopglutpro/wp-content/plugins/shopglut/src/layouts/orderCompletePage\';
+$ordercompletepage_dir = SHOPGLUT_PATH . \'src/layouts/orderCompletePage\';
 $markup_file = $ordercompletepage_dir . \'/templates/\' . $layout_template . \'/\' . $layout_template . \'Markup.php\';
 $style_file = $ordercompletepage_dir . \'/templates/\' . $layout_template . \'/\' . $layout_template . \'Style.php\';
 

@@ -4,6 +4,11 @@ body.shopglut-admin {
   overflow-x: hidden;
 }
 
+#adminmenu .wp-not-current-submenu.toplevel_page_shopglut_layouts li>a{
+  padding-right: 14px;
+
+}
+
 .shopg_layout_modal {
   display: none;
   /* Hidden by default */

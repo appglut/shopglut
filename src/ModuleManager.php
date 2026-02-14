@@ -202,7 +202,14 @@ class ModuleManager {
                 'table_method' => null,
                 'icon' => 'fa-solid fa-user'
             ],
-            
+            'checkout_field_editor' => [
+                'name' => __('Checkout Field Editor', 'shopglut'),
+                'description' => __('Customize Checkout Fields', 'shopglut'),
+                'type' => 'layout',
+                'table_method' => 'create_checkout_fields',
+                'icon' => 'fa-solid fa-credit-card'
+            ],
+
             // Business Solution Modules
             'pdf_invoices' => [
                 'name' => __('Invoices & Packing Slips', 'shopglut'),
@@ -222,12 +229,26 @@ class ModuleManager {
     }
     
     private function initialize_default_states() {
-        // Set all modules as disabled by default if no explicit setting exists
+        // Core modules that should be enabled by default (always initialized in ShopGlutBase)
+        $core_modules = [
+            'single_product',
+            'cart_page',
+            'orderComplete_page',
+            'product_badges',
+            'product_comparison',
+            'product_swatches',
+            'acf_fields',
+            'shop_layouts'
+        ];
+
+        // Set default states for all modules
         foreach (array_keys($this->modules) as $module_key) {
             $option_name = 'shopglut_module_' . $module_key . '_enabled';
             // Only set if the option doesn't exist in the database
             if (get_option($option_name) === false) {
-                add_option($option_name, false);  // Default to disabled
+                // Core modules are enabled by default, others are disabled
+                $default_enabled = in_array($module_key, $core_modules, true);
+                add_option($option_name, $default_enabled);
             }
         }
     }
@@ -374,6 +395,7 @@ class ModuleManager {
             'woo_templates',
             'mini_cart',
             'login_register',
+            'checkout_field_editor',
             'sliders',
             'tabs',
             'accordions',

@@ -421,6 +421,12 @@ class template1Markup {
 		// Get the placeholder image URL
 		$placeholder_url = SHOPGLUT_URL . 'global-assets/images/wc-placeholder.png';
 
+		// Debug: Print settings directly to page
+		echo '<div style="background: #f0f0f; color: #fff; padding: 10px; margin: 10px 0;">';
+		echo '<strong>DEMO SETTINGS DEBUG:</strong><br>';
+		echo '<pre>' . esc_html(print_r($settings, true)) . '</pre>';
+		echo '</div>';
+
 		?>
 		<div class="cart-content">
 			<div class="cart-table-container">
@@ -640,6 +646,11 @@ class template1Markup {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_cartpage_layouts';
 
+		// Debug: Output what we're retrieving
+		echo '<div style="background: #000; color: #0f0; padding: 10px; margin: 10px 0;">';
+		echo '<strong style="color: #0f0;">GETLAYOUTSETTINGS DEBUG:</strong> Layout ID = ' . esc_html($layout_id) . '<br>';
+		echo '</div>';
+
 		// Use caching for better performance
 		$cache_key = "shopglut_cartpage_settings_{$layout_id}";
 		$layout_data = wp_cache_get( $cache_key, 'shopglut_cartpage' );
@@ -657,8 +668,38 @@ class template1Markup {
 
 		if ($layout_data && !empty($layout_data->layout_settings)) {
 			$settings = maybe_unserialize($layout_data->layout_settings);
-			if (isset($settings['shopg_cartpage_settings_template1']['cart-page-settings'])) {
-				return $this->flattenSettings($settings['shopg_cartpage_settings_template1']['cart-page-settings']);
+
+			// Debug: Output raw data from database
+			echo '<div style="background: #000; color: #0f0; padding: 10px; margin: 10px 0;">';
+			echo '<strong style="color: #0f0;">RAW DB DATA DEBUG:</strong><br>';
+			echo '<pre style="color: #fff; font-size: 12px;">' . esc_html(print_r($settings, true)) . '</pre>';
+			echo '</div>';
+
+			// Handle different data structures for compatibility
+			if (isset($settings['shopg_cartpage_settings_template1'])) {
+				$template_data = $settings['shopg_cartpage_settings_template1'];
+
+				// Debug: Output template data structure
+				echo '<div style="background: #222; color: #fff; padding: 10px; margin: 10px 0;">';
+				echo '<strong>TEMPLATE DATA DEBUG:</strong><br>';
+				echo '<pre style="color: #0f0;">' . esc_html(print_r($template_data, true)) . '</pre>';
+				echo '</div>';
+
+				// Check if cart-page-settings is nested inside (tabbed field structure)
+				if (isset($template_data['cart-page-settings'])) {
+					$flattened = $this->flattenSettings($template_data['cart-page-settings']);
+
+					// Debug: Output flattened settings
+					echo '<div style="background: #d4edda; color: #fff; padding: 10px; margin: 10px 0;">';
+					echo '<strong style="color: #059669;">FLATTENED SETTINGS DEBUG:</strong><br>';
+					echo '<pre style="color: #fff;">' . esc_html(print_r($flattened, true)) . '</pre>';
+					echo '</div>';
+
+					return $flattened;
+				}
+
+				// Otherwise, data is already flat or in a different structure
+				return $this->flattenSettings($template_data);
 			}
 		}
 

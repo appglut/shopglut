@@ -941,6 +941,11 @@ class BadgeDataManage {
 
         $badge_types = $this->get_nested_value($badge_settings, 'badge_type', array());
 
+        // Ensure badge_types is an array
+        if (!is_array($badge_types)) {
+            $badge_types = is_string($badge_types) && !empty($badge_types) ? array($badge_types) : array();
+        }
+
         if (empty($badge_types)) {
             return '<div class="shopglut-preview-error">No badge types enabled. Please select at least one badge type.</div>';
         }
@@ -1120,6 +1125,11 @@ class BadgeDataManage {
         foreach ($badges as $badge) {
             $badge_settings = maybe_unserialize($badge->layout_settings);
             $badge_types = $this->get_nested_value($badge_settings, 'badge_type', array());
+
+            // Ensure badge_types is an array before foreach
+            if (!is_array($badge_types)) {
+                continue;
+            }
 
             foreach ($badge_types as $badge_type) {
                 if ($this->should_display_badge_type($badge_settings, $badge_type, $product_id)) {

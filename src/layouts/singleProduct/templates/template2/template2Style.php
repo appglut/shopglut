@@ -2317,82 +2317,104 @@ class template2Style {
             }
         }
 
-        // Product Title
-        $css .= '.shopglut-single-product-container .product-title {';
-        $css .= 'color: ' . $this->getSetting($settings, 'product_title_color', '#111827') . ' !important;';
-        $css .= 'font-size: ' . $this->getSetting($settings, 'product_title_font_size', 32) . 'px !important;';
-        $css .= 'font-weight: ' . $this->getSetting($settings, 'product_title_font_weight', '700') . ' !important;';
-        $css .= 'margin-bottom: 16px !important;';
-        $css .= 'line-height: 1.2 !important;';
-        $css .= '}';
-
-        // Rating Section
-        if ($this->getSetting($settings, 'show_rating', true)) {
-            $css .= '.shopglut-single-product-container .stars-container .star.filled {';
-            $css .= 'color: ' . $this->getSetting($settings, 'star_color', '#fbbf24') . ';';
-            $css .= '}';
-            $css .= '.shopglut-single-product-container .rating-text {';
-            $css .= 'color: ' . $this->getSetting($settings, 'rating_text_color', '#6b7280') . ';';
-            $css .= 'font-size: ' . $this->getSetting($settings, 'rating_font_size', 14) . 'px;';
+        // Product Title - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        $product_info_selectors = array('.single-product-template2', '.shopglut-single-product-container');
+        foreach ($product_info_selectors as $selector) {
+            $css .= $selector . ' .product-title {';
+            $css .= 'color: ' . $this->getSetting($settings, 'product_title_color', '#111827') . ' !important;';
+            $css .= 'font-size: ' . $this->getSetting($settings, 'product_title_font_size', 32) . 'px !important;';
+            $css .= 'font-weight: ' . $this->getSetting($settings, 'product_title_font_weight', '700') . ' !important;';
+            $css .= 'margin-bottom: 16px !important;';
+            $css .= 'line-height: 1.2 !important;';
             $css .= '}';
         }
 
-        // Price Section
-        $css .= '.shopglut-single-product-container .price-section {';
-        $css .= 'display: flex !important;';
-        $css .= 'align-items: center !important;';
-        $css .= 'gap: 12px !important;';
-        $css .= 'margin-bottom: 24px !important;';
-        $css .= 'flex-wrap: wrap !important;';
-        $css .= '}';
+        // Rating Section - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        $product_info_selectors = array('.single-product-template2', '.shopglut-single-product-container');
+        if ($this->getSetting($settings, 'show_rating', true)) {
+            foreach ($product_info_selectors as $selector) {
+                $css .= $selector . ' .rating-stars {';
+                $css .= 'color: ' . $this->getSetting($settings, 'star_color', '#fbbf24') . ' !important;';
+                $css .= '}';
+                $css .= $selector . ' .stars-container .star.filled {';
+                $css .= 'color: ' . $this->getSetting($settings, 'star_color', '#fbbf24') . ';';
+                $css .= '}';
+                $css .= $selector . ' .rating-text, ' . $selector . ' .reviews-count {';
+                $css .= 'color: ' . $this->getSetting($settings, 'rating_text_color', '#6b7280') . ' !important;';
+                $css .= 'font-size: ' . $this->getSetting($settings, 'rating_font_size', 14) . 'px !important;';
+                $css .= '}';
+            }
+        }
 
-
-        $css .= '.shopglut-single-product-container .original-price {';
-        $css .= 'color: ' . $this->getSetting($settings, 'original_price_color', '#9ca3af') . ' !important;';
-        $css .= 'font-size: 1.2rem !important;';
-        $css .= 'text-decoration: line-through !important;';
-        $css .= '}';
-
-        $css .= '.shopglut-single-product-container .discount-badge {';
-        $css .= 'background-color: ' . $this->getSetting($settings, 'discount_badge_color', '#ef4444') . ' !important;';
-        $css .= 'color: ' . $this->getSetting($settings, 'discount_badge_text_color', '#ffffff') . ' !important;';
-        $css .= 'padding: 4px 8px !important;';
-        $css .= 'border-radius: 12px !important;';
-        $css .= 'font-size: 12px !important;';
-        $css .= 'font-weight: 600 !important;';
-        $css .= '}';
-
-        // Description
-        if ($this->getSetting($settings, 'show_description', true)) {
-            $css .= '.shopglut-single-product-container .product-description {';
-            $css .= 'color: ' . $this->getSetting($settings, 'description_color', '#6b7280') . ' !important;';
-            $css .= 'font-size: ' . $this->getSetting($settings, 'description_font_size', 16) . 'px !important;';
-            $css .= 'line-height: ' . $this->getSetting($settings, 'description_line_height', 1.6) . ' !important;';
+        // Price Section - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        $product_info_selectors = array('.single-product-template2', '.shopglut-single-product-container');
+        foreach ($product_info_selectors as $selector) {
+            $css .= $selector . ' .price-section {';
+            $css .= 'display: flex !important;';
+            $css .= 'align-items: center !important;';
+            $css .= 'gap: 12px !important;';
             $css .= 'margin-bottom: 24px !important;';
+            $css .= 'flex-wrap: wrap !important;';
             $css .= '}';
+
+            $css .= $selector . ' .current-price {';
+            $css .= 'color: ' . $this->getSetting($settings, 'current_price_color', '#111827') . ' !important;';
+            $css .= 'font-size: ' . $this->getSetting($settings, 'current_price_font_size', 28) . 'px !important;';
+            $css .= 'font-weight: 700 !important;';
+            $css .= '}';
+
+            $css .= $selector . ' .original-price {';
+            $css .= 'color: ' . $this->getSetting($settings, 'original_price_color', '#9ca3af') . ' !important;';
+            $css .= 'font-size: 1.2rem !important;';
+            $css .= 'text-decoration: line-through !important;';
+            $css .= '}';
+
+            $css .= $selector . ' .discount-badge {';
+            $css .= 'background-color: ' . $this->getSetting($settings, 'discount_badge_color', '#ef4444') . ' !important;';
+            $css .= 'color: ' . $this->getSetting($settings, 'discount_badge_text_color', '#ffffff') . ' !important;';
+            $css .= 'padding: 4px 8px !important;';
+            $css .= 'border-radius: 12px !important;';
+            $css .= 'font-size: 12px !important;';
+            $css .= 'font-weight: 600 !important;';
+            $css .= '}';
+        }
+
+        // Description - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        if ($this->getSetting($settings, 'show_description', true)) {
+            foreach ($product_info_selectors as $selector) {
+                $css .= $selector . ' .product-description, ' . $selector . ' .short-description {';
+                $css .= 'color: ' . $this->getSetting($settings, 'description_color', '#6b7280') . ' !important;';
+                $css .= 'font-size: ' . $this->getSetting($settings, 'description_font_size', 16) . 'px !important;';
+                $css .= 'line-height: ' . $this->getSetting($settings, 'description_line_height', 1.6) . ' !important;';
+                $css .= 'margin-bottom: 24px !important;';
+                $css .= '}';
+            }
         }
 
         // ==================== PRODUCT INFO SETTINGS ====================
 
-        // Breadcrumb Settings
+        // Breadcrumb Settings - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        $product_info_selectors = array('.single-product-template2', '.shopglut-single-product-container');
         if ($this->getSetting($settings, 'show_breadcrumb', true)) {
-            $css .= '.shopglut-single-product-container .breadcrumb {';
-            $css .= 'font-size: ' . $this->getSetting($settings, 'breadcrumb_font_size', 14) . 'px !important;';
-            $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_text_color', '#6b7280') . ' !important;';
-            $css .= 'margin-bottom: ' . $this->getSetting($settings, 'breadcrumb_margin_bottom', 16) . 'px !important;';
-            $css .= '}';
+            foreach ($product_info_selectors as $selector) {
+                $css .= $selector . ' .breadcrumb {';
+                $css .= 'font-size: ' . $this->getSetting($settings, 'breadcrumb_font_size', 14) . 'px !important;';
+                $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_text_color', '#6b7280') . ' !important;';
+                $css .= 'margin-bottom: ' . $this->getSetting($settings, 'breadcrumb_margin_bottom', 16) . 'px !important;';
+                $css .= '}';
 
-            $css .= '.shopglut-single-product-container .breadcrumb a {';
-            $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_link_color', '#667eea') . ' !important;';
-            $css .= '}';
+                $css .= $selector . ' .breadcrumb a {';
+                $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_link_color', '#667eea') . ' !important;';
+                $css .= '}';
 
-            $css .= '.shopglut-single-product-container .breadcrumb a:hover {';
-            $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_link_hover_color', '#5a67d8') . ' !important;';
-            $css .= '}';
+                $css .= $selector . ' .breadcrumb a:hover {';
+                $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_link_hover_color', '#5a67d8') . ' !important;';
+                $css .= '}';
 
-            $css .= '.shopglut-single-product-container .breadcrumb .separator {';
-            $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_separator_color', '#9ca3af') . ' !important;';
-            $css .= '}';
+                $css .= $selector . ' .breadcrumb .separator {';
+                $css .= 'color: ' . $this->getSetting($settings, 'breadcrumb_separator_color', '#9ca3af') . ' !important;';
+                $css .= '}';
+            }
         }
 
         // Product Metadata Settings
@@ -2900,33 +2922,35 @@ class template2Style {
         $css .= '}';
         $css .= '}';
 
-        // Product Tabs Styling
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li a {';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_title_color', '#374151') . ';';
-        $css .= 'font-size: ' . $this->getSetting($settings, 'tab_title_font_size', 15) . 'px;';
-        $css .= 'font-weight: ' . $this->getSetting($settings, 'tab_title_font_weight', '500') . ';';
-        $css .= '}';
+        // Product Tabs Styling - Target both demo (.single-product-template2) and live (.shopglut-single-product-container)
+        foreach ($product_info_selectors as $selector) {
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li a {';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_title_color', '#374151') . ';';
+            $css .= 'font-size: ' . $this->getSetting($settings, 'tab_title_font_size', 15) . 'px;';
+            $css .= 'font-weight: ' . $this->getSetting($settings, 'tab_title_font_weight', '500') . ';';
+            $css .= '}';
 
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li a i {';
-        $css .= 'font-size: ' . $this->getSetting($settings, 'tab_icon_size', 16) . 'px;';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_color', '#6b7280') . ';';
-        $css .= '}';
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li a i {';
+            $css .= 'font-size: ' . $this->getSetting($settings, 'tab_icon_size', 16) . 'px;';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_color', '#6b7280') . ';';
+            $css .= '}';
 
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li a:hover {';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_title_hover_color', '#667eea') . ';';
-        $css .= '}';
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li a:hover {';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_title_hover_color', '#667eea') . ';';
+            $css .= '}';
 
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li a:hover i {';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_hover_color', '#667eea') . ';';
-        $css .= '}';
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li a:hover i {';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_hover_color', '#667eea') . ';';
+            $css .= '}';
 
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li.active a {';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_title_active_color', '#667eea') . ';';
-        $css .= '}';
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li.active a {';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_title_active_color', '#667eea') . ';';
+            $css .= '}';
 
-        $css .= '.shopglut-single-product-container .woocommerce-tabs .wc-tabs li.active a i {';
-        $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_active_color', '#667eea') . ';';
-        $css .= '}';
+            $css .= $selector . ' .woocommerce-tabs .wc-tabs li.active a i {';
+            $css .= 'color: ' . $this->getSetting($settings, 'tab_icon_active_color', '#667eea') . ';';
+            $css .= '}';
+        }
 
         // Product Swatches Styles for Template2
         // Dropdown width fix

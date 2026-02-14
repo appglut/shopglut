@@ -126,7 +126,8 @@ class dataManage {
         }
 
         // Clear cache for this layout so preview can fetch updated settings
-        wp_cache_delete( 'shopglut_cartpage_layout_data_' . $layout_id, 'shopglut_cartpage' );
+        wp_cache_delete( 'shopglut_cartpage_settings_' . $layout_id, 'shopglut_cartpage' );
+        // Also clear layout data cache key used in preview function
         wp_cache_delete( 'shopglut_layout_' . $layout_id, 'shopglut_layouts' );
         // Clear all shopglut cartpage cache
         wp_cache_flush_group( 'shopglut_cartpage' );

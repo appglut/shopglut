@@ -78,11 +78,6 @@ AGSHOPGLUT::createSection(
                                         'default' => '1',
                                     ),
 
-                                         array(
-                                        'id' => 'show_table_nheader',
-                                        'type' => 'ntext',
-                                        'title' => __('NText Header', 'shopglut'),
-                                    ),
 
                                     array(
                                         'id' => 'header_background_color',

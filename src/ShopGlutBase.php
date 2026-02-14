@@ -84,6 +84,7 @@ class ShopGlutBase {
 
 		// Initialize core components
 		ShopGlutDatabase::ShopGlut_initialize();
+		ShopGlutDatabase::force_create_core_tables(); // Ensure core tables exist even if modules are disabled
 		ShopGlutRegisterScripts::get_instance();
 		ShopGlutRegisterMenu::get_instance();
 		DataManage::get_instance();

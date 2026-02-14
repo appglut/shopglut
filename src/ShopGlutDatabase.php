@@ -810,8 +810,10 @@ class ShopGlutDatabase {
 			// Table exists and we didn't just add the column - check if we need to insert defaults
 			$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
 			if ( $count == 0 ) {
-				// Table is empty, insert default templates
-				\Shopglut\tools\wooTemplates\WooTemplatesEntity::insert_default_templates();
+				// Table is empty, insert default templates if class exists
+				if ( class_exists( '\Shortcodeglut\wooTemplates\WooTemplatesEntity' ) ) {
+					\Shortcodeglut\wooTemplates\WooTemplatesEntity::insert_default_templates();
+				}
 			}
 			return;
 		}
@@ -836,8 +838,10 @@ class ShopGlutDatabase {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dbDelta for table creation, safe SQL with placeholders
 		dbDelta( $sql );
 
-		// Insert default templates after table creation
-		\Shopglut\tools\wooTemplates\WooTemplatesEntity::insert_default_templates();
+		// Insert default templates after table creation if class exists
+		if ( class_exists( '\Shortcodeglut\wooTemplates\WooTemplatesEntity' ) ) {
+			\Shortcodeglut\wooTemplates\WooTemplatesEntity::insert_default_templates();
+		}
 	}
 
 	public static function create_product_custom_field_settings() {
@@ -1338,6 +1342,30 @@ class ShopGlutDatabase {
 		return $wpdb->prefix . 'shopglut_checkout_fields';
 	}
 
+	public static function create_checkout_fields() {
+		global $wpdb;
+
+		$table_name = self::table_checkout_fields();
+		if ( self::table_exists( $table_name ) ) {
+			return;
+		}
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table_name} (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			field_name varchar(255) NOT NULL,
+			field_settings longtext,
+			created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			PRIMARY KEY (id)
+		) {$charset_collate};";
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- dbDelta for table creation, safe SQL with placeholders
+		dbDelta( $sql );
+	}
+
 
 	public static function create_showcase_filters1() {
 		global $wpdb;
@@ -1470,42 +1498,50 @@ class ShopGlutDatabase {
 		if ( self::$initialized ) {
 			return;
 		}
-		
+
+		// Get list of intentionally deleted tables (do not recreate these)
+		$deleted_tables = get_option( 'shopglut_intentionally_deleted_tables', array() );
+
 		// Get ModuleManager instance to check which modules are enabled
 		$module_manager = \Shopglut\ModuleManager::get_instance();
-		
-		// Always create core tables
-		self::create_user_actions();
-		
-		// Only create tables for enabled modules
-		if ($module_manager->is_module_enabled('shop_layouts')) {
+
+		// Always create core tables (unless intentionally deleted)
+		if ( ! in_array( 'user_actions', $deleted_tables, true ) ) {
+			self::create_user_actions();
+		}
+
+		// Only create tables for enabled modules (unless intentionally deleted)
+		if ($module_manager->is_module_enabled('shop_layouts') && ! in_array( 'shop_layouts', $deleted_tables, true )) {
 			self::create_shop_layouts();
 		}
-		if ($module_manager->is_module_enabled('archive_layouts')) {
+		if ($module_manager->is_module_enabled('archive_layouts') && ! in_array( 'archive_layouts', $deleted_tables, true )) {
 			self::create_archive_layouts();
 		}
-		if ($module_manager->is_module_enabled('single_product')) {
+		if ($module_manager->is_module_enabled('single_product') && ! in_array( 'single_product', $deleted_tables, true )) {
 			self::create_single_layouts();
 		}
-		if ($module_manager->is_module_enabled('cart_page')) {
+		if ($module_manager->is_module_enabled('cart_page') && ! in_array( 'cart_page', $deleted_tables, true )) {
 			self::create_cartpage_layouts();
 		}
-		if ($module_manager->is_module_enabled('orderComplete_page')) {
+		if ($module_manager->is_module_enabled('orderComplete_page') && ! in_array( 'order_complete', $deleted_tables, true )) {
 			self::create_ordercomplete_layouts();
 		}
-		if ($module_manager->is_module_enabled('account_page')) {
+		if ($module_manager->is_module_enabled('account_page') && ! in_array( 'account_page', $deleted_tables, true )) {
 			self::create_accountpage_layouts();
 		}
-		if ($module_manager->is_module_enabled('shop_filters')) {
+		if ($module_manager->is_module_enabled('checkout_field_editor') && ! in_array( 'checkout_field_editor', $deleted_tables, true )) {
+			self::create_checkout_fields();
+		}
+		if ($module_manager->is_module_enabled('shop_filters') && ! in_array( 'shop_filters', $deleted_tables, true )) {
 			self::create_showcase_filters();
 		}
-		if ($module_manager->is_module_enabled('wishlist')) {
+		if ($module_manager->is_module_enabled('wishlist') && ! in_array( 'wishlist', $deleted_tables, true )) {
 			self::create_wishlist_table();
 		}
-		if ($module_manager->is_module_enabled('shortcode_showcase')) {
+		if ($module_manager->is_module_enabled('shortcode_showcase') && ! in_array( 'shortcodes', $deleted_tables, true )) {
 			self::create_shortcodes_showcase();
 		}
-		if ($module_manager->is_module_enabled('product_badges')) {
+		if ($module_manager->is_module_enabled('product_badges') && ! in_array( 'product_badges', $deleted_tables, true )) {
 			self::create_product_badges();
 		}
 		if ($module_manager->is_module_enabled('shop_banner')) {
@@ -1526,8 +1562,10 @@ class ShopGlutDatabase {
 			self::create_gallery_layouts();
 		}
 
-		// Always create mega menu table for showcases
-		self::create_mega_menu_showcase();
+		// Always create mega menu table for showcases (unless intentionally deleted)
+		if ( ! in_array( 'mega_menu', $deleted_tables, true ) ) {
+			self::create_mega_menu_showcase();
+		}
 		if ($module_manager->is_module_enabled('quick_views')) {
 			self::create_showcase_quickview();
 			self::create_product_quickview();
@@ -1703,6 +1741,9 @@ class ShopGlutDatabase {
 		$errors = array();
 		$not_found = array();
 
+		// Get current list of intentionally deleted tables
+		$deleted_tables_list = get_option( 'shopglut_intentionally_deleted_tables', array() );
+
 		foreach ( $selected_tables as $table_key ) {
 			if ( ! isset( $all_tables[ $table_key ] ) ) {
 				$errors[] = "Invalid table key: {$table_key}";
@@ -1716,7 +1757,6 @@ class ShopGlutDatabase {
 
 			if ( ! $table_exists ) {
 				$not_found[] = $table_name;
-				continue;
 			}
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- DROP TABLE requires direct query
@@ -1730,8 +1770,16 @@ class ShopGlutDatabase {
 					'table' => $table_name,
 					'name' => $all_tables[ $table_key ]['name']
 				);
+
+				// Mark this table as intentionally deleted (prevent recreation)
+				if ( ! in_array( $table_key, $deleted_tables_list, true ) ) {
+					$deleted_tables_list[] = $table_key;
+				}
 			}
 		}
+
+		// Update the intentionally deleted tables list
+		update_option( 'shopglut_intentionally_deleted_tables', $deleted_tables_list );
 
 		return array(
 			'deleted' => $deleted,
@@ -1765,6 +1813,9 @@ class ShopGlutDatabase {
 			}
 		}
 
+		// Clear the intentionally deleted tables list (allow tables to be recreated)
+		delete_option( 'shopglut_intentionally_deleted_tables' );
+
 		// Clear the initialization flag
 		self::$initialized = false;
 
@@ -1776,6 +1827,39 @@ class ShopGlutDatabase {
 				$reset_count
 			)
 		);
+	}
+
+	/**
+	 * Force create core tables - used for existing installations where tables are missing
+	 * This bypasses module enabled status to ensure essential tables exist
+	 */
+	public static function force_create_core_tables() {
+		$created_tables = array();
+
+		// Core layout tables that are always needed
+		$core_tables = array(
+			'create_single_layouts',
+			'create_cartpage_layouts',
+			'create_ordercomplete_layouts',
+			'create_product_badges',
+			'create_product_swatches',
+			'create_product_comparisons',
+			'create_product_custom_field_settings',
+		);
+
+		foreach ($core_tables as $method) {
+			if (method_exists(__CLASS__, $method)) {
+				try {
+					call_user_func(array(__CLASS__, $method));
+					$created_tables[] = $method;
+				} catch (Exception $e) {
+					// Log error but continue with other tables
+					error_log('ShopGlut: Error creating table via ' . $method . ': ' . $e->getMessage());
+				}
+			}
+		}
+
+		return $created_tables;
 	}
 }
 
@@ -2081,3 +2165,4 @@ function shopglut_render_reset_modules_button() {
 	</script>
 	<?php
 }
+

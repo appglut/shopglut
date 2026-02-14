@@ -2596,12 +2596,12 @@ class AllEnhancements {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
-		// $active_menu = $this->activeMenuTab();
-		// $this->settingsPageHeader( $active_menu );
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
 
 		//if($this->not_implemented):
 		//	$this->renderNotImplementedMessage();
-		// else: 
+		// else:
 		// Check if product_comparison module is enabled
 		$module_manager = \Shopglut\ModuleManager::get_instance();
 		if ( ! $module_manager->is_module_enabled( 'product_comparison' ) ) {
@@ -2631,8 +2631,6 @@ class AllEnhancements {
 		}
 		$layouts_table = new ProductComparisonListTable();
 		$layouts_table->prepare_items();
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shopglut-admin-contents">
 			<h2><?php echo esc_html__( 'Product Comparison Layouts', 'shopglut' ); ?><a

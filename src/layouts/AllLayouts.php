@@ -1128,8 +1128,8 @@ class AllLayouts {
 							__( 'Security badges display', 'shopglut' )
 						]
 					],
-					'checkout_page' => [
-						'name' => __( 'Checkout Editor', 'shopglut' ),
+					'checkout_field_editor' => [
+						'name' => __( 'Checkout Field Editor', 'shopglut' ),
 						'description' => __( 'Customize checkout fields and layouts.', 'shopglut' ),
 						'icon' => 'fas fa-credit-card',
 						'url' => admin_url( 'admin.php?page=shopglut_layouts&view=checkout' ),

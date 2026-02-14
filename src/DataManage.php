@@ -150,6 +150,9 @@ class DataManage {
 		$not_found = array();
 		$modules_disabled = array();
 
+		// Get current list of intentionally deleted tables
+		$deleted_tables_list = get_option( 'shopglut_intentionally_deleted_tables', array() );
+
 		foreach ( $selected_tables as $table_key ) {
 			if ( ! isset( $all_tables[ $table_key ] ) ) {
 				$errors[] = "Invalid table key: {$table_key}";
@@ -164,7 +167,6 @@ class DataManage {
 
 			if ( ! $table_exists ) {
 				$not_found[] = $table_name;
-				continue;
 			}
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- DROP TABLE requires direct query
@@ -179,6 +181,11 @@ class DataManage {
 					'name' => $all_tables[ $table_key ]['name']
 				);
 
+				// Mark this table as intentionally deleted (prevent recreation)
+				if ( ! in_array( $table_key, $deleted_tables_list, true ) ) {
+					$deleted_tables_list[] = $table_key;
+				}
+
 				// Disable the corresponding module
 				$option_name = 'shopglut_module_' . $module_key . '_enabled';
 				if ( delete_option( $option_name ) ) {
@@ -186,6 +193,9 @@ class DataManage {
 				}
 			}
 		}
+
+		// Update the intentionally deleted tables list
+		update_option( 'shopglut_intentionally_deleted_tables', $deleted_tables_list );
 
 		return array(
 			'deleted' => $deleted,
@@ -222,6 +232,9 @@ class DataManage {
 				$reset_count++;
 			}
 		}
+
+		// Clear the intentionally deleted tables list (allow tables to be recreated)
+		delete_option( 'shopglut_intentionally_deleted_tables' );
 
 		// Truncate all ShopGlut tables (delete data but keep tables)
 		$all_tables = self::get_all_table_names();
