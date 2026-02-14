@@ -245,6 +245,10 @@ jQuery(document).ready(function($) {
                     if (response.data && response.data.reload) {
                         // Reload the page instantly
                         window.location.reload();
+                    } else if (response.data && response.data.html) {
+                        // Update preview with new HTML
+                        $('#shopg_cart_live_preview .inside').html(response.data.html);
+                        showNotification('Layout saved successfully!', 'success');
                     } else {
                         // Show success message - cart layout doesn't need reload
                         showNotification('Layout saved successfully!', 'success');
