@@ -75,23 +75,21 @@ AGSHOPGLUT::createSection(
                                         'id' => 'show_table_header',
                                         'type' => 'switcher',
                                         'title' => __('Show Table Header', 'shopglut'),
-                                        'default' => '1',
+                                        'default' => true,
                                     ),
-
-
                                     array(
                                         'id' => 'header_background_color',
                                         'type' => 'color',
                                         'title' => __('Header Background Color', 'shopglut'),
                                         'default' => '#f3f4f6',
-                                        'dependency' => array('show_table_header', '==', '1'),
+                                        'dependency' => array('show_table_header', '==', true),
                                     ),
                                     array(
                                         'id' => 'header_text_color',
                                         'type' => 'color',
                                         'title' => __('Header Text Color', 'shopglut'),
                                         'default' => '#374151',
-                                        'dependency' => array('show_table_header', '==', '1'),
+                                        'dependency' => array('show_table_header', '==', true),
                                     ),
                                     array(
                                         'id' => 'header_font_weight',
@@ -104,7 +102,7 @@ AGSHOPGLUT::createSection(
                                             '700' => __('Bold', 'shopglut'),
                                         ),
                                         'default' => '600',
-                                        'dependency' => array('show_table_header', '==', '1'),
+                                        'dependency' => array('show_table_header', '==', true),
                                     ),
                                     array(
                                         'id' => 'header_padding',
@@ -117,12 +115,10 @@ AGSHOPGLUT::createSection(
                                             'left' => '12',
                                             'unit' => 'px',
                                         ),
-                                        'dependency' => array('show_table_header', '==', '1'),
+                                        'dependency' => array('show_table_header', '==', true),
                                     ),
                                 ),
                             ),
-
-               
 
                             // Product Image Settings
                             array(

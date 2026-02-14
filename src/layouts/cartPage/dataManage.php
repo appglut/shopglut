@@ -72,13 +72,6 @@ class dataManage {
 
         $table_name = $wpdb->prefix . 'shopglut_cartpage_layouts';
 
-        // Ensure the table exists before trying to insert/update
-        $table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) === $table_name;
-        if ( ! $table_exists ) {
-            // Table doesn't exist, create it
-            \Shopglut\ShopGlutDatabase::create_cartpage_layouts();
-        }
-
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $existing_record = $wpdb->get_row(
             sprintf( "SELECT * FROM `%s` WHERE id = %d", esc_sql( $table_name ), $layout_id ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name and validated ID
@@ -126,8 +119,7 @@ class dataManage {
         }
 
         // Clear cache for this layout so preview can fetch updated settings
-        wp_cache_delete( 'shopglut_cartpage_settings_' . $layout_id, 'shopglut_cartpage' );
-        // Also clear layout data cache key used in preview function
+        wp_cache_delete( 'shopglut_cartpage_layout_data_' . $layout_id, 'shopglut_cartpage' );
         wp_cache_delete( 'shopglut_layout_' . $layout_id, 'shopglut_layouts' );
         // Clear all shopglut cartpage cache
         wp_cache_flush_group( 'shopglut_cartpage' );

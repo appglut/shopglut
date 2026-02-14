@@ -155,15 +155,14 @@ class template1Style {
 
         .shopglut-ordercomplete.template1 .item {
             padding: 15px;
-            border-bottom: 1px solid #f1f3f4;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: <?php echo esc_attr($settings['item_spacing']); ?>px;
+            margin-bottom: <?php echo esc_attr($settings['item_spacing']); ?>px;
         }
 
         .shopglut-ordercomplete.template1 .item:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .shopglut-ordercomplete.template1 .item-info {

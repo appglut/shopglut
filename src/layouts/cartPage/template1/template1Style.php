@@ -52,7 +52,7 @@ class template1Style {
             }
 
             .shopglut-cart.template1 .cart-content {
-                background: <?php echo esc_attr($settings['table_background_color'] ?? '#ffffff'); ?>;
+                background: <?php echo esc_attr($settings['table_background_color']); ?>;
                 box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
                 border-radius: 0 0 16px 16px;
             }
@@ -67,21 +67,21 @@ class template1Style {
                 width: 100%;
                 border-collapse: separate;
                 border-spacing: 0;
-                border-top-left-radius: 15px;
-                border-top-right-radius: 15px;
+                border-top-left-radius:15px;
+                border-top-right-radius:15px;
             }
 
-            <?php if ($settings['show_table_header'] ?? true): ?>
+            <?php if ($settings['show_table_header']): ?>
             .shopglut-cart.template1 .cart-table th {
-                background: <?php echo esc_attr($settings['header_background_color'] ?? '#f3f4f6'); ?>;
-                padding: <?php echo esc_attr($settings['header_padding']['top'] ?? '16') . ($settings['header_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['header_padding']['right'] ?? '12') . ($settings['header_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['header_padding']['bottom'] ?? '16') . ($settings['header_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['header_padding']['left'] ?? '12') . ($settings['header_padding']['unit'] ?? 'px'); ?>;
+                background: <?php echo esc_attr($settings['header_background_color']); ?>;
+                padding: <?php echo esc_attr($settings['header_padding']['top'] . $settings['header_padding']['unit']); ?> <?php echo esc_attr($settings['header_padding']['right'] . $settings['header_padding']['unit']); ?> <?php echo esc_attr($settings['header_padding']['bottom'] . $settings['header_padding']['unit']); ?> <?php echo esc_attr($settings['header_padding']['left'] . $settings['header_padding']['unit']); ?>;
                 text-align: left;
-                font-weight: <?php echo esc_attr($settings['header_font_weight'] ?? '600'); ?>;
-                color: <?php echo esc_attr($settings['header_text_color'] ?? '#374151'); ?>;
+                font-weight: <?php echo esc_attr($settings['header_font_weight']); ?>;
+                color: <?php echo esc_attr($settings['header_text_color']); ?>;
                 font-size: 0.875rem;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                border-bottom: <?php echo esc_attr($settings['table_border_width'] ?? '1') . 'px solid ' . ($settings['table_border_color'] ?? '#e5e7eb'); ?>;
+                border-bottom: <?php echo esc_attr($settings['table_border_width'] . 'px solid ' . $settings['table_border_color']); ?>;
                 white-space: nowrap;
             }
             <?php else: ?>
@@ -91,377 +91,865 @@ class template1Style {
             <?php endif; ?>
 
             .shopglut-cart.template1 .cart-table th:first-child {
-                border-top-left-radius: 12px;
+                border-radius: 12px 0 0 0;
             }
 
             .shopglut-cart.template1 .cart-table th:last-child {
-                border-top-right-radius: 12px;
+                border-radius: 0 12px 0 0;
             }
 
             .shopglut-cart.template1 .cart-table td {
-                padding: <?php echo esc_attr($settings['row_padding']['top'] ?? '16') . ($settings['row_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['row_padding']['right'] ?? '12') . ($settings['row_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['row_padding']['bottom'] ?? '16') . ($settings['row_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['row_padding']['left'] ?? '12') . ($settings['row_padding']['unit'] ?? 'px'); ?>;
-                border-bottom: <?php echo esc_attr($settings['table_border_width'] ?? '1') . 'px solid ' . ($settings['table_border_color'] ?? '#e5e7eb'); ?>;
+                padding: <?php echo esc_attr($settings['row_padding']['top'] . $settings['row_padding']['unit']); ?> <?php echo esc_attr($settings['row_padding']['right'] . $settings['row_padding']['unit']); ?> <?php echo esc_attr($settings['row_padding']['bottom'] . $settings['row_padding']['unit']); ?> <?php echo esc_attr($settings['row_padding']['left'] . $settings['row_padding']['unit']); ?>;
+                border-bottom: <?php echo esc_attr($settings['table_border_width'] . 'px solid ' . $settings['table_border_color']); ?>;
+                vertical-align: middle;
+                background: <?php echo esc_attr($settings['table_background_color']); ?>;
+                transition: all 0.2s ease;
             }
 
-            <?php if ($settings['row_hover_effect'] ?? true): ?>
-            .shopglut-cart.template1 .cart-table tbody tr:hover {
-                background: <?php echo esc_attr($settings['row_hover_color'] ?? '#f8fafc'); ?>;
+            <?php if ($settings['row_hover_effect']): ?>
+            .shopglut-cart.template1 .cart-table tbody tr:hover td {
+                background: <?php echo esc_attr($settings['row_hover_color']); ?>;
             }
             <?php endif; ?>
 
             .shopglut-cart.template1 .product-cell {
                 display: flex;
                 align-items: center;
-                gap: <?php echo esc_attr($settings['product_image_size']['width'] ?? '60') . 'px'; ?>;
+                gap: 20px;
+                min-width: 300px;
             }
 
             .shopglut-cart.template1 .product-image {
-                width: <?php echo esc_attr($settings['product_image_size']['width'] ?? '60') . 'px'; ?>;
-                height: <?php echo esc_attr($settings['product_image_size']['height'] ?? '60') . 'px'; ?>;
-                background: <?php echo esc_attr($settings['image_background_color'] ?? '#f9fafb'); ?>;
-                border-radius: <?php echo esc_attr($settings['image_border_radius'] ?? '8') . 'px'; ?>;
-                border: <?php echo esc_attr($settings['image_border_width'] ?? '1') . 'px solid ' . ($settings['image_border_color'] ?? '#e5e7eb'); ?>;
-                object-fit: cover;
-            }
-
-            .shopglut-cart.template1 .product-title {
-                color: <?php echo esc_attr($settings['product_title_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['product_title_font_size'] ?? '16') . 'px'; ?>;
-                font-weight: <?php echo esc_attr($settings['product_title_font_weight'] ?? '600'); ?>;
-                margin-bottom: 4px;
-            }
-
-            <?php if ($settings['show_product_link'] ?? true): ?>
-            .shopglut-cart.template1 .product-title a {
-                color: inherit;
-                text-decoration: none;
-            }
-            .shopglut-cart.template1 .product-title a:hover {
-                color: <?php echo esc_attr($settings['product_title_color'] ?? '#111827'); ?>;
-                text-decoration: underline;
-            }
-            <?php endif; ?>
-
-            .shopglut-cart.template1 .product-meta {
-                color: <?php echo esc_attr($settings['product_meta_color'] ?? '#6b7280'); ?>;
-                font-size: <?php echo esc_attr($settings['product_meta_font_size'] ?? '14') . 'px'; ?>;
-            }
-
-            .shopglut-cart.template1 .quantity-control {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .shopglut-cart.template1 .quantity-btn {
-                width: 32px;
-                height: 32px;
-                background: <?php echo esc_attr($settings['quantity_button_color'] ?? '#f3f4f6'); ?>;
-                color: <?php echo esc_attr($settings['quantity_button_text_color'] ?? '#374151'); ?>;
-                border: none;
-                border-radius: <?php echo esc_attr($settings['quantity_control_border_radius'] ?? '6') . 'px'; ?>;
-                cursor: pointer;
-                font-size: 18px;
+                width: <?php echo esc_attr($settings['product_image_size']['width'] . $settings['product_image_size']['unit']); ?>;
+                height: <?php echo esc_attr($settings['product_image_size']['height'] . $settings['product_image_size']['unit']); ?>;
+                background: <?php echo esc_attr($settings['image_background_color']); ?>;
+                border-radius: <?php echo esc_attr($settings['image_border_radius'] . 'px'); ?>;
+                border: <?php echo esc_attr($settings['image_border_width'] . 'px solid ' . $settings['image_border_color']); ?>;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: background 0.2s;
+                font-size: 2rem;
+                color: white;
+                flex-shrink: 0;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
             }
 
-            .shopglut-cart.template1 .quantity-btn:hover {
-                background: <?php echo esc_attr($settings['quantity_button_hover_color'] ?? '#e5e7eb'); ?>;
+            .shopglut-cart.template1 .product-details {
+                min-width: 0;
+                flex: 1;
             }
 
-            .shopglut-cart.template1 .quantity-input {
-                width: 50px;
-                height: 32px;
-                background: <?php echo esc_attr($settings['quantity_input_background'] ?? '#ffffff'); ?>;
-                border: 1px solid <?php echo esc_attr($settings['quantity_input_border'] ?? '#d1d5db'); ?>;
-                border-radius: <?php echo esc_attr($settings['quantity_control_border_radius'] ?? '6') . 'px'; ?>;
-                text-align: center;
-                font-size: 14px;
+            .shopglut-cart.template1 .product-name {
+                font-weight: <?php echo esc_attr($settings['product_title_font_weight']); ?>;
+                color: <?php echo esc_attr($settings['product_title_color']); ?>;
+                font-size: <?php echo esc_attr($settings['product_title_font_size'] . 'px'); ?>;
+                margin-bottom: 4px;
+                line-height: 1.4;
             }
+
+            <?php if ($settings['show_product_meta']): ?>
+            .shopglut-cart.template1 .product-meta {
+                color: <?php echo esc_attr($settings['product_meta_color']); ?>;
+                font-size: <?php echo esc_attr($settings['product_meta_font_size'] . 'px'); ?>;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            <?php else: ?>
+            .shopglut-cart.template1 .product-meta {
+                display: none;
+            }
+            <?php endif; ?>
+
+            <?php if ($settings['show_product_badges']): ?>
+            .shopglut-cart.template1 .product-badge {
+                background: <?php echo esc_attr($settings['badge_background_color']); ?>;
+                color: <?php echo esc_attr($settings['badge_text_color']); ?>;
+                padding: 2px 8px;
+                border-radius: 6px;
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+            <?php else: ?>
+            .shopglut-cart.template1 .product-badge {
+                display: none;
+            }
+            <?php endif; ?>
 
             .shopglut-cart.template1 .price-cell {
-                text-align: right;
+                font-weight: <?php echo esc_attr($settings['price_font_weight']); ?>;
+                color: <?php echo esc_attr($settings['price_color']); ?>;
+                font-size: <?php echo esc_attr($settings['price_font_size'] . 'px'); ?>;
+                white-space: nowrap;
             }
 
-            .shopglut-cart.template1 .price {
-                color: <?php echo esc_attr($settings['price_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['price_font_size'] ?? '16') . 'px'; ?>;
-                font-weight: <?php echo esc_attr($settings['price_font_weight'] ?? '600'); ?>;
-            }
-
-            <?php if ($settings['total_price_highlight'] ?? true): ?>
-            .shopglut-cart.template1 .total-price {
-                color: <?php echo esc_attr($settings['total_price_color'] ?? '#059669'); ?>;
+            <?php if ($settings['total_price_highlight']): ?>
+            .shopglut-cart.template1 .price-cell.item-total {
+                color: <?php echo esc_attr($settings['total_price_color']); ?>;
                 font-weight: 700;
             }
             <?php endif; ?>
 
-            .shopglut-cart.template1 .cart-footer {
+            .shopglut-cart.template1 .quantity-cell {
+                min-width: 120px;
+            }
+
+            .shopglut-cart.template1 .qty-control {
+                display: inline-flex;
+                border: 2px solid <?php echo esc_attr($settings['quantity_input_border']); ?>;
+                border-radius: <?php echo esc_attr($settings['quantity_control_border_radius'] . 'px'); ?>;
+                overflow: hidden;
+                background: <?php echo esc_attr($settings['quantity_input_background']); ?>;
+            }
+
+            .shopglut-cart.template1 .qty-control:focus-within {
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            .shopglut-cart.template1 .qty-btn {
+                width: 36px;
+                height: 36px;
+                border: none;
+                background: <?php echo esc_attr($settings['quantity_button_color']); ?>;
+                color: <?php echo esc_attr($settings['quantity_button_text_color']); ?>;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.15s ease;
                 display: flex;
-                justify-content: flex-end;
-                gap: 20px;
-                margin-top: 40px;
+                align-items: center;
+                justify-content: center;
             }
 
-            <?php if ($settings['show_summary_section'] ?? true): ?>
-            .shopglut-cart.template1 .cart-summary {
-                background: <?php echo esc_attr($settings['summary_background_color'] ?? '#f9fafb'); ?>;
-                border: 1px solid <?php echo esc_attr($settings['summary_border_color'] ?? '#e5e7eb'); ?>;
-                border-radius: <?php echo esc_attr($settings['summary_border_radius'] ?? '8') . 'px'; ?>;
-                padding: <?php echo esc_attr($settings['summary_padding']['top'] ?? '24') . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['right'] ?? '20') . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['bottom'] ?? '24') . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['left'] ?? '20') . ($settings['summary_padding']['unit'] ?? 'px'); ?>;
-                min-width: 320px;
+            .shopglut-cart.template1 .qty-btn:hover {
+                background: <?php echo esc_attr($settings['quantity_button_hover_color']); ?>;
+                color: <?php echo esc_attr($settings['quantity_button_text_color']); ?>;
             }
 
-            <?php if ($settings['show_summary_header'] ?? true): ?>
-            .shopglut-cart.template1 .summary-header {
+            .shopglut-cart.template1 .qty-input {
+                width: 50px;
+                height: 36px;
+                border: none;
+                text-align: center;
+                font-weight: 600;
+                color: <?php echo esc_attr($settings['quantity_button_text_color']); ?>;
+                background: <?php echo esc_attr($settings['quantity_input_background']); ?>;
+            }
+
+            .shopglut-cart.template1 .qty-input:focus {
+                outline: none;
+            }
+
+            .shopglut-cart.template1 .remove-btn {
+                background: none;
+                border: none;
+                color: #ef4444;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 6px;
+                transition: all 0.15s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .shopglut-cart.template1 .remove-btn:hover {
+                background: #fef2f2;
+                color: #dc2626;
+            }
+
+            .shopglut-cart.template1 .cart-footer {
+                padding: 40px;
+                padding-top: 20px;
+                border-top: 1px solid #e5e7eb;
+                background: #fafbfc;
+                border-radius: 0 0 16px 16px;
+            }
+
+            .shopglut-cart.template1 .footer-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                margin-bottom: 40px;
+            }
+
+            .shopglut-cart.template1 .footer-section {
+                background: white;
+                padding: 32px;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            /* Discount Section Layout */
+            <?php if ($settings['show_discount_section'] ?? true): ?>
+            .shopglut-cart.template1 .cart-footer .footer-section {
+                background: <?php echo esc_attr($settings['discount_section_background'] ?? '#ffffff'); ?>;
+                border: 1px solid <?php echo esc_attr($settings['discount_section_border'] ?? '#e5e7eb'); ?>;
+                padding: <?php echo esc_attr(($settings['discount_section_padding']['top'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['discount_section_padding']['right'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['discount_section_padding']['bottom'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['discount_section_padding']['left'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px')); ?>;
+                border-radius: 8px;
+            }
+            <?php endif; ?>
+
+            .shopglut-cart.template1 .section-title {
+                font-size: <?php echo esc_attr($settings['discount_title_font_size'] . 'px'); ?>;
+                font-weight: 600;
+                color: <?php echo esc_attr($settings['discount_title_color'] ?? '#1f2937'); ?>;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .shopglut-cart.template1 .section-title i {
+                color: <?php echo esc_attr($settings['discount_icon_color'] ?? '#3b82f6'); ?>;
+                font-size: 1.1rem;
+            }
+
+            /* Coupon Section */
+            .shopglut-cart.template1 .coupon-form {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .shopglut-cart.template1 .input-group {
+                display: flex;
+                border: <?php echo esc_attr($settings['coupon_input_border'] ?? '#d1d5db'); ?> solid <?php echo esc_attr($settings['coupon_input_border'] ? '2px' : '2px'); ?>;
+                border-radius: <?php echo esc_attr($settings['coupon_input_border_radius'] . 'px'); ?>px;
+                overflow: hidden;
+                transition: border-color 0.15s ease;
+            }
+
+            .shopglut-cart.template1 .input-group:focus-within {
+                border-color: #3b82f6;
+            }
+
+            .shopglut-cart.template1 .coupon-input {
+                flex: 1;
+                padding: <?php echo esc_attr(($settings['coupon_input_padding']['top'] ?? '12') . ($settings['coupon_input_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['coupon_input_padding']['right'] ?? '16') . ($settings['coupon_input_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['coupon_input_padding']['bottom'] ?? '12') . ($settings['coupon_input_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['coupon_input_padding']['left'] ?? '16') . ($settings['coupon_input_padding']['unit'] ?? 'px')); ?>;
+                border: none;
+                font-size: 0.95rem;
+                background: <?php echo esc_attr($settings['coupon_input_background'] ?? '#ffffff'); ?>;
+                color: <?php echo esc_attr($settings['coupon_input_text_color'] ?? '#374151'); ?>;
+            }
+
+            .shopglut-cart.template1 .coupon-input:focus {
+                outline: none;
+            }
+
+            .shopglut-cart.template1 .coupon-input::placeholder {
+                color: #9ca3af;
+            }
+
+            .shopglut-cart.template1 .apply-btn {
+                background: <?php echo esc_attr($settings['apply_button_background'] ?? '#3b82f6'); ?>;
+                color: <?php echo esc_attr($settings['apply_button_text_color'] ?? '#ffffff'); ?>;
+                border: none;
+                padding: <?php echo esc_attr(($settings['apply_button_padding']['top'] ?? '12') . ($settings['apply_button_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['apply_button_padding']['right'] ?? '20') . ($settings['apply_button_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['apply_button_padding']['bottom'] ?? '12') . ($settings['apply_button_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['apply_button_padding']['left'] ?? '20') . ($settings['apply_button_padding']['unit'] ?? 'px')); ?>;
+                border-radius: <?php echo esc_attr($settings['apply_button_border_radius'] . 'px'); ?>;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.15s ease;
+                font-size: 0.95rem;
+            }
+
+            .shopglut-cart.template1 .apply-btn:hover {
+                background: <?php echo esc_attr($settings['apply_button_hover_background'] ?? '#2563eb'); ?>;
+            }
+
+            <?php if ($settings['show_coupon_messages']): ?>
+            .shopglut-cart.template1 .coupon-message {
+                font-size: <?php echo esc_attr($settings['message_font_size'] . 'px'); ?>;
+                margin-top: 8px;
+            }
+
+            .shopglut-cart.template1 .coupon-message.success {
+                color: <?php echo esc_attr($settings['success_message_color']); ?>;
+            }
+
+            .shopglut-cart.template1 .coupon-message.error {
+                color: <?php echo esc_attr($settings['error_message_color']); ?>;
+            }
+            <?php else: ?>
+            .shopglut-cart.template1 .coupon-message {
+                display: none;
+            }
+            <?php endif; ?>
+
+            /* Shipping Section */
+            .shopglut-cart.template1 .shipping-toggle {
+                background: none;
+                border: none;
+                color: #3b82f6;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 0.95rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 0;
+                transition: color 0.15s ease;
+                width: 100%;
+                text-align: left;
+            }
+
+            .shopglut-cart.template1 .shipping-toggle:hover {
+                color: #2563eb;
+            }
+
+            .shopglut-cart.template1 .shipping-form {
+                display: none;
+                margin-top: 20px;
+                animation: slideDown 0.2s ease-out;
+            }
+
+            .shopglut-cart.template1 .shipping-form.active {
+                display: block;
+            }
+
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .shopglut-cart.template1 .form-row {
+                margin-bottom: 16px;
+            }
+
+            .shopglut-cart.template1 .form-label {
+                display: block;
+                margin-bottom: 6px;
+                font-weight: 500;
+                color: #374151;
+                font-size: 0.9rem;
+            }
+
+            .shopglut-cart.template1 .form-input {
+                width: 100%;
+                padding: 10px 12px;
+                border: 2px solid #e5e7eb;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                transition: border-color 0.15s ease;
+                background: white;
+            }
+
+            .shopglut-cart.template1 .form-input:focus {
+                border-color: #3b82f6;
+                outline: none;
+            }
+
+            .shopglut-cart.template1 .shipping-options {
+                margin-top: 20px;
+                display: none;
+            }
+
+            .shopglut-cart.template1 .shipping-options.show {
+                display: block;
+            }
+
+            .shopglut-cart.template1 .shipping-option {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px;
+                border: 2px solid #e5e7eb;
+                border-radius: 8px;
+                margin-bottom: 12px;
+                cursor: pointer;
+                transition: all 0.15s ease;
+                background: white;
+            }
+
+            .shopglut-cart.template1 .shipping-option:hover {
+                border-color: #3b82f6;
+                background: #f8faff;
+            }
+
+            .shopglut-cart.template1 .shipping-option.selected {
+                border-color: #3b82f6;
+                background: #eff6ff;
+            }
+
+            .shopglut-cart.template1 .shipping-info {
                 display: flex;
                 align-items: center;
                 gap: 12px;
-                margin-bottom: <?php echo esc_attr($settings['row_spacing'] ?? '12') . 'px'; ?>;
-                padding-bottom: <?php echo esc_attr($settings['row_spacing'] ?? '12') . 'px'; ?>;
-                border-bottom: <?php echo esc_attr($settings['total_row_separator'] ?? '1') . 'px solid ' . ($settings['total_separator_color'] ?? '#e5e7eb'); ?>;
+                flex: 1;
+            }
+
+            .shopglut-cart.template1 .shipping-radio {
+                margin: 0;
+            }
+
+            .shopglut-cart.template1 .shipping-details {
+                flex: 1;
+            }
+
+            .shopglut-cart.template1 .shipping-name {
+                font-weight: 600;
+                color: #1f2937;
+                font-size: 0.95rem;
+            }
+
+            .shopglut-cart.template1 .shipping-desc {
+                color: #6b7280;
+                font-size: 0.85rem;
+                margin-top: 2px;
+            }
+
+            .shopglut-cart.template1 .shipping-price {
+                font-weight: 700;
+                color: #059669;
+                font-size: 1rem;
+            }
+
+            /* Cart Summary */
+            <?php if ($settings['show_summary_section']): ?>
+            .shopglut-cart.template1 .cart-summary {
+                background: <?php echo esc_attr($settings['summary_background_color']); ?>;
+                border: 2px solid <?php echo esc_attr($settings['summary_border_color']); ?>;
+                border-radius: <?php echo esc_attr($settings['summary_border_radius'] . 'px'); ?>;
+                overflow: hidden;
+            }
+
+            <?php if ($settings['show_summary_header']): ?>
+            .shopglut-cart.template1 .summary-header {
+                background: <?php echo esc_attr($settings['summary_background_color']); ?>;
+                padding: <?php echo esc_attr($settings['summary_padding']['top'] . $settings['summary_padding']['unit']); ?> <?php echo esc_attr($settings['summary_padding']['right'] . $settings['summary_padding']['unit']); ?>;
+                border-bottom: 1px solid <?php echo esc_attr($settings['summary_border_color']); ?>;
             }
 
             .shopglut-cart.template1 .summary-title {
-                color: <?php echo esc_attr($settings['summary_title_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['summary_title_font_size'] ?? '20') . 'px'; ?>;
+                font-size: <?php echo esc_attr($settings['summary_title_font_size'] . 'px'); ?>;
                 font-weight: 600;
-                flex-grow: 1;
+                color: <?php echo esc_attr($settings['summary_title_color']); ?>;
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
 
-            <?php if ($settings['show_summary_icon'] ?? true): ?>
-            .shopglut-cart.template1 .summary-icon {
-                color: <?php echo esc_attr($settings['summary_icon_color'] ?? '#3b82f6'); ?>;
-                font-size: 24px;
+            .shopglut-cart.template1 .summary-title i {
+                color: <?php echo esc_attr($settings['summary_icon_color']); ?>;
+            }
+            <?php else: ?>
+            .shopglut-cart.template1 .summary-header {
+                display: none;
             }
             <?php endif; ?>
+            <?php else: ?>
+            .shopglut-cart.template1 .cart-summary {
+                display: none;
+            }
             <?php endif; ?>
-            <?php endif; ?>
+
+            .shopglut-cart.template1 .summary-content {
+                padding: <?php echo esc_attr($settings['summary_padding']['top'] . $settings['summary_padding']['unit']); ?> <?php echo esc_attr($settings['summary_padding']['right'] . $settings['summary_padding']['unit']); ?> <?php echo esc_attr($settings['summary_padding']['bottom'] . $settings['summary_padding']['unit']); ?> <?php echo esc_attr($settings['summary_padding']['left'] . $settings['summary_padding']['unit']); ?>;
+            }
 
             .shopglut-cart.template1 .summary-row {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: <?php echo esc_attr($settings['row_spacing'] ?? '12') . 'px'; ?> 0;
+                padding: <?php echo esc_attr($settings['row_spacing'] . 'px'); ?> 0;
+                border-bottom: 1px solid #f3f4f6;
+                font-size: <?php echo esc_attr($settings['row_font_size'] . 'px'); ?>;
             }
 
-            .shopglut-cart.template1 .summary-label {
-                color: <?php echo esc_attr($settings['row_label_color'] ?? '#6b7280'); ?>;
-                font-size: <?php echo esc_attr($settings['row_font_size'] ?? '14') . 'px'; ?>;
+            .shopglut-cart.template1 .summary-row:last-of-type {
+                <?php if ($settings['total_row_separator']): ?>
+                border-bottom: 2px solid <?php echo esc_attr($settings['total_separator_color']); ?>;
+                <?php else: ?>
+                border-bottom: none;
+                <?php endif; ?>
+                font-weight: <?php echo esc_attr($settings['total_font_weight']); ?>;
+                font-size: <?php echo esc_attr($settings['total_font_size'] . 'px'); ?>;
+                color: <?php echo esc_attr($settings['total_label_color']); ?>;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
             }
 
-            .shopglut-cart.template1 .summary-value {
-                color: <?php echo esc_attr($settings['row_value_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['row_font_size'] ?? '14') . 'px'; ?>;
-                font-weight: 500;
+            .shopglut-cart.template1 .summary-row .label {
+                color: <?php echo esc_attr($settings['row_label_color']); ?>;
             }
 
-            .shopglut-cart.template1 .summary-total {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-top: <?php echo esc_attr($settings['row_spacing'] ?? '12') . 'px'; ?>;
-                margin-top: <?php echo esc_attr($settings['row_spacing'] ?? '12') . 'px'; ?>;
-                border-top: <?php echo esc_attr($settings['total_row_separator'] ?? '1') . 'px solid ' . ($settings['total_separator_color'] ?? '#e5e7eb'); ?>;
+            .shopglut-cart.template1 .summary-row .value {
+                font-weight: 600;
+                color: <?php echo esc_attr($settings['row_value_color']); ?>;
             }
 
-            .shopglut-cart.template1 .total-label {
-                color: <?php echo esc_attr($settings['total_label_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['total_font_size'] ?? '18') . 'px'; ?>;
-                font-weight: <?php echo esc_attr($settings['total_font_weight'] ?? '700'); ?>;
+            .shopglut-cart.template1 .summary-row:last-of-type .value {
+                color: <?php echo esc_attr($settings['total_value_color']); ?>;
             }
 
-            .shopglut-cart.template1 .total-value {
-                color: <?php echo esc_attr($settings['total_value_color'] ?? '#059669'); ?>;
-                font-size: <?php echo esc_attr($settings['total_font_size'] ?? '18') . 'px'; ?>;
-                font-weight: <?php echo esc_attr($settings['total_font_weight'] ?? '700'); ?>;
+            .shopglut-cart.template1 .summary-row .discount {
+                color: #059669;
             }
 
-            .shopglut-cart.template1 .checkout-button {
+            .shopglut-cart.template1 .checkout-btn {
                 width: 100%;
-                background: <?php echo esc_attr($settings['checkout_button_background'] ?? '#059669'); ?>;
-                color: <?php echo esc_attr($settings['checkout_button_text_color'] ?? '#ffffff'); ?>;
-                padding: <?php echo esc_attr($settings['checkout_button_padding']['top'] ?? '16') . ($settings['checkout_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['checkout_button_padding']['right'] ?? '24') . ($settings['checkout_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['checkout_button_padding']['bottom'] ?? '16') . ($settings['checkout_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['checkout_button_padding']['left'] ?? '24') . ($settings['checkout_button_padding']['unit'] ?? 'px'); ?>;
+                background: <?php echo esc_attr($settings['checkout_button_background']); ?>;
+                color: <?php echo esc_attr($settings['checkout_button_text_color']); ?>;
                 border: none;
-                border-radius: <?php echo esc_attr($settings['checkout_button_border_radius'] ?? '8') . 'px'; ?>;
-                font-size: <?php echo esc_attr($settings['checkout_button_font_size'] ?? '16') . 'px'; ?>;
+                padding: <?php echo esc_attr($settings['checkout_button_padding']['top'] . $settings['checkout_button_padding']['unit']); ?> <?php echo esc_attr($settings['checkout_button_padding']['right'] . $settings['checkout_button_padding']['unit']); ?> <?php echo esc_attr($settings['checkout_button_padding']['bottom'] . $settings['checkout_button_padding']['unit']); ?> <?php echo esc_attr($settings['checkout_button_padding']['left'] . $settings['checkout_button_padding']['unit']); ?>;
+                border-radius: <?php echo esc_attr($settings['checkout_button_border_radius'] . 'px'); ?>;
+                font-size: <?php echo esc_attr($settings['checkout_button_font_size'] . 'px'); ?>;
                 font-weight: 600;
                 cursor: pointer;
-                transition: background 0.2s;
+                transition: all 0.15s ease;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 8px;
+                gap: 10px;
             }
 
-            .shopglut-cart.template1 .checkout-button:hover {
-                background: <?php echo esc_attr($settings['checkout_button_hover_background'] ?? '#047857'); ?>;
+            .shopglut-cart.template1 .checkout-btn:hover {
+                background: <?php echo esc_attr($settings['checkout_button_hover_background']); ?>;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             }
 
-            <?php if ($settings['show_security_badges'] ?? true): ?>
-            .shopglut-cart.template1 .security-badges {
+            .shopglut-cart.template1 .checkout-btn:active {
+                transform: translateY(0);
+            }
+
+            <?php if ($settings['show_security_badges']): ?>
+            .shopglut-cart.template1 .security-info {
                 display: flex;
-                flex-direction: <?php echo esc_attr($settings['security_badges_layout'] ?? 'horizontal'); ?>;
-                gap: <?php echo esc_attr($settings['security_badge_spacing'] ?? '8') . 'px'; ?>;
-                margin-top: 20px;
                 justify-content: center;
+                gap: <?php echo esc_attr($settings['security_badge_spacing'] . 'px'); ?>;
+                margin-top: 16px;
+                <?php if ($settings['security_badges_layout'] === 'vertical'): ?>
+                flex-direction: column;
+                align-items: center;
+                <?php elseif ($settings['security_badges_layout'] === 'grid'): ?>
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                justify-items: center;
+                <?php else: ?>
+                flex-wrap: wrap;
+                <?php endif; ?>
             }
 
             .shopglut-cart.template1 .security-badge {
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                font-size: 12px;
+                font-size: <?php echo esc_attr($settings['ssl_badge_font_size'] . 'px'); ?>;
             }
 
-            <?php if ($settings['show_ssl_badge'] ?? true): ?>
-            .shopglut-cart.template1 .ssl-badge {
-                color: <?php echo esc_attr($settings['ssl_badge_text_color'] ?? '#6b7280'); ?>;
+            /* SSL Badge Colors */
+            .shopglut-cart.template1 .security-badge.ssl-badge {
+                color: <?php echo esc_attr($settings['ssl_badge_text_color']); ?>;
             }
-            .shopglut-cart.template1 .ssl-badge i {
-                color: <?php echo esc_attr($settings['ssl_badge_icon_color'] ?? '#059669'); ?>;
+            .shopglut-cart.template1 .security-badge.ssl-badge i {
+                color: <?php echo esc_attr($settings['ssl_badge_icon_color']); ?>;
+            }
+
+            /* Payment Badge Colors */
+            .shopglut-cart.template1 .security-badge.payment-badge {
+                color: <?php echo esc_attr($settings['payment_badge_text_color']); ?>;
+            }
+            .shopglut-cart.template1 .security-badge.payment-badge i {
+                color: <?php echo esc_attr($settings['payment_badge_icon_color']); ?>;
+            }
+
+            /* Return Badge Colors */
+            .shopglut-cart.template1 .security-badge.return-badge {
+                color: <?php echo esc_attr($settings['return_badge_text_color']); ?>;
+            }
+            .shopglut-cart.template1 .security-badge.return-badge i {
+                color: <?php echo esc_attr($settings['return_badge_icon_color']); ?>;
+            }
+            <?php else: ?>
+            .shopglut-cart.template1 .security-info {
+                display: none;
             }
             <?php endif; ?>
 
-            <?php if ($settings['show_payment_badge'] ?? true): ?>
-            .shopglut-cart.template1 .payment-badge {
-                color: <?php echo esc_attr($settings['payment_badge_text_color'] ?? '#6b7280'); ?>;
-            }
-            .shopglut-cart.template1 .payment-badge i {
-                color: <?php echo esc_attr($settings['payment_badge_icon_color'] ?? '#3b82f6'); ?>;
-            }
-            <?php endif; ?>
-
-            <?php if ($settings['show_return_badge'] ?? true): ?>
-            .shopglut-cart.template1 .return-badge {
-                color: <?php echo esc_attr($settings['return_badge_text_color'] ?? '#6b7280'); ?>;
-            }
-            .shopglut-cart.template1 .return-badge i {
-                color: <?php echo esc_attr($settings['return_badge_icon_color'] ?? '#f59e0b'); ?>;
-            }
-            <?php endif; ?>
-            <?php endif; ?>
-
-            <?php if ($settings['show_discount_section'] ?? true): ?>
-            .shopglut-cart.template1 .discount-section {
-                background: <?php echo esc_attr($settings['discount_section_background'] ?? '#ffffff'); ?>;
-                border: 1px solid <?php echo esc_attr($settings['discount_section_border'] ?? '#e5e7eb'); ?>;
-                border-radius: 8px;
-                padding: <?php echo esc_attr($settings['discount_section_padding']['top'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['discount_section_padding']['right'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['discount_section_padding']['bottom'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['discount_section_padding']['left'] ?? '20') . ($settings['discount_section_padding']['unit'] ?? 'px'); ?>;
-                margin-bottom: 20px;
-            }
-
-            <?php if ($settings['show_discount_title'] ?? true): ?>
-            .shopglut-cart.template1 .discount-title {
-                color: <?php echo esc_attr($settings['discount_title_color'] ?? '#111827'); ?>;
-                font-size: <?php echo esc_attr($settings['discount_title_font_size'] ?? '18') . 'px'; ?>;
-                font-weight: 600;
-                margin-bottom: 16px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            <?php if ($settings['show_discount_icon'] ?? true): ?>
-            .shopglut-cart.template1 .discount-title i {
-                color: <?php echo esc_attr($settings['discount_icon_color'] ?? '#3b82f6'); ?>;
-            }
-            <?php endif; ?>
-            <?php endif; ?>
-
-            .shopglut-cart.template1 .coupon-form {
-                display: flex;
-                gap: 8px;
-            }
-
-            .shopglut-cart.template1 .coupon-input {
-                flex: 1;
-                padding: <?php echo esc_attr($settings['coupon_input_padding']['top'] ?? '12') . ($settings['coupon_input_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['coupon_input_padding']['right'] ?? '16') . ($settings['coupon_input_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['coupon_input_padding']['bottom'] ?? '12') . ($settings['coupon_input_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['coupon_input_padding']['left'] ?? '16') . ($settings['coupon_input_padding']['unit'] ?? 'px'); ?>;
-                background: <?php echo esc_attr($settings['coupon_input_background'] ?? '#ffffff'); ?>;
-                border: 1px solid <?php echo esc_attr($settings['coupon_input_border'] ?? '#d1d5db'); ?>;
-                border-radius: <?php echo esc_attr($settings['coupon_input_border_radius'] ?? '6') . 'px'; ?>;
-                font-size: 14px;
-                color: <?php echo esc_attr($settings['coupon_input_text_color'] ?? '#374151'); ?>;
-            }
-
-            .shopglut-cart.template1 .apply-button {
-                padding: <?php echo esc_attr($settings['apply_button_padding']['top'] ?? '12') . ($settings['apply_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['apply_button_padding']['right'] ?? '20') . ($settings['apply_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['apply_button_padding']['bottom'] ?? '12') . ($settings['apply_button_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['apply_button_padding']['left'] ?? '20') . ($settings['apply_button_padding']['unit'] ?? 'px'); ?>;
-                background: <?php echo esc_attr($settings['apply_button_background'] ?? '#3b82f6'); ?>;
-                color: <?php echo esc_attr($settings['apply_button_text_color'] ?? '#ffffff'); ?>;
-                border: none;
-                border-radius: <?php echo esc_attr($settings['apply_button_border_radius'] ?? '6') . 'px'; ?>;
-                font-weight: 600;
-                cursor: pointer;
-                transition: background 0.2s;
-            }
-
-            .shopglut-cart.template1 .apply-button:hover {
-                background: <?php echo esc_attr($settings['apply_button_hover_background'] ?? '#2563eb'); ?>;
-            }
-
-            <?php if ($settings['show_coupon_messages'] ?? true): ?>
-            .shopglut-cart.template1 .coupon-message {
-                margin-top: 12px;
-                padding: 12px;
-                border-radius: 6px;
-                font-size: <?php echo esc_attr($settings['message_font_size'] ?? '14') . 'px'; ?>;
-            }
-
-            .shopglut-cart.template1 .coupon-message.success {
-                background: #dcfce7;
-                color: <?php echo esc_attr($settings['success_message_color'] ?? '#059669'); ?>;
-            }
-
-            .shopglut-cart.template1 .coupon-message.error {
-                background: #fee2e2;
-                color: <?php echo esc_attr($settings['error_message_color'] ?? '#dc2626'); ?>;
-            }
-            <?php endif; ?>
-            <?php endif; ?>
-
-            <?php if ($settings['show_continue_shopping'] ?? true): ?>
             .shopglut-cart.template1 .continue-shopping {
                 text-align: center;
-                margin-top: 24px;
+                margin-top: 32px;
             }
 
-            .shopglut-cart.template1 .continue-shopping a {
+            .shopglut-cart.template1 .continue-link {
                 color: <?php echo esc_attr($settings['continue_link_color'] ?? '#3b82f6'); ?>;
-                font-size: <?php echo esc_attr($settings['continue_link_font_size'] ?? '14') . 'px'; ?>;
                 text-decoration: none;
+                font-weight: 500;
                 display: inline-flex;
                 align-items: center;
-                gap: 6px;
-                font-weight: 500;
+                gap: 8px;
+                transition: color 0.15s ease;
+                font-size: <?php echo esc_attr($settings['continue_link_font_size'] . 'px'); ?>;
             }
 
-            .shopglut-cart.template1 .continue-shopping a:hover {
+            .shopglut-cart.template1 .continue-link:hover {
                 color: <?php echo esc_attr($settings['continue_link_hover_color'] ?? '#2563eb'); ?>;
-                text-decoration: underline;
             }
-            <?php endif; ?>
 
-            @media (max-width: 768px) {
-                .shopglut-cart.template1 .cart-footer {
-                    flex-direction: column;
+            /* Preview Container Responsive */
+            @container (max-width: 1024px) {
+                .shopglut-cart.template1 .cart-container {
+                    max-width: 100%;
+                    margin: 5px;
+                    padding: 0 10px;
                 }
 
-                .shopglut-cart.template1 .cart-summary {
-                    width: 100%;
-                    min-width: auto;
+                .shopglut-cart.template1 .footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .shopglut-cart.template1 .cart-table-container {
+                    padding: 20px 15px;
+                }
+            }
+
+            @container (max-width: 800px) {
+                .shopglut-cart.template1 .cart-header {
+                    padding: 16px;
+                }
+
+                .shopglut-cart.template1 .cart-header h1 {
+                    font-size: 1.4rem;
+                }
+
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 400px;
+                }
+
+                .shopglut-cart.template1 .product-cell {
+                    min-width: 150px;
+                    gap: 8px;
+                }
+
+                .shopglut-cart.template1 .product-image {
+                    width: 45px;
+                    height: 45px;
+                    font-size: 1rem;
+                }
+
+                .shopglut-cart.template1 .cart-table th,
+                .shopglut-cart.template1 .cart-table td {
+                    padding: 10px 6px;
+                }
+            }
+
+            @container (max-width: 500px) {
+                .shopglut-cart.template1 .cart-container {
+                    margin: 2px;
+                    padding: 0 5px;
+                }
+
+                .shopglut-cart.template1 .cart-header {
+                    padding: 12px;
+                    border-radius: 8px 8px 0 0;
+                }
+
+                .shopglut-cart.template1 .cart-content {
+                    border-radius: 0 0 8px 8px;
+                }
+
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 320px;
+                }
+
+                .shopglut-cart.template1 .product-cell {
+                    min-width: 120px;
+                    gap: 6px;
+                }
+
+                .shopglut-cart.template1 .product-image {
+                    width: 35px;
+                    height: 35px;
+                    font-size: 0.8rem;
+                }
+
+                .shopglut-cart.template1 .product-name {
+                    font-size: 0.8rem;
+                    line-height: 1.2;
+                }
+
+                .shopglut-cart.template1 .cart-footer {
+                    padding: 15px 10px;
+                }
+
+                .shopglut-cart.template1 .footer-section {
+                    padding: 12px;
+                }
+
+                .shopglut-cart.template1 .input-group {
+                    flex-direction: column;
+                    border-radius: 6px;
+                }
+
+                .shopglut-cart.template1 .coupon-input {
+                    border-radius: 4px 4px 0 0;
+                    font-size: 0.8rem;
+                    padding: 8px 10px;
+                }
+
+                .shopglut-cart.template1 .apply-btn {
+                    border-radius: 0 0 4px 4px;
+                    padding: 8px 12px;
+                    font-size: 0.8rem;
+                }
+
+                .shopglut-cart.template1 .checkout-btn {
+                    padding: 10px;
+                    font-size: 0.85rem;
+                }
+            }
+
+            /* Container Query Support for Preview Areas */
+            .shopglut-cart.template1 {
+                container-type: inline-size;
+                container-name: cart-preview;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 1200px) {
+                .shopglut-cart.template1 .cart-container {
+                    max-width: 100%;
+                    margin: 10px;
+                    padding: 0 15px;
+                }
+
+                .shopglut-cart.template1 .cart-table-container {
+                    padding: 30px;
+                }
+
+                .shopglut-cart.template1 .product-image {
+                    width: 70px;
+                    height: 70px;
+                    font-size: 1.8rem;
+                }
+            }
+
+            @media (max-width: 1024px) {
+                .shopglut-cart.template1 .footer-grid {
+                display: block;
+            }
+
+                .shopglut-cart.template1 .product-cell {
+                    min-width: 250px;
+                    gap: 15px;
+                }
+
+                .shopglut-cart.template1 .product-image {
+                    width: 60px;
+                    height: 60px;
+                    font-size: 1.5rem;
+                }
+
+                .shopglut-cart.template1 .cart-table th,
+                .shopglut-cart.template1 .cart-table td {
+                    padding: 24px 16px;
+                }
+            }
+
+            @media (max-width: 768px) {
+
+            .shopglut-cart.template1 .footer-grid {
+                display: block;
+            }
+                .shopglut-cart.template1 .cart-container {
+                    margin: 10px;
+                    padding: 0 10px;
+                }
+
+                .shopglut-cart.template1 .cart-header {
+                    padding: 24px 16px;
+                }
+
+                .shopglut-cart.template1 .cart-header h1 {
+                    font-size: 1.8rem;
+                }
+
+                .shopglut-cart.template1 .cart-header .subtitle {
+                    font-size: 1rem;
+                }
+
+                .shopglut-cart.template1 .cart-table-container {
+                    padding: 20px 10px;
+                }
+
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 650px;
+                }
+
+                .shopglut-cart.template1 .cart-table th,
+                .shopglut-cart.template1 .cart-table td {
+                    padding: 16px 12px;
+                }
+
+                .shopglut-cart.template1 .product-cell {
+                    min-width: 220px;
+                    gap: 12px;
                 }
 
                 .shopglut-cart.template1 .product-image {
                     width: 50px;
                     height: 50px;
+                    font-size: 1.3rem;
+                }
+
+                .shopglut-cart.template1 .product-name {
+                    font-size: 1rem;
+                }
+
+                .shopglut-cart.template1 .product-meta {
+                    font-size: 0.8rem;
+                }
+
+                .shopglut-cart.template1 .qty-control {
+                    transform: scale(0.9);
+                }
+
+                .shopglut-cart.template1 .footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .shopglut-cart.template1 .cart-footer {
+                    padding: 24px 16px;
+                }
+
+                .shopglut-cart.template1 .footer-section {
+                    padding: 20px;
+                }
+
+                .shopglut-cart.template1 .section-title {
+                    font-size: 1.1rem;
+                }
+            }
+
+            @media (max-width: 640px) {
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 550px;
+                }
+
+                .shopglut-cart.template1 .cart-table th:first-child,
+                .shopglut-cart.template1 .cart-table td:first-child {
+                    position: sticky;
+                    left: 0;
+                    background: white;
+                    z-index: 1;
+                    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
                 }
 
                 .shopglut-cart.template1 .product-cell {
-                    min-width: 120px;
-                    gap: 12px;
+                    min-width: 200px;
+                }
+
+                .shopglut-cart.template1 .cart-table th {
+                    font-size: 0.8rem;
+                    padding: 12px 8px;
+                }
+
+                .shopglut-cart.template1 .cart-table td {
+                    padding: 16px 8px;
                 }
             }
 
@@ -473,27 +961,183 @@ class template1Style {
 
                 .shopglut-cart.template1 .cart-header {
                     padding: 20px 12px;
-                    border-radius: 8px 8px 0;
                 }
 
                 .shopglut-cart.template1 .cart-header h1 {
                     font-size: 1.5rem;
                 }
 
-                .shopglut-cart.template1 .product-image {
-                    width: 40px;
-                    height: 40px;
+                .shopglut-cart.template1 .cart-header .subtitle {
+                    font-size: 0.9rem;
+                }
+
+                .shopglut-cart.template1 .cart-header .cart-count {
+                    font-size: 0.8rem;
+                    padding: 6px 12px;
+                }
+
+                .shopglut-cart.template1 .cart-table-container {
+                    padding: 15px 8px;
+                }
+
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 500px;
+                }
+
+                .shopglut-cart.template1 .cart-table th,
+                .shopglut-cart.template1 .cart-table td {
+                    padding: 12px 6px;
                 }
 
                 .shopglut-cart.template1 .product-cell {
-                    min-width: 100px;
-                    gap: 10px;
+                    min-width: 160px;
+                    gap: 8px;
                 }
 
-                .shopglut-cart.template1 .security-badges {
+                .shopglut-cart.template1 .product-image {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 1rem;
+                }
+
+                .shopglut-cart.template1 .product-name {
+                    font-size: 0.9rem;
+                    line-height: 1.3;
+                }
+
+                .shopglut-cart.template1 .product-meta {
+                    font-size: 0.75rem;
+                }
+
+                .shopglut-cart.template1 .product-badge {
+                    padding: 1px 4px;
+                    font-size: 0.65rem;
+                }
+
+                .shopglut-cart.template1 .qty-control {
+                    transform: scale(0.8);
+                }
+
+                .shopglut-cart.template1 .qty-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 0.9rem;
+                }
+
+                .shopglut-cart.template1 .qty-input {
+                    width: 40px;
+                    height: 30px;
+                    font-size: 0.9rem;
+                }
+
+                .shopglut-cart.template1 .price-cell {
+                    font-size: 0.95rem;
+                }
+
+                .shopglut-cart.template1 .remove-btn {
+                    padding: 6px;
+                }
+
+                .shopglut-cart.template1 .cart-footer {
+                    padding: 20px 12px;
+                }
+
+                .shopglut-cart.template1 .footer-section {
+                    padding: 16px;
+                }
+
+                .shopglut-cart.template1 .section-title {
+                    font-size: 1rem;
+                    margin-bottom: 15px;
+                }
+
+                .shopglut-cart.template1 .input-group {
+                    flex-direction: column;
+                }
+
+                .shopglut-cart.template1 .coupon-input {
+                    border-radius: 6px 6px 0 0;
+                }
+
+                .shopglut-cart.template1 .apply-btn {
+                    border-radius: 0 0 6px 6px;
+                }
+
+                .shopglut-cart.template1 .checkout-btn {
+                    padding: 14px;
+                    font-size: 1rem;
+                }
+
+                .shopglut-cart.template1 .security-info {
+                    gap: 12px;
                     flex-direction: column;
                     align-items: center;
                 }
+
+                .shopglut-cart.template1 .security-badge {
+                    font-size: 0.75rem;
+                }
+            }
+
+            @media (max-width: 380px) {
+                .shopglut-cart.template1 .cart-table {
+                    min-width: 450px;
+                }
+
+                .shopglut-cart.template1 .product-cell {
+                    min-width: 140px;
+                }
+
+                .shopglut-cart.template1 .product-image {
+                    width: 35px;
+                    height: 35px;
+                    font-size: 0.9rem;
+                }
+
+                .shopglut-cart.template1 .product-name {
+                    font-size: 0.8rem;
+                }
+
+                .shopglut-cart.template1 .cart-header h1 {
+                    font-size: 1.3rem;
+                }
+
+                .shopglut-cart.template1 .footer-section {
+                    padding: 12px;
+                }
+
+                .shopglut-cart.template1 .summary-row {
+                    font-size: 0.85rem;
+                }
+
+                .shopglut-cart.template1 .checkout-btn {
+                    font-size: 0.9rem;
+                    padding: 12px;
+                }
+            }
+
+            /* Empty cart state */
+            .shopglut-cart.template1 .empty-cart {
+                text-align: center;
+                padding: 80px 40px;
+                color: #6b7280;
+            }
+
+            .shopglut-cart.template1 .empty-cart i {
+                font-size: 4rem;
+                margin-bottom: 24px;
+                color: #d1d5db;
+            }
+
+            .shopglut-cart.template1 .empty-cart h3 {
+                font-size: 1.5rem;
+                color: #374151;
+                margin-bottom: 8px;
+            }
+
+            .shopglut-cart.template1 .empty-cart p {
+                font-size: 1rem;
+                margin-bottom: 24px;
             }
         </style>
         <?php
@@ -512,23 +1156,30 @@ class template1Style {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         $layout_data = $wpdb->get_row(
-            $wpdb->prepare("SELECT layout_settings FROM {$wpdb->prefix}shopglut_cartpage_layouts WHERE id = %d", $layout_id)
+            $wpdb->prepare("SELECT layout_settings FROM `{$wpdb->prefix}shopglut_cartpage_layouts` WHERE id = %d", $layout_id)
         );
 
         if ($layout_data && !empty($layout_data->layout_settings)) {
             $settings = maybe_unserialize($layout_data->layout_settings);
 
-            // Handle different data structures for compatibility
+            // Handle different possible data structures
             if (isset($settings['shopg_cartpage_settings_template1'])) {
                 $template_data = $settings['shopg_cartpage_settings_template1'];
 
-                // Check if cart-page-settings is nested inside (tabbed field structure)
+                // Check for double nesting (key inside itself)
+                if (isset($template_data['shopg_cartpage_settings_template1']['cart-page-settings'])) {
+                    return $this->flattenSettings($template_data['shopg_cartpage_settings_template1']['cart-page-settings']);
+                }
+
+                // Check for single nesting (direct cart-page-settings)
                 if (isset($template_data['cart-page-settings'])) {
                     return $this->flattenSettings($template_data['cart-page-settings']);
                 }
+            }
 
-                // Otherwise, data is already flat or in a different structure
-                return $this->flattenSettings($template_data);
+            // Direct check for single level (compatibility)
+            if (isset($settings['shopg_cartpage_settings_template1']['cart-page-settings'])) {
+                return $this->flattenSettings($settings['shopg_cartpage_settings_template1']['cart-page-settings']);
             }
         }
 
@@ -537,7 +1188,6 @@ class template1Style {
 
     /**
      * Flatten nested settings structure to simple key-value pairs
-     * Handles deeply nested fieldsets by recursively extracting all settings
      */
     private function flattenSettings($nested_settings) {
         $flat_settings = array();
@@ -553,6 +1203,9 @@ class template1Style {
                         } elseif (isset($setting_value['value']) && isset($setting_value['unit'])) {
                             // Handle slider fields with value/unit structure
                             $flat_settings[$setting_key] = $setting_value;
+                        } elseif ($this->isPreservableArray($setting_value)) {
+                            // Keep arrays with 'unit' key or only numeric/string values (like padding arrays)
+                            $flat_settings[$setting_key] = $setting_value;
                         } else {
                             // Recursively flatten nested fieldsets
                             $flattened = $this->flattenSettings(array($setting_key => $setting_value));
@@ -566,6 +1219,37 @@ class template1Style {
         }
 
         return array_merge($this->getDefaultSettings(), $flat_settings);
+    }
+
+    /**
+     * Check if an array should be preserved as-is (not flattened further)
+     * Arrays like padding arrays, margin arrays, font size arrays with unit should be preserved
+     */
+    private function isPreservableArray($array) {
+        // Check if array has a 'unit' key - these are dimension/size arrays
+        if (isset($array['unit'])) {
+            return true;
+        }
+
+        // Check if array has 'value' and 'unit' keys - slider field structure
+        if (isset($array['value']) && isset($array['unit'])) {
+            return true;
+        }
+
+        // Check if all keys are known directional keys (for padding/margin/size arrays)
+        $known_keys = array('top', 'right', 'bottom', 'left', 'width', 'height');
+        $all_known = true;
+        foreach (array_keys($array) as $key) {
+            if (!in_array($key, $known_keys, true)) {
+                $all_known = false;
+                break;
+            }
+        }
+        if ($all_known && count($array) > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -674,29 +1358,27 @@ class template1Style {
             'security_badge_spacing' => 8,
             'show_ssl_badge' => true,
             'ssl_badge_text' => 'SSL Secured',
-            'ssl_badge_icon' => 'fas fa-shield-alt',
             'ssl_badge_text_color' => '#6b7280',
+            'ssl_badge_icon' => 'fas fa-shield-alt',
             'ssl_badge_icon_color' => '#059669',
             'ssl_badge_font_size' => 12,
             'show_payment_badge' => true,
             'payment_badge_text' => 'Safe Payment',
-            'payment_badge_icon' => 'fas fa-credit-card',
             'payment_badge_text_color' => '#6b7280',
+            'payment_badge_icon' => 'fas fa-credit-card',
             'payment_badge_icon_color' => '#3b82f6',
             'payment_badge_font_size' => 12,
             'show_return_badge' => true,
             'return_badge_text' => '30-Day Return',
-            'return_badge_icon' => 'fas fa-undo',
             'return_badge_text_color' => '#6b7280',
+            'return_badge_icon' => 'fas fa-undo',
             'return_badge_icon_color' => '#f59e0b',
             'return_badge_font_size' => 12,
 
             // Discount Section
             'show_discount_section' => true,
-            'discount_section_background' => '#ffffff',
-            'discount_section_border' => '#e5e7eb',
-            'discount_section_padding' => array('top' => '20', 'right' => '20', 'bottom' => '20', 'left' => '20', 'unit' => 'px'),
             'show_discount_title' => true,
+            'discount_title_text' => 'Discount Code',
             'discount_title_color' => '#111827',
             'discount_title_font_size' => 18,
             'show_discount_icon' => true,
@@ -721,12 +1403,12 @@ class template1Style {
             // Continue Shopping
             'show_continue_shopping' => true,
             'continue_shopping_text' => 'Continue Shopping',
-            'continue_shopping_url' => 'shop',
-            'custom_continue_url' => '',
-            'show_continue_icon' => true,
+            'continue_shopping_url' => '#',
             'continue_link_color' => '#3b82f6',
             'continue_link_hover_color' => '#2563eb',
             'continue_link_font_size' => 14,
+            'show_continue_icon' => true,
         );
     }
+
 }

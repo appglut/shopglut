@@ -158,15 +158,38 @@ class CartPageAssets {
      * Add dynamic cart styles
      */
     private function add_dynamic_styles() {
-        if (class_exists('\Shopglut\layouts\cartPage\dynamicStyle')) {
-            // Get secure layout_id (simplified version for module)
-            $layout_id = 0;
-            if (is_admin() && current_user_can('manage_options') && isset($_GET['layout_id'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin preview with capability check
-                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin preview parameter with capability check
-                $layout_id = absint(sanitize_text_field(wp_unslash($_GET['layout_id'])));
-            }
+        // Get layout_id - from GET for admin preview, or from options/shortcode for frontend
+        $layout_id = 0;
+        if (is_admin() && current_user_can('manage_options') && isset($_GET['layout_id'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin preview with capability check
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin preview parameter with capability check
+            $layout_id = absint(sanitize_text_field(wp_unslash($_GET['layout_id'])));
+        } else {
+            // Try to get active cart layout ID from options for frontend
+            $layout_id = get_option('shopglut_active_cart_layout', 0);
 
-            $cart_dynamic_style = new \Shopglut\layouts\cartPage\dynamicStyle();
+            // If no layout is set, try to get the first available layout
+            if (!$layout_id) {
+                global $wpdb;
+                $table_name = $wpdb->prefix . 'shopglut_cartpage_layouts';
+
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table query
+                $first_layout = $wpdb->get_var("SELECT id FROM {$table_name} ORDER BY id ASC LIMIT 1");
+                if ($first_layout) {
+                    $layout_id = (int) $first_layout;
+                }
+            }
+        }
+
+        if (!$layout_id) {
+            return;
+        }
+
+        // Include the template1 style file
+        require_once SHOPGLUT_PATH . 'src/layouts/cartPage/template1/template1Style.php';
+
+        // Check if template1Style class exists
+        if (class_exists('\Shopglut\layouts\cartPage\template1\template1Style')) {
+            $cart_dynamic_style = new \Shopglut\layouts\cartPage\template1\template1Style();
             $cart_dynamic_css = $cart_dynamic_style->dynamicCss($layout_id);
             if (!empty($cart_dynamic_css)) {
                 wp_add_inline_style('shopglut-main', $cart_dynamic_css);

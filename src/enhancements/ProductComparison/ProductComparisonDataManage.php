@@ -826,6 +826,12 @@ class ProductComparisonDataManage {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_comparison_layouts';
 
+		// Check if table exists first
+		$table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) === $table_name;
+		if (!$table_exists) {
+			return null;
+		}
+
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table name variable
 		$all_layouts = $wpdb->get_results("SELECT id, layout_settings FROM `{$wpdb->prefix}shopglut_comparison_layouts`");
 

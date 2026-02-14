@@ -105,7 +105,7 @@ class template1Markup {
 								$subtotal = $item->get_subtotal();
 								$total = $item->get_total();
 							?>
-							<div class="item">
+							<div class="item" style="margin-bottom: <?php echo esc_attr($settings['item_spacing']); ?>px;">
 								<div class="item-info">
 									<div class="item-name"><?php echo esc_html($item->get_name()); ?></div>
 									<div class="item-meta">
@@ -302,21 +302,21 @@ class template1Markup {
                         <div class="items-header"><?php echo esc_html($settings['items_header_text']); ?></div>
                         <?php endif; ?>
 
-                        <div class="item">
+                        <div class="item" style="margin-bottom: <?php echo esc_attr($settings['item_spacing']); ?>px;">
                             <div class="item-info">
                                 <div class="item-name">Premium Wireless Headphones</div>
                                 <div class="item-meta">Quantity: 1 | Color: Black</div>
                             </div>
                             <div class="item-price">$299.99</div>
                         </div>
-                        <div class="item">
+                        <div class="item" style="margin-bottom: <?php echo esc_attr($settings['item_spacing']); ?>px;">
                             <div class="item-info">
                                 <div class="item-name">Bluetooth Speaker</div>
                                 <div class="item-meta">Quantity: 2 | Color: Blue</div>
                             </div>
                             <div class="item-price">$159.98</div>
                         </div>
-                        <div class="item">
+                        <div class="item" style="margin-bottom: 0;">
                             <div class="item-info">
                                 <div class="item-name">USB-C Cable</div>
                                 <div class="item-meta">Quantity: 1 | Length: 2m</div>

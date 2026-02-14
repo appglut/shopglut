@@ -323,14 +323,6 @@ class chooseTemplates {
 			global $wpdb;
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table_name = $wpdb->prefix . 'shopglut_cartpage_layouts';
-
-			// Ensure the table exists before trying to insert
-			$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) === $table_name;
-			if ( ! $table_exists ) {
-				// Table doesn't exist, create it
-				\Shopglut\ShopGlutDatabase::create_cartpage_layouts();
-			}
-
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$inserted = $wpdb->insert($table_name, $data, $format);
 	
