@@ -28,10 +28,14 @@ if ( ! class_exists( 'AGSHOPGLUT_switcher' ) ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'shopglut_shop_layouts';
 
+			$layout_values = [];
+
 			// Query shop layouts without cache for real-time conflict detection
+			if ( $this->table_exists( $table_name ) ) {
 			$layout_values = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for real-time conflict check
 				sprintf("SELECT * FROM `%s`", esc_sql($table_name)) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.MissingReplacements -- Using sprintf with escaped table name, no additional parameters needed
 			);
+			}
 
 	
 			// Default value for enable_switcher
@@ -94,19 +98,24 @@ if ( ! class_exists( 'AGSHOPGLUT_switcher' ) ) {
 
 				// Cache key for single product layouts
 				// Query WITHOUT cache for real-time conflict detection
+				$single_product_layout_values = [];
+
+               if ( $this->table_exists( $single_product_table_name ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for real-time conflict check
 				$single_product_layout_values = $wpdb->get_results(
 					sprintf("SELECT * FROM `%s`", esc_sql($single_product_table_name)) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name, no prepare needed
 				);
+			   }
 
 				// Query current layout WITHOUT cache for real-time status check
+				$current_layout = null;
+
+               if ( $this->table_exists( $single_product_table_name ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for real-time status check
 				$current_layout = $wpdb->get_row(
 					sprintf("SELECT * FROM `%s` WHERE id = %d", esc_sql($single_product_table_name), $layout_id) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name and validated ID
 				);
-
-				// Initialize $current_overwrite_all_products with default value
-				$current_overwrite_all_products = '0';
+			   }
 
 				// If current layout exists, get its details
 				if ( $current_layout ) {
@@ -198,10 +207,12 @@ if ( ! class_exists( 'AGSHOPGLUT_switcher' ) ) {
 				$ordercomplete_table_name = $wpdb->prefix . 'shopglut_ordercomplete_layouts';
 
 				// Get all order complete layouts (no cache)
+				if ( $this->table_exists( $ordercomplete_table_name ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for real-time override check
 				$ordercomplete_layout_values = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for real-time override check
 					sprintf("SELECT * FROM `%s`", esc_sql($ordercomplete_table_name)) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name
 				);
+				}
 
 				// Get current order complete layout (no cache)
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for real-time override check
@@ -262,10 +273,13 @@ if ( ! class_exists( 'AGSHOPGLUT_switcher' ) ) {
 				$accountpage_taken_message = '';
 
 				// Get all account page layouts (no cache)
+				if ( $this->table_exists( $accountpage_table_name ) ) {
+
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for real-time override check
 				$accountpage_layout_values = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for real-time override check
 					sprintf("SELECT * FROM `%s`", esc_sql($accountpage_table_name)) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name
 				);
+				}
 
 				// Get current account page layout (no cache)
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for real-time override check
@@ -405,5 +419,17 @@ if ( ! class_exists( 'AGSHOPGLUT_switcher' ) ) {
 			
 			return implode( ', ', $product_names );
 		}
+
+		private function table_exists( $table_name ) {
+				global $wpdb;
+
+				return ( $wpdb->get_var(
+					$wpdb->prepare(
+						"SHOW TABLES LIKE %s",
+						$table_name
+					)
+				) === $table_name );
+          }
+
 	}
 }

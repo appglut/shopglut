@@ -45,7 +45,7 @@ class dataManage {
             }
         }
 
-        // Wrap the data in the expected structure - keep cart-page-settings wrapper for frontend compatibility
+        // Wrap the data in the expected structure - wrap in cart-page-settings to match getLayoutSettings() expectation
         $data_to_save = array( 'shopg_cartpage_settings_template1' => $raw_data );
 
         // Check nonce

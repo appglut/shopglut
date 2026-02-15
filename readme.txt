@@ -4,7 +4,7 @@ Tags: woocommerce product , woocommerce customizer, woocommerce builder, woocomm
 Requires at least: 5.1
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.7.6
+Stable tag: 1.7.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -260,6 +260,23 @@ Yes! All ShopGlut shortcodes are compatible with major page builders and the Wor
 4. **ShopGlut Wishlist Admin Dashboard**
 
 == Changelog ==
+
+= 1.7.7 =
+
+**Fixed: Cart Module Template1 Settings**
+* Fixed cart page template1 settings not applying correctly
+* Fixed array merge order in cart layout settings
+* Enhanced settings flattening for proper user customization
+* Fixed database table existence checks across multiple modules
+* Improved error handling for disabled modules
+
+**Fixed: Other Bugs**
+* Fixed Product Comparison module table existence check
+* Fixed Shop Layout table existence checks
+* Fixed Single Product Layout table existence checks
+* Fixed Filters module table existence checks
+* Fixed Email Users Table module table existence checks
+* Fixed Switcher field component issues
 
 = 1.7.6 =
 

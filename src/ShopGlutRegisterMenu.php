@@ -973,7 +973,7 @@ class ShopGlutRegisterMenu {
 			return;
 		}
 
-		$github_url = 'https://github.com/appglut/wishglut';
+		$github_url = 'https://github.com/appglut/wishglut/releases/download/latest/wishglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		// If WishGlut plugin is active, render the WishlistMenuHandler
@@ -1464,7 +1464,7 @@ class ShopGlutRegisterMenu {
     	$is_active = in_array( $plugin_slug, $active_plugins );
     	$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-    	$github_url = 'https://github.com/appglut/checkoutglut';
+    	$github_url = 'https://github.com/appglut/checkoutglut/releases/download/latest/checkoutglut.zip';
     	$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
     	if ( ! current_user_can( 'manage_options' ) ) {

@@ -64,8 +64,16 @@ class ShopListTable extends \WP_List_Table {
 		global $wpdb;
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$layout_id = absint( $item['id'] );
+		$table_name = $wpdb->prefix . 'shopglut_shop_layouts';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return '<span style="color: #999;">—</span>';
+		}
+
 // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$current_layout_values = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}shopglut_shop_layouts WHERE id = %d", $layout_id ) );
+		$current_layout_values = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $layout_id ) );
 
 		$current_enable_switcher = '0';
 		if ( ! empty( $current_layout_values ) ) {
@@ -90,8 +98,16 @@ class ShopListTable extends \WP_List_Table {
 		global $wpdb;
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$layout_id = absint( $item['id'] );
+		$table_name = $wpdb->prefix . 'shopglut_shop_layouts';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return '<span style="color: #999;">—</span>';
+		}
+
 // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$current_layout_values = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}shopglut_shop_layouts WHERE id = %d", $layout_id ) );
+		$current_layout_values = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $layout_id ) );
 
 		$archive_pages = array();
 		if ( ! empty( $current_layout_values ) ) {

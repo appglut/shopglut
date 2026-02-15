@@ -1139,6 +1139,105 @@ class template1Style {
                 font-size: 1rem;
                 margin-bottom: 24px;
             }
+
+            /* Loading Overlay Styles */
+            .shopglut-loader-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.8);
+                display: none;
+                z-index: 999999;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .shopglut-loader-overlay.active {
+                display: flex;
+            }
+
+            .shopglut-loader-spinner {
+                width: 40px;
+                height: 40px;
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #059669;
+                border-radius: 50%;
+                animation: shopglut-spin 1s linear infinite;
+            }
+
+            @keyframes shopglut-spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            /* Notification Styles */
+            .shopglut-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 20px;
+                border-radius: 8px;
+                background: #fff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 999999;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                min-width: 300px;
+                animation: shopglut-slideIn 0.3s ease-out;
+            }
+
+            .shopglut-notification-success {
+                border-left: 4px solid #059669;
+            }
+
+            .shopglut-notification-error {
+                border-left: 4px solid #dc2626;
+            }
+
+            .shopglut-notification span {
+                flex: 1;
+                font-size: 14px;
+            }
+
+            .shopglut-notification-success span {
+                color: #059669;
+            }
+
+            .shopglut-notification-error span {
+                color: #dc2626;
+            }
+
+            .notification-close {
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: #6b7280;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .notification-close:hover {
+                color: #111827;
+            }
+
+            @keyframes shopglut-slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
         </style>
         <?php
     }

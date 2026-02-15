@@ -750,7 +750,7 @@ class AllEnhancements {
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-		$github_url = 'https://github.com/appglut/wishglut';
+		$github_url = 'https://github.com/appglut/wishglut/releases/download/latest/wishglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		if ( ! current_user_can( 'manage_options' ) ) {

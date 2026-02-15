@@ -69,6 +69,13 @@ class SingleProductListTable extends \WP_List_Table {
 	private function get_overwrite_all_layout_id() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return null;
+		}
+
 		$results = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, no caching needed
 			$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.MissingReplacements -- Using sprintf with escaped table name, no additional parameters needed
 				sprintf("SELECT id, layout_settings, layout_template FROM `%s`", esc_sql($table_name)) // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Using sprintf for table name
@@ -105,6 +112,13 @@ class SingleProductListTable extends \WP_List_Table {
 	private function get_layout_name_by_id( $layout_id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return '';
+		}
+
 		return $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, no caching needed
 			$wpdb->prepare(
 				sprintf("SELECT layout_name FROM `%s` WHERE id = %d", esc_sql($table_name)), // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Using sprintf for table name, expected 0 but proper placeholders are used
@@ -140,6 +154,13 @@ class SingleProductListTable extends \WP_List_Table {
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return '<span style="color: #999;">—</span>';
+		}
+
 		$layout_data = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, no caching needed
 			sprintf("SELECT layout_settings FROM `%s` WHERE id = %d", esc_sql($table_name), $layout_id) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name and validated parameter
 		);
@@ -190,6 +211,13 @@ class SingleProductListTable extends \WP_List_Table {
 
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+
+		// Check if table exists
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
+		if ( $table_exists === null ) {
+			return '<span style="color: #999;">—</span>';
+		}
+
 		$layout_data = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, no caching needed
 			sprintf("SELECT layout_settings FROM `%s` WHERE id = %d", esc_sql($table_name), $layout_id) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Using sprintf with escaped table name and validated parameter
 		);

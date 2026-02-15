@@ -1,6 +1,6 @@
 /**
  * Shopglut Cart Template1 Functionality
- * Handles AJAX cart operations for the template1 layout
+ * Handles AJAX cart operations for template1 layout
  */
 
 (function($) {
@@ -51,9 +51,10 @@
             const qtyControl = button.closest('.qty-control');
             const qtyInput = qtyControl.find('.qty-input');
             const currentQty = parseInt(qtyInput.val()) || 1;
+            const maxQty = parseInt(qtyInput.attr('max')) || 999;
 
             if (currentQty > 1) {
-                // Update the input immediately for visual feedback
+                // Update input immediately for visual feedback
                 qtyInput.val(currentQty - 1);
                 this.updateCartQuantity(cartKey, currentQty - 1, qtyInput);
             }
@@ -72,7 +73,7 @@
             const maxQty = parseInt(qtyInput.attr('max')) || 999;
 
             if (currentQty < maxQty) {
-                // Update the input immediately for visual feedback
+                // Update input immediately for visual feedback
                 qtyInput.val(currentQty + 1);
                 this.updateCartQuantity(cartKey, currentQty + 1, qtyInput);
             }
@@ -85,6 +86,7 @@
             const qtyInput = $(e.currentTarget);
             const cartKey = qtyInput.data('cart-key');
             const newQty = parseInt(qtyInput.val());
+
             const minQty = parseInt(qtyInput.attr('min')) || 1;
             const maxQty = parseInt(qtyInput.attr('max')) || 999;
 
@@ -98,6 +100,11 @@
                 return;
             }
 
+            // Store original value for rollback
+            if (!qtyInput.data('original-value')) {
+                qtyInput.data('original-value', newQty);
+            }
+
             this.updateCartQuantity(cartKey, newQty, qtyInput);
         }
 
@@ -106,11 +113,7 @@
          */
         updateCartQuantity(cartKey, quantity, qtyInput) {
             const cartItem = qtyInput.closest('.cart-item');
-
-            // Store original value for rollback
-            if (!qtyInput.data('original-value')) {
-                qtyInput.data('original-value', qtyInput.val());
-            }
+            const originalQty = qtyInput.data('original-value') || qtyInput.val();
 
             this.setLoading(cartItem, true);
 
@@ -123,45 +126,35 @@
                     quantity: quantity,
                     nonce: shopglut_cart_ajax.nonce
                 },
+                timeout: 30000,
                 success: (response) => {
                     if (response.success) {
-                        // Only update the specific cart item's price, not the entire cart
-                        if (response.data) {
-                            // Update line total for this item only
-                            if (response.data.line_total) {
-                                const priceCell = cartItem.find('.price-cell');
-                                priceCell.html(response.data.line_total);
-                            }
-                            // Update cart totals/subtotal if provided
-                            if (response.data.cart_subtotal) {
-                                $('.cart-subtotal .amount').html(response.data.cart_subtotal);
-                            }
-                            if (response.data.cart_total) {
-                                $('.cart-total .amount').html(response.data.cart_total);
-                            }
+                        // Update cart fragments if provided
+                        if (response.data && response.data.fragments) {
+                            this.updateCartFragments(response.data.fragments);
                         }
 
                         // Show success message
-                        const message = (response.data && response.data.message) ?
-                            response.data.message : shopglut_cart_ajax.i18n.updating;
+                        const message = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.updated || 'Cart updated';
                         this.showMessage(message, 'success');
 
                         // Update original value
                         qtyInput.data('original-value', quantity);
                     } else {
-                        const errorMessage = (response.data && response.data.message) ?
-                            response.data.message : shopglut_cart_ajax.i18n.error;
+                        // Rollback to original quantity
+                        qtyInput.val(originalQty);
+                        const errorMessage = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.error || 'Error updating cart';
                         this.showMessage(errorMessage, 'error');
-                        // Revert quantity to original value
-                        const originalValue = qtyInput.data('original-value') || 1;
-                        qtyInput.val(originalValue);
                     }
                 },
                 error: () => {
-                    this.showMessage(shopglut_cart_ajax.i18n.error, 'error');
-                    // Revert quantity to original value
-                    const originalValue = qtyInput.data('original-value') || 1;
-                    qtyInput.val(originalValue);
+                    // Rollback to original quantity
+                    qtyInput.val(originalQty);
+                    this.showMessage(shopglut_cart_ajax.i18n.error || 'Error updating cart', 'error');
                 },
                 complete: () => {
                     this.setLoading(cartItem, false);
@@ -192,39 +185,36 @@
                     cart_item_key: cartKey,
                     nonce: shopglut_cart_ajax.nonce
                 },
+                timeout: 30000,
                 success: (response) => {
                     if (response.success) {
-                        // Update cart totals if provided
-                        if (response.data) {
-                            if (response.data.cart_subtotal) {
-                                $('.cart-subtotal .amount').html(response.data.cart_subtotal);
-                            }
-                            if (response.data.cart_total) {
-                                $('.cart-total .amount').html(response.data.cart_total);
-                            }
-                        }
-
                         // Remove only this specific row
                         cartItem.fadeOut(300, function() {
                             $(this).remove();
-                            // Check if cart is empty
-                            if ($('.cart-item').length === 0) {
-                                location.reload(); // Reload to show empty cart state
-                            }
                         });
 
+                        // Show success message
                         const message = (response.data && response.data.message) ?
-                            response.data.message : shopglut_cart_ajax.i18n.removing;
+                            response.data.message : shopglut_cart_ajax.i18n.removing || 'Item removed';
+
                         this.showMessage(message, 'success');
+
+                        // Check if cart is empty and reload page
+                        if ($('.cart-item').length === 0) {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
                     } else {
                         const errorMessage = (response.data && response.data.message) ?
-                            response.data.message : shopglut_cart_ajax.i18n.error;
+                            response.data.message : shopglut_cart_ajax.i18n.error || 'Error removing item';
                         this.showMessage(errorMessage, 'error');
-                        this.setLoading(cartItem, false);
                     }
                 },
                 error: () => {
-                    this.showMessage(shopglut_cart_ajax.i18n.error, 'error');
+                    this.showMessage(shopglut_cart_ajax.i18n.error || 'Error removing item', 'error');
+                },
+                complete: () => {
                     this.setLoading(cartItem, false);
                 }
             });
@@ -247,7 +237,7 @@
             const submitButton = form.find('.apply-btn');
             const originalText = submitButton.text();
 
-            submitButton.text(shopglut_cart_ajax.i18n.updating).prop('disabled', true);
+            submitButton.text(shopglut_cart_ajax.i18n.updating || 'Updating...').prop('disabled', true);
 
             $.ajax({
                 url: shopglut_cart_ajax.ajax_url,
@@ -257,25 +247,33 @@
                     coupon_code: couponCode,
                     nonce: shopglut_cart_ajax.nonce
                 },
+                timeout: 30000,
                 success: (response) => {
                     if (response.success) {
-                        this.showCouponMessage(messageContainer, response.data.message || shopglut_cart_ajax.i18n.coupon_applied, 'success');
-                        form.find('#couponCode').val('');
-
+                        // Update cart fragments if provided
                         if (response.data && response.data.fragments) {
                             this.updateCartFragments(response.data.fragments);
                         }
+
+                        const message = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.coupon_applied || 'Coupon applied';
+                        this.showMessage(message, 'success');
+                        form.find('#couponCode').val('');
 
                         // Reload cart to show applied coupon
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
                     } else {
-                        this.showCouponMessage(messageContainer, response.data.message || shopglut_cart_ajax.i18n.invalid_coupon, 'error');
+                        const errorMessage = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.invalid_coupon || 'Invalid coupon';
+                        this.showMessage(errorMessage, 'error');
                     }
                 },
                 error: () => {
-                    this.showCouponMessage(messageContainer, shopglut_cart_ajax.i18n.error, 'error');
+                    this.showCouponMessage(messageContainer, shopglut_cart_ajax.i18n.error || 'Error applying coupon', 'error');
                 },
                 complete: () => {
                     submitButton.text(originalText).prop('disabled', false);
@@ -290,9 +288,17 @@
             e.preventDefault();
             const button = $(e.currentTarget);
             const couponCode = button.data('coupon');
-            const couponElement = button.closest('.applied-coupon');
 
-            this.setLoading(couponElement, true);
+            if (!couponCode) {
+                return;
+            }
+
+            const couponContainer = button.closest('.applied-coupons');
+            if (!couponContainer.length) {
+                return;
+            }
+
+            this.setLoading(couponContainer, true);
 
             $.ajax({
                 url: shopglut_cart_ajax.ajax_url,
@@ -302,23 +308,30 @@
                     coupon_code: couponCode,
                     nonce: shopglut_cart_ajax.nonce
                 },
+                timeout: 30000,
                 success: (response) => {
                     if (response.success) {
-                        if (response.data && response.data.fragments) {
-                            this.updateCartFragments(response.data.fragments);
-                        }
-                        couponElement.fadeOut(300, function() {
-                            $(this).remove();
-                        });
-                        this.showMessage(response.data.message || shopglut_cart_ajax.i18n.coupon_removed, 'success');
+                        const message = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.coupon_removed || 'Coupon removed';
+                        this.showMessage(message, 'success');
+
+                        // Reload page to update cart display
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     } else {
-                        this.showMessage(response.data.message || shopglut_cart_ajax.i18n.error, 'error');
-                        this.setLoading(couponElement, false);
+                        const errorMessage = response.data && response.data.message
+                            ? response.data.message
+                            : shopglut_cart_ajax.i18n.error || 'Error removing coupon';
+                        this.showMessage(errorMessage, 'error');
                     }
                 },
                 error: () => {
-                    this.showMessage(shopglut_cart_ajax.i18n.error, 'error');
-                    this.setLoading(couponElement, false);
+                    this.showMessage(shopglut_cart_ajax.i18n.error || 'Error removing coupon', 'error');
+                },
+                complete: () => {
+                    this.setLoading(couponContainer, false);
                 }
             });
         }
@@ -332,44 +345,48 @@
         }
 
         /**
-         * Show loading state - using fixed overlay to avoid layout interference
+         * Show loading state - using fixed overlay
          */
         setLoading(element, isLoading) {
-            // Get or create the loader overlay
+            // Get or create a loader overlay
             let $overlay = $('.shopglut-loader-overlay');
+
             if ($overlay.length === 0) {
                 $overlay = $(`
                     <div class="shopglut-loader-overlay">
-                        <div class="shopglut-loader-spinner"></div>
+                        <div class="shopglut-loader-container">
+                            <div class="shopglut-loader-spinner"></div>
+                            <div class="shopglut-loader-dash-circle"></div>
+                        </div>
                     </div>
                 `);
                 $('body').append($overlay);
             }
 
             if (isLoading) {
-                // Position the overlay over the specific element using fixed positioning
+                // Position overlay over specific element using fixed positioning
                 const offset = element.offset();
                 const scrollTop = $(window).scrollTop();
                 const scrollLeft = $(window).scrollLeft();
-                const width = element.outerWidth();
-                const height = element.outerHeight();
 
                 // Use fixed position relative to viewport
                 $overlay.css({
                     position: 'fixed',
                     top: (offset.top - scrollTop) + 'px',
                     left: (offset.left - scrollLeft) + 'px',
-                    width: width + 'px',
-                    height: height + 'px',
+                    width: element.outerWidth(),
+                    height: element.outerHeight(),
                     backgroundColor: 'rgba(255, 255, 255, 0.7)',
                     display: 'flex',
-                    zIndex: 99999
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 999999
                 }).addClass('active');
 
                 // Disable buttons and inputs
                 element.find('button, input').addClass(this.disabledClass).prop('disabled', true);
             } else {
-                // Hide the overlay immediately
+                // Hide overlay immediately
                 $overlay.removeClass('active').css('display', 'none');
 
                 // Re-enable buttons and inputs
@@ -378,36 +395,48 @@
         }
 
         /**
-         * Show message
+         * Show message notification
          */
-        showMessage(message, type = 'info') {
-            // Create or update message container
-            let messageContainer = $('.shopglut-cart-message');
-            if (messageContainer.length === 0) {
-                messageContainer = $('<div class="shopglut-cart-message"></div>');
-                $('.shopglut-cart.template1').prepend(messageContainer);
-            }
+        showMessage(message, type) {
+            // Remove any existing notifications
+            $('.shopglut-notification').remove();
 
-            messageContainer
-                .removeClass('success error info')
-                .addClass(type)
-                .text(message)
-                .fadeIn();
+            // Create notification element
+            const notification = $(`
+                <div class="shopglut-notification shopglut-notification-${type}">
+                    <span>${message}</span>
+                    <button class="notification-close">×</button>
+                </div>
+            `);
 
-            // Auto hide after 3 seconds
+            $('body').append(notification);
+
+            // Auto hide after 5 seconds
             setTimeout(() => {
-                messageContainer.fadeOut();
-            }, 3000);
+                notification.fadeOut(300, function() {
+                    $(this).remove();
+                });
+            }, 5000);
+
+            // Close button handler
+            notification.find('.notification-close').on('click', function() {
+                notification.fadeOut(300, function() {
+                    $(this).remove();
+                });
+            });
         }
 
         /**
          * Show coupon message
          */
         showCouponMessage(container, message, type) {
+            // Decode HTML entities in message before displaying
+            const decodedMessage = $('<div/>').html(message).text();
+
             container
                 .removeClass('success error')
                 .addClass(type)
-                .text(message)
+                .text(decodedMessage)
                 .show();
 
             // Auto hide after 5 seconds
@@ -429,142 +458,17 @@
         }
 
         /**
-         * Update line total for a cart item
-         */
-        updateLineTotal(cartItem, quantity) {
-            const priceCell = cartItem.find('.price-cell').first();
-            const priceText = priceCell.text();
-
-            // Extract numeric value from price (handles currency symbols)
-            const priceMatch = priceText.match(/[\d,]+\.?\d*/);
-            if (!priceMatch) return;
-
-            const price = parseFloat(priceMatch[0].replace(/,/g, ''));
-            const total = price * quantity;
-
-            // Get currency symbol and position
-            const currencySymbol = priceText.replace(/[\d,.\s]/g, '').trim();
-            const isSymbolBefore = priceText.indexOf(currencySymbol) < priceText.indexOf(priceMatch[0]);
-
-            // Format the new total
-            const formattedTotal = total.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-
-            const newTotal = isSymbolBefore ?
-                currencySymbol + formattedTotal :
-                formattedTotal + currencySymbol;
-
-            cartItem.find('.item-total').text(newTotal);
-        }
-
-        /**
-         * Update order summary totals
-         */
-        updateOrderSummary() {
-            let subtotal = 0;
-
-            // Calculate subtotal from all cart items
-            $('.cart-item').each(function() {
-                const itemTotal = $(this).find('.item-total').text();
-                const priceMatch = itemTotal.match(/[\d,]+\.?\d*/);
-                if (priceMatch) {
-                    subtotal += parseFloat(priceMatch[0].replace(/,/g, ''));
-                }
-            });
-
-            // Update subtotal display
-            const subtotalElement = $('#subtotal, .summary-row .value').first();
-            if (subtotalElement.length) {
-                const currencySymbol = subtotalElement.text().replace(/[\d,.\s]/g, '').trim();
-                const isSymbolBefore = subtotalElement.text().indexOf(currencySymbol) < subtotalElement.text().search(/\d/);
-
-                const formattedSubtotal = subtotal.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                const newSubtotal = isSymbolBefore ?
-                    currencySymbol + formattedSubtotal :
-                    formattedSubtotal + currencySymbol;
-
-                subtotalElement.text(newSubtotal);
-            }
-
-            // Update total (subtotal + shipping + tax - discount)
-            this.updateFinalTotal(subtotal);
-        }
-
-        /**
-         * Update final total calculation
-         */
-        updateFinalTotal(subtotal) {
-            let shipping = 0;
-            let tax = 0;
-            let discount = 0;
-
-            // Get shipping amount
-            const shippingElement = $('#shipping');
-            if (shippingElement.length) {
-                const shippingMatch = shippingElement.text().match(/[\d,]+\.?\d*/);
-                if (shippingMatch) {
-                    shipping = parseFloat(shippingMatch[0].replace(/,/g, ''));
-                }
-            }
-
-            // Get tax amount
-            const taxElement = $('#tax');
-            if (taxElement.length) {
-                const taxMatch = taxElement.text().match(/[\d,]+\.?\d*/);
-                if (taxMatch) {
-                    tax = parseFloat(taxMatch[0].replace(/,/g, ''));
-                }
-            }
-
-            // Get discount amount
-            const discountElement = $('#discount');
-            if (discountElement.length && discountElement.is(':visible')) {
-                const discountMatch = discountElement.text().match(/[\d,]+\.?\d*/);
-                if (discountMatch) {
-                    discount = parseFloat(discountMatch[0].replace(/,/g, ''));
-                }
-            }
-
-            // Calculate final total
-            const total = subtotal + shipping + tax - discount;
-
-            // Update total display
-            const totalElement = $('#total, .total-row .value').last();
-            if (totalElement.length) {
-                const currencySymbol = totalElement.text().replace(/[\d,.\s]/g, '').trim();
-                const isSymbolBefore = totalElement.text().indexOf(currencySymbol) < totalElement.text().search(/\d/);
-
-                const formattedTotal = total.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                const newTotal = isSymbolBefore ?
-                    currencySymbol + formattedTotal :
-                    formattedTotal + currencySymbol;
-
-                totalElement.text(newTotal);
-            }
-        }
-
-        /**
          * Handle cart updated event
          */
         onCartUpdated() {
-            // Re-initialize any new elements
-            this.bindEvents();
+            // Cart has been updated - any additional logic can go here
         }
     }
 
     // Initialize when document is ready
     $(document).ready(function() {
         const cartTemplate = new ShopglutCartTemplate1();
+        cartTemplate.init();
 
         // Store original quantities for all inputs
         $('.shopglut-cart.template1 .qty-input').each(function() {

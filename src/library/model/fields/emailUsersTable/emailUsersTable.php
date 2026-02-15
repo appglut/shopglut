@@ -909,10 +909,16 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
             global $wpdb;
             $wishlist_table = $wpdb->prefix . 'shopglut_wishlist';
             $is_pro_active = class_exists( 'Shopglut\WishlistPro\ProEmail' );
-            
+
+            // Check if table exists
+            $table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wishlist_table ) );
+            if ( $table_exists === null ) {
+                return '';
+            }
+
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query
             $users = $wpdb->get_results(
-                "SELECT DISTINCT 
+                "SELECT DISTINCT
                     w.id,
                     w.wish_user_id,
                     w.username,
@@ -920,10 +926,10 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
                     w.wishlist_notifications,
                     w.product_added_time
                 FROM {$wpdb->prefix}shopglut_wishlist w
-                WHERE w.wishlist_notifications IS NOT NULL 
+                WHERE w.wishlist_notifications IS NOT NULL
                 AND w.wishlist_notifications != ''
                 AND w.wishlist_notifications != '[]'
-                AND w.useremail IS NOT NULL 
+                AND w.useremail IS NOT NULL
                 AND w.useremail != ''
                 ORDER BY w.product_added_time DESC
                 LIMIT 100"
@@ -992,14 +998,20 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
             $wishlist_table = $wpdb->prefix . 'shopglut_wishlist';
             $wishlist_social_table = $wpdb->prefix . 'shopglut_wishlist_social';
             $is_pro_active = class_exists( 'Shopglut\WishlistPro\ProEmail' );
-            
+
+            // Check if table exists
+            $table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wishlist_social_table ) );
+            if ( $table_exists === null ) {
+                return '';
+            }
+
             // Note: sublist_notifications column has been removed, now using social table
             $wishlist_users = [];
-            
-            // Get users from shopglut_wishlist_social table with notification_settings  
+
+            // Get users from shopglut_wishlist_social table with notification_settings
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query
             $social_users = $wpdb->get_results(
-                "SELECT DISTINCT 
+                "SELECT DISTINCT
                     s.id,
                     s.wishlist_user_id,
                     s.list_name,
@@ -1007,10 +1019,10 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
                     s.created_at,
                     'social' as source
                 FROM {$wpdb->prefix}shopglut_wishlist_social s
-                WHERE s.notification_settings IS NOT NULL 
+                WHERE s.notification_settings IS NOT NULL
                 AND s.notification_settings != ''
                 AND s.notification_settings != '{}'
-                AND s.list_name IS NOT NULL 
+                AND s.list_name IS NOT NULL
                 AND s.list_name != ''
                 ORDER BY s.created_at DESC
                 LIMIT 100"
@@ -1133,9 +1145,16 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
             global $wpdb;
             $wishlist_social_table = $wpdb->prefix . 'shopglut_wishlist_social';
             $is_pro_active = class_exists( 'Shopglut\WishlistPro\ProEmail' );
+
+            // Check if table exists
+            $table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wishlist_social_table ) );
+            if ( $table_exists === null ) {
+                return '';
+            }
+
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query
             $social_users = $wpdb->get_results(
-                "SELECT DISTINCT 
+                "SELECT DISTINCT
                     s.id,
                     s.wishlist_user_id,
                     s.list_name,
@@ -1143,7 +1162,7 @@ if ( ! class_exists( 'AGSHOPGLUT_emailUsersTable' ) ) {
                     s.product_subscriptions,
                     s.created_at
                 FROM {$wpdb->prefix}shopglut_wishlist_social s
-                WHERE s.product_subscriptions IS NOT NULL 
+                WHERE s.product_subscriptions IS NOT NULL
                 AND s.product_subscriptions != ''
                 AND s.product_subscriptions != '[]'
                 ORDER BY s.created_at DESC

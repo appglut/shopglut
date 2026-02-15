@@ -656,7 +656,7 @@ class AllTools {
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-		$github_url = 'https://github.com/appglut/shortcodeglut';
+		$github_url = 'https://github.com/appglut/shortcodeglut/releases/download/latest/shortcodeglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		$feature_titles = array(
