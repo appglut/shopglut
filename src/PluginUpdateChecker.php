@@ -374,8 +374,26 @@ class ShopGlut_PluginUpdateChecker {
         require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
         require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
 
-        // Get plugin directory
-        $plugin_dir = dirname(WP_PLUGIN_DIR . '/' . $plugin_basename);
+        // Define the skin class here, after WordPress admin files are loaded
+        if (!class_exists('ShopGlut_Quiet_Upgrader_Skin')) {
+            class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
+                public function feedback($string, ...$args) {
+                    // Silence feedback
+                }
+
+                public function header() {
+                    // No header
+                }
+
+                public function footer() {
+                    // No footer
+                }
+
+                public function error($errors) {
+                    // Handle errors silently
+                }
+            }
+        }
 
         // Create a custom upgrader skin
         $skin = new ShopGlut_Quiet_Upgrader_Skin();
@@ -383,14 +401,11 @@ class ShopGlut_PluginUpdateChecker {
         // Create upgrader instance
         $upgrader = new Plugin_Upgrader($skin);
 
-        // Download the ZIP file
-        $download_url = $zip_url;
+        // Check if plugin was active before update
+        $was_active = is_plugin_active($plugin_basename);
 
-        // Get the plugin slug from basename
-        $plugin_slug = dirname($plugin_basename);
-
-        // Use WordPress upgrade API
-        $result = $upgrader->upgrade($plugin_basename, $download_url);
+        // Use WordPress upgrade API - download and install
+        $result = $upgrader->install($zip_url);
 
         if (is_wp_error($result)) {
             return $result;
@@ -398,6 +413,11 @@ class ShopGlut_PluginUpdateChecker {
 
         if ($result === false) {
             return new WP_Error('update_failed', 'Plugin update failed');
+        }
+
+        // Reactivate if it was active
+        if ($was_active) {
+            activate_plugin($plugin_basename);
         }
 
         return true;
@@ -424,27 +444,6 @@ class ShopGlut_PluginUpdateChecker {
             'shortcodeglut' => 'shortcodeglut/shortcodeglut.php'
         );
         return isset($basenames[$slug]) ? $basenames[$slug] : '';
-    }
-}
-
-/**
- * Custom upgrader skin for silent updates
- */
-class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
-    public function feedback($string, ...$args) {
-        // Silence feedback
-    }
-
-    public function header() {
-        // No header
-    }
-
-    public function footer() {
-        // No footer
-    }
-
-    public function error($errors) {
-        // Handle errors silently
     }
 }
 
