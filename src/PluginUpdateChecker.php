@@ -358,6 +358,14 @@ class ShopGlut_PluginUpdateChecker {
             wp_send_json_error($result->get_error_message());
         }
 
+        // Clear version cache to force refresh on next page load
+        delete_option($this->option_name);
+        delete_transient($this->option_name . '_last_check');
+        delete_option($this->option_name . '_dismissed');
+
+        // Also clear WordPress plugin cache
+        wp_cache_flush();
+
         wp_send_json_success(array(
             'message' => 'Plugin updated successfully',
             'plugin' => $plugin
@@ -373,15 +381,34 @@ class ShopGlut_PluginUpdateChecker {
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
         require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
         require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
-
-        // Create upgrader instance with silent skin
-        $upgrader = new Plugin_Upgrader(new ShopGlut_Quiet_Upgrader_Skin());
+        require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skins.php';
 
         // Check if plugin was active before update
         $was_active = is_plugin_active($plugin_basename);
 
-        // Use WordPress upgrade API - download and install
-        $result = $upgrader->install($zip_url);
+        // Get plugin directory
+        $plugin_dir = dirname(WP_PLUGIN_DIR . '/' . $plugin_basename);
+
+        // Use File_Upload_Upgrader skin to handle download
+        $skin = new WP_Ajax_Upgrader_Skin(array(
+            'nonce' => 'shopglut_update_plugin',
+            'url' => admin_url('admin-ajax.php?action=shopglut_update_plugin')
+        ));
+
+        // Create upgrader instance
+        $upgrader = new Plugin_Upgrader($skin);
+
+        // Download the ZIP file
+        $download_url = $zip_url;
+
+        // Use WordPress upgrade API
+        $result = $upgrader->install($download_url, array(
+            'overwrite_package' => true,
+            'hook_extra' => array(
+                'type' => 'plugin',
+                'plugin' => $plugin_basename
+            )
+        ));
 
         if (is_wp_error($result)) {
             return $result;
@@ -393,8 +420,16 @@ class ShopGlut_PluginUpdateChecker {
 
         // Reactivate if it was active
         if ($was_active) {
-            activate_plugin($plugin_basename);
+            $reactivate = activate_plugin($plugin_basename);
+            if (is_wp_error($reactivate)) {
+                // Try to activate anyway, might be a minor issue
+                error_log('ShopGlut: Failed to reactivate plugin after update: ' . $reactivate->get_error_message());
+            }
         }
+
+        // Clear plugin cache to force refresh
+        wp_cache_flush();
+        delete_option('shopglut_related_plugins_versions');
 
         return true;
     }
