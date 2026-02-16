@@ -23,8 +23,6 @@ Builder for Woocommerce with 9 powerful modules including single product builder
 🎨 **Product Swatches** - Color, image, and label swatches for variations
 🏷️ **Product Badges** - Custom product labels and badges
 ⚖️ **Product Comparison** - Side-by-side product comparison with Compare Products Table
-
-**Plus Add-on Modules (requires ShortcodeGlut plugin):**
 💻 **Shortcode Showcase** - Powerful shortcodes for displaying products in beautiful layouts
 📋 **Woo Templates** - Create custom WooCommerce product templates with visual editor
 
