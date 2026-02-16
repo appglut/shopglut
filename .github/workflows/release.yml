@@ -1,45 +1,38 @@
-name: Create Release
+name: Build Plugin Zip
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
-  release:
-    name: Create Release
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-      - name: Create ZIP archive
+      - name: Create plugin zip
         run: |
-          VERSION="${{ steps.get_version.outputs.VERSION }}"
-          mkdir -p release
-          rsync -av --exclude='.git' \
-                    --exclude='.github' \
-                    --exclude='.gitignore' \
-                    --exclude='*.log' \
-                    --exclude='tests' \
-                    --exclude='node_modules' \
-                    --exclude='release' \
-                    . release/shopglut/
-          cd release
-          zip -r ../shopglut-${VERSION}.zip shopglut/
+          PLUGIN_NAME="shopglut"
+          cd ..
+          mv $PLUGIN_NAME $PLUGIN_NAME-temp
+          mkdir $PLUGIN_NAME
+          cp -r $PLUGIN_NAME-temp/* $PLUGIN_NAME/
+          zip -r $PLUGIN_NAME.zip $PLUGIN_NAME -x "*.git*" "*/.github/*" "*/node_modules/*"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Update latest release
+        uses: softprops/action-gh-release@v2
         with:
-          files: shopglut-${{ steps.get_version.outputs.VERSION }}.zip
-          generate_release_notes: true
+          tag_name: latest
+          name: Latest Build
+          files: ../shopglut.zip
+          prerelease: false
+          draft: false
+          overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
