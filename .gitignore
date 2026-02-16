@@ -65,5 +65,6 @@ coverage/
 # Package manager
 package-lock.json
 
-# Release script
+# Release scripts
 release.sh
+release.php
