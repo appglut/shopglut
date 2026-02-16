@@ -12,7 +12,7 @@ Builder for Woocommerce with 9 powerful modules including single product builder
 
 == Description ==
 
-**ShopGlut** - The ultimate all-in-one WooCommerce store builder with 9 powerful modules for creating complete e-commerce websites:
+**ShopGlut** - The WooCommerce store builder with 9 powerful modules for creating complete e-commerce websites:
 
 🛍️ **Single Product** - Create conversion-optimized product pages with Product Page Builder
 🛒 **Cart Page** - Build custom cart page layouts with advanced styling
