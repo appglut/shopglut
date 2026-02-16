@@ -64,3 +64,6 @@ coverage/
 
 # Package manager
 package-lock.json
+
+# Release script
+release.sh
