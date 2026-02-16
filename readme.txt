@@ -247,11 +247,6 @@ The primary shortcode is [shopglut_woo_category] which allows you to display pro
 = Can I customize the appearance of shortcode output? =
 Absolutely! The Shortcode Showcase module integrates seamlessly with Woo Templates, allowing you to create custom product display templates. You can control grid layouts, colors, typography, spacing, and all visual aspects. The module also includes built-in toolbar options for search, filtering, and sorting with customizable styling.
 
-= Do shortcodes work with page builders like Elementor or Gutenberg? =
-Yes! All ShopGlut shortcodes are compatible with major page builders and the WordPress block editor. You can add shortcodes to any page, post, or widget area. The module provides a user-friendly interface for copying shortcodes and includes live preview functionality to see exactly how they will appear on your site.
-
-== Screenshots ==
-
 1. **ShopGlut Admin Dashboard**
 2. **ShopGlut Admin Dashboard**
 3. **ShopGlut Admin Dashboard**
