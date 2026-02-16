@@ -34,7 +34,9 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					<?php foreach ( $plugins as $slug => $plugin ) :
 						$is_installed = $this->is_plugin_installed( $plugin['basename'] );
 						$is_active = $this->is_plugin_active( $plugin['basename'] );
-						$has_update = isset( $versions[ $slug ] ) && ! in_array( $slug, $dismissed );
+						$current_version = $is_installed ? $this->get_plugin_version( $plugin['basename'] ) : null;
+						$latest_version = isset( $versions[ $slug ]['version'] ) ? $versions[ $slug ]['version'] : null;
+						$has_update = $latest_version && $current_version && version_compare( $current_version, $latest_version, '<' );
 						$version_info = isset( $versions[ $slug ] ) ? $versions[ $slug ] : null;
 						?>
 
@@ -44,16 +46,27 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 								<h4 class="plugin-name"><?php echo esc_html( $plugin['name'] ); ?></h4>
 								<p class="plugin-description"><?php echo esc_html( $plugin['description'] ); ?></p>
 
-								<?php if ( $has_update && $version_info ) : ?>
+								<!-- Version Info -->
+								<div class="plugin-versions">
+									<?php if ( $current_version ) : ?>
+										<span class="version-label current-version">
+											<?php esc_html_e( 'Current:', 'shopglut' ); ?>
+											<strong><?php echo esc_html( $current_version ); ?></strong>
+										</span>
+									<?php endif; ?>
+
+									<?php if ( $latest_version ) : ?>
+										<span class="version-label latest-version <?php echo $has_update ? 'update-available' : ''; ?>">
+											<?php esc_html_e( 'Latest:', 'shopglut' ); ?>
+											<strong><?php echo esc_html( $latest_version ); ?></strong>
+										</span>
+									<?php endif; ?>
+								</div>
+
+								<?php if ( $has_update ) : ?>
 									<div class="plugin-update-badge">
 										<span class="update-badge">
-											<?php
-											printf(
-												/* translators: %s: version date */
-												esc_html__( 'New: %s', 'shopglut' ),
-												esc_html( $version_info['version'] )
-											);
-											?>
+											<?php esc_html_e( 'Update Available!', 'shopglut' ); ?>
 										</span>
 									</div>
 								<?php endif; ?>
@@ -70,17 +83,35 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 
 								<div class="plugin-actions">
 									<?php if ( $has_update && $version_info ) : ?>
+										<!-- Update Now button -->
+										<button type="button" class="button button-primary button-small shopglut-update-plugin"
+											data-slug="<?php echo esc_attr( $slug ); ?>"
+											data-basename="<?php echo esc_attr( $plugin['basename'] ); ?>"
+											data-zip="<?php echo esc_url( $version_info['zip_url'] ); ?>"
+											data-nonce="<?php echo esc_attr( wp_create_nonce( 'shopglut_update_plugin_' . $slug ) ); ?>">
+											<span class="dashicons dashicons-update-alt"></span>
+											<?php esc_html_e( 'Update Now', 'shopglut' ); ?>
+										</button>
 										<a href="<?php echo esc_url( $version_info['url'] ); ?>" target="_blank" class="button button-small">
 											<?php esc_html_e( 'View Release', 'shopglut' ); ?>
 										</a>
-										<a href="<?php echo esc_url( $version_info['zip_url'] ); ?>" target="_blank" class="button button-primary button-small">
-											<?php esc_html_e( 'Download', 'shopglut' ); ?>
-										</a>
-									<?php else : ?>
+									<?php elseif ( $is_installed && $version_info ) : ?>
 										<a href="<?php echo esc_url( $plugin['url'] ); ?>" target="_blank" class="button button-small">
 											<?php esc_html_e( 'Learn More', 'shopglut' ); ?>
 										</a>
+									<?php else : ?>
+										<a href="<?php echo esc_url( $plugin['url'] ); ?>" target="_blank" class="button button-small">
+											<?php esc_html_e( 'View Plugin', 'shopglut' ); ?>
+										</a>
 									<?php endif; ?>
+								</div>
+
+								<!-- Update Progress -->
+								<div class="update-progress" style="display:none;" id="progress-<?php echo esc_attr( $slug ); ?>">
+									<div class="progress-bar">
+										<div class="progress-fill" style="width: 0%"></div>
+									</div>
+									<div class="progress-text"><?php esc_html_e( 'Updating...', 'shopglut' ); ?></div>
 								</div>
 							</div>
 						</div>
@@ -120,7 +151,7 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 
 				.shopglut-plugins-grid {
 					display: grid;
-					grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+					grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 					gap: 15px;
 					margin-bottom: 15px;
 				}
@@ -143,6 +174,7 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 				.shopglut-plugin-card.has-update {
 					border-color: #72aee6;
 					background: #f0f6fc;
+					border-left: 4px solid #72aee6;
 				}
 
 				.plugin-icon {
@@ -169,18 +201,50 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					line-height: 1.4;
 				}
 
+				/* Version Info Styles */
+				.plugin-versions {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 10px;
+					margin-bottom: 8px;
+				}
+
+				.version-label {
+					font-size: 11px;
+					padding: 3px 8px;
+					border-radius: 3px;
+					background: #f0f0f1;
+					color: #646970;
+				}
+
+				.version-label strong {
+					margin-left: 4px;
+				}
+
+				.version-label.latest-version.update-available {
+					background: #edfaef;
+					color: #00a32a;
+					border: 1px solid #00a32a;
+				}
+
 				.plugin-update-badge {
 					margin-bottom: 8px;
 				}
 
 				.plugin-update-badge .update-badge {
 					display: inline-block;
-					background: #72aee6;
+					background: #d63638;
 					color: #fff;
-					padding: 2px 8px;
+					padding: 3px 8px;
 					border-radius: 3px;
 					font-size: 11px;
-					font-weight: 500;
+					font-weight: 600;
+					animation: pulse 2s infinite;
+				}
+
+				@keyframes pulse {
+					0%, 100% { opacity: 1; }
+					50% { opacity: 0.8; }
 				}
 
 				.plugin-status {
@@ -213,6 +277,7 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 				.plugin-actions {
 					display: flex;
 					gap: 8px;
+					flex-wrap: wrap;
 				}
 
 				.plugin-actions .button {
@@ -220,6 +285,45 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					font-size: 12px;
 					height: auto;
 					line-height: 1.5;
+					display: inline-flex;
+					align-items: center;
+					gap: 4px;
+				}
+
+				/* Update Progress Styles */
+				.update-progress {
+					margin-top: 10px;
+				}
+
+				.progress-bar {
+					height: 4px;
+					background: #f0f0f1;
+					border-radius: 2px;
+					overflow: hidden;
+					margin-bottom: 5px;
+				}
+
+				.progress-fill {
+					height: 100%;
+					background: #2271b1;
+					transition: width 0.3s ease;
+				}
+
+				.progress-fill.updating {
+					animation: progress-stripes 1s linear infinite;
+					background: linear-gradient(45deg, #2271b1 25%, #135e96 25%, #135e96 50%, #2271b1 50%, #2271b1 75%, #135e96 75%);
+					background-size: 20px 20px;
+				}
+
+				@keyframes progress-stripes {
+					0% { background-position: 0 0; }
+					100% { background-position: 20px 0; }
+				}
+
+				.progress-text {
+					font-size: 11px;
+					color: #646970;
+					text-align: center;
 				}
 
 				.shopglut-plugins-footer {
@@ -254,6 +358,7 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 
 			<script>
 			jQuery(document).ready(function($) {
+				// Check for Updates button
 				$('#shopglut-check-updates-btn').on('click', function() {
 					var $btn = $(this);
 					var $spinner = $btn.next('.spinner');
@@ -276,6 +381,54 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 						complete: function() {
 							$btn.prop('disabled', false);
 							$spinner.css('display', 'none');
+						}
+					});
+				});
+
+				// Update Plugin button
+				$('.shopglut-update-plugin').on('click', function() {
+					var $btn = $(this);
+					var slug = $btn.data('slug');
+					var basename = $btn.data('basename');
+					var zipUrl = $btn.data('zip');
+					var nonce = $btn.data('nonce');
+					var $progress = $('#progress-' + slug);
+					var $card = $btn.closest('.shopglut-plugin-card');
+
+					// Show progress
+					$btn.prop('disabled', true);
+					$progress.show();
+					$progress.find('.progress-fill').addClass('updating').css('width', '20%');
+					$progress.find('.progress-text').text('<?php esc_html_e( 'Downloading update...', 'shopglut' ); ?>');
+
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'shopglut_update_plugin',
+							plugin: basename,
+							zip_url: zipUrl,
+							slug: slug,
+							nonce: nonce
+						},
+						success: function(response) {
+							if (response.success) {
+								$progress.find('.progress-fill').css('width', '100%');
+								$progress.find('.progress-text').text('<?php esc_html_e( 'Update complete! Reloading...', 'shopglut' ); ?>');
+
+								setTimeout(function() {
+									location.reload();
+								}, 1500);
+							} else {
+								$progress.find('.progress-fill').removeClass('updating').css('width', '0%');
+								$progress.find('.progress-text').text('<?php esc_html_e( 'Update failed: ', 'shopglut' ); ?>' + (response.data || 'Unknown error'));
+								$btn.prop('disabled', false);
+							}
+						},
+						error: function() {
+							$progress.find('.progress-fill').removeClass('updating').css('width', '0%');
+							$progress.find('.progress-text').text('<?php esc_html_e( 'Update failed: Server error', 'shopglut' ); ?>');
+							$btn.prop('disabled', false);
 						}
 					});
 				});
@@ -322,6 +475,17 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 
 		private function is_plugin_active( $basename ) {
 			return is_plugin_active( $basename );
+		}
+
+		private function get_plugin_version( $basename ) {
+			if ( ! function_exists( 'get_plugins' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+			$plugins = get_plugins();
+			if ( isset( $plugins[ $basename ] ) ) {
+				return $plugins[ $basename ]['Version'];
+			}
+			return null;
 		}
 	}
 }

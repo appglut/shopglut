@@ -36,6 +36,7 @@ class ShopGlut_PluginUpdateChecker {
         add_action('admin_notices', array($this, 'show_update_notices'));
         add_action('wp_ajax_shopglut_dismiss_plugin_update', array($this, 'dismiss_update'));
         add_action('wp_ajax_shopglut_force_check_updates', array($this, 'ajax_force_check'));
+        add_action('wp_ajax_shopglut_update_plugin', array($this, 'ajax_update_plugin'));
     }
 
     /**
@@ -59,14 +60,24 @@ class ShopGlut_PluginUpdateChecker {
             $release_info = $this->get_github_release($plugin['repo']);
 
             if ($release_info && !isset($release_info['message'])) {
-                $published_at = $release_info['published_at'];
-                $version_date = $this->format_version_date($published_at);
+                // Use tag_name as version (e.g., "v1.0.0" or "latest")
+                $tag_name = isset($release_info['tag_name']) ? $release_info['tag_name'] : 'latest';
+
+                // If tag is "latest", use date as fallback version
+                if ($tag_name === 'latest') {
+                    $published_at = $release_info['published_at'];
+                    $version = $this->format_version_date($published_at);
+                } else {
+                    // Remove 'v' prefix if present
+                    $version = ltrim($tag_name, 'v');
+                }
 
                 $versions[$slug] = array(
                     'name' => $plugin['name'],
-                    'version' => $version_date,
-                    'published_at' => $published_at,
-                    'url' => $plugin['url'],
+                    'version' => $version,
+                    'tag_name' => $tag_name,
+                    'published_at' => $release_info['published_at'],
+                    'url' => $plugin['url'] . '/releases/tag/' . $tag_name,
                     'icon' => $plugin['icon'],
                     'zip_url' => $this->get_zip_url($release_info)
                 );
@@ -148,16 +159,45 @@ class ShopGlut_PluginUpdateChecker {
         $notice_id = esc_attr($slug);
         $dismiss_nonce = wp_create_nonce('shopglut_dismiss_update');
 
+        // Get current installed version if plugin is installed
+        $plugin_basename = $this->get_plugin_basename($slug);
+        $current_version = '';
+
+        if ($plugin_basename && function_exists('get_plugins')) {
+            $plugins = get_plugins();
+            if (isset($plugins[$plugin_basename])) {
+                $current_version = $plugins[$plugin_basename]['Version'];
+            }
+        }
+
         ?>
         <div class="notice notice-info is-dismissible shopglut-plugin-update" data-plugin="<?php echo $notice_id; ?>">
             <p>
                 <strong><?php echo esc_html($plugin['icon'] . ' ' . $plugin['name']); ?></strong>
-                - A new version is available! (Updated: <?php echo esc_html($plugin['version']); ?>)
+                -
+                <?php if ($current_version) : ?>
+                    <?php
+                    printf(
+                        /* translators: 1: current version, 2: new version */
+                        esc_html__('You have version %1$s installed. New version %2$s is available!', 'shopglut'),
+                        esc_html($current_version),
+                        esc_html($plugin['version'])
+                    );
+                    ?>
+                <?php else : ?>
+                    <?php
+                    printf(
+                        /* translators: %s: version number */
+                        esc_html__('Version %s is now available!', 'shopglut'),
+                        esc_html($plugin['version'])
+                    );
+                    ?>
+                <?php endif; ?>
                 <a href="<?php echo esc_url($plugin['url']); ?>" target="_blank" class="button button-small" style="margin-left: 10px;">
-                    View Release
+                    <?php esc_html_e('View Release', 'shopglut'); ?>
                 </a>
                 <a href="<?php echo esc_url($plugin['zip_url']); ?>" target="_blank" class="button button-primary button-small" style="margin-left: 5px;">
-                    Download
+                    <?php esc_html_e('Download', 'shopglut'); ?>
                 </a>
             </p>
         </div>
@@ -217,14 +257,24 @@ class ShopGlut_PluginUpdateChecker {
             $release_info = $this->get_github_release($plugin['repo']);
 
             if ($release_info && !isset($release_info['message'])) {
-                $published_at = $release_info['published_at'];
-                $version_date = $this->format_version_date($published_at);
+                // Use tag_name as version (e.g., "v1.0.0" or "latest")
+                $tag_name = isset($release_info['tag_name']) ? $release_info['tag_name'] : 'latest';
+
+                // If tag is "latest", use date as fallback version
+                if ($tag_name === 'latest') {
+                    $published_at = $release_info['published_at'];
+                    $version = $this->format_version_date($published_at);
+                } else {
+                    // Remove 'v' prefix if present
+                    $version = ltrim($tag_name, 'v');
+                }
 
                 $versions[$slug] = array(
                     'name' => $plugin['name'],
-                    'version' => $version_date,
-                    'published_at' => $published_at,
-                    'url' => $plugin['url'],
+                    'version' => $version,
+                    'tag_name' => $tag_name,
+                    'published_at' => $release_info['published_at'],
+                    'url' => $plugin['url'] . '/releases/tag/' . $tag_name,
                     'icon' => $plugin['icon'],
                     'zip_url' => $this->get_zip_url($release_info)
                 );
@@ -276,6 +326,125 @@ class ShopGlut_PluginUpdateChecker {
      */
     public function get_versions() {
         return get_option($this->option_name, array());
+    }
+
+    /**
+     * Handle AJAX update plugin request
+     */
+    public function ajax_update_plugin() {
+        $plugin = isset($_POST['plugin']) ? sanitize_text_field($_POST['plugin']) : '';
+        $zip_url = isset($_POST['zip_url']) ? esc_url_raw($_POST['zip_url']) : '';
+        $slug = isset($_POST['slug']) ? sanitize_text_field($_POST['slug']) : '';
+
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'shopglut_update_plugin_' . $slug)) {
+            wp_send_json_error('Invalid nonce');
+        }
+
+        // Check permissions
+        if (!current_user_can('update_plugins')) {
+            wp_send_json_error('You do not have permission to update plugins');
+        }
+
+        // Validate plugin
+        if (!$plugin || !$this->is_valid_plugin($plugin)) {
+            wp_send_json_error('Invalid plugin');
+        }
+
+        // Download and update the plugin
+        $result = $this->update_plugin_from_zip($plugin, $zip_url);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+        }
+
+        wp_send_json_success(array(
+            'message' => 'Plugin updated successfully',
+            'plugin' => $plugin
+        ));
+    }
+
+    /**
+     * Update plugin from ZIP URL
+     */
+    private function update_plugin_from_zip($plugin_basename, $zip_url) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/misc.php';
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+        require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
+
+        // Get plugin directory
+        $plugin_dir = dirname(WP_PLUGIN_DIR . '/' . $plugin_basename);
+
+        // Create a custom upgrader skin
+        $skin = new ShopGlut_Quiet_Upgrader_Skin();
+
+        // Create upgrader instance
+        $upgrader = new Plugin_Upgrader($skin);
+
+        // Download the ZIP file
+        $download_url = $zip_url;
+
+        // Get the plugin slug from basename
+        $plugin_slug = dirname($plugin_basename);
+
+        // Use WordPress upgrade API
+        $result = $upgrader->upgrade($plugin_basename, $download_url);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        if ($result === false) {
+            return new WP_Error('update_failed', 'Plugin update failed');
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if plugin is valid and installed
+     */
+    private function is_valid_plugin($plugin_basename) {
+        if (!function_exists('get_plugins')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        $plugins = get_plugins();
+        return isset($plugins[$plugin_basename]);
+    }
+
+    /**
+     * Get plugin basename from slug
+     */
+    private function get_plugin_basename($slug) {
+        $basenames = array(
+            'wishglut' => 'wishglut/wishglut.php',
+            'checkoutglut' => 'checkoutglut/checkoutglut.php',
+            'shortcodeglut' => 'shortcodeglut/shortcodeglut.php'
+        );
+        return isset($basenames[$slug]) ? $basenames[$slug] : '';
+    }
+}
+
+/**
+ * Custom upgrader skin for silent updates
+ */
+class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
+    public function feedback($string, ...$args) {
+        // Silence feedback
+    }
+
+    public function header() {
+        // No header
+    }
+
+    public function footer() {
+        // No footer
+    }
+
+    public function error($errors) {
+        // Handle errors silently
     }
 }
 
