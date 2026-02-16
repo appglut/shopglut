@@ -31,6 +31,9 @@ define( 'SHOPGLUT_UPGRADE_URL', 'https://www.appglut.com' );
 // Autoloader for class loading
 require __DIR__ . '/autoloader.php';
 
+// Plugin Update Widget for related plugins notifications
+require __DIR__ . '/src/PluginUpdateWidget.php';
+
 // Plugin Update Checker for related plugins
 require __DIR__ . '/src/PluginUpdateChecker.php';
 
