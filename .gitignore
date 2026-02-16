@@ -15,6 +15,7 @@ Thumbs.db
 .settings/
 *.sublime-project
 *.sublime-workspace
+.phpintel/
 
 # OS files
 .DS_Store
@@ -35,6 +36,7 @@ vendor/
 *.min.css.map
 dist/
 build/
+public_build/
 
 # Environment
 .env
@@ -48,6 +50,17 @@ wp-content/upgrade/
 wp-content/backup-db/
 wp-content/cache/
 
+# SVN
+svn/
+svn.php
+
+# Plugin ZIP builds
+shopglut.zip
+shopglut/
+
 # Testing
 .phpunit.result.cache
 coverage/
+
+# Package manager
+package-lock.json
