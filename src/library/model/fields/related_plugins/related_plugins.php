@@ -26,8 +26,15 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 			?>
 			<div class="shopglut-related-plugins-wrapper">
 				<div class="shopglut-plugins-header">
-					<h3><?php esc_html_e( 'More Plugins by AppGlut', 'shopglut' ); ?></h3>
-					<p class="description"><?php esc_html_e( 'Check out our other WooCommerce plugins to enhance your store.', 'shopglut' ); ?></p>
+					<div>
+						<h3><?php esc_html_e( 'More Plugins by AppGlut', 'shopglut' ); ?></h3>
+						<p class="description"><?php esc_html_e( 'Check out our other WooCommerce plugins to enhance your store.', 'shopglut' ); ?></p>
+					</div>
+					<button type="button" class="button button-primary button-primary shopglut-check-updates" id="shopglut-check-updates-btn">
+						<span class="dashicons dashicons-update-alt"></span>
+						<?php esc_html_e( 'Check for Updates', 'shopglut' ); ?>
+					</button>
+					<span class="spinner" style="display:none;" id="shopglut-check-updates-spinner"></span>
 				</div>
 
 				<div class="shopglut-plugins-grid">
@@ -118,14 +125,6 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 
 					<?php endforeach; ?>
 				</div>
-
-				<div class="shopglut-plugins-footer">
-					<button type="button" class="button shopglut-check-updates" id="shopglut-check-updates-btn">
-						<span class="dashicons dashicons-update-alt"></span>
-						<?php esc_html_e( 'Check for Updates', 'shopglut' ); ?>
-					</button>
-					<span class="spinner" style="display:none;"></span>
-				</div>
 			</div>
 
 			<style>
@@ -137,6 +136,18 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					margin: 15px 0;
 				}
 
+				.shopglut-plugins-header {
+					display: flex;
+					justify-content: space-between;
+					align-items: flex-start;
+					margin-bottom: 20px;
+					gap: 20px;
+				}
+
+				.shopglut-plugins-header > div {
+					flex: 1;
+				}
+
 				.shopglut-plugins-header h3 {
 					margin: 0 0 5px 0;
 					font-size: 16px;
@@ -144,9 +155,23 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 				}
 
 				.shopglut-plugins-header .description {
-					margin: 0 0 15px 0;
+					margin: 0;
 					color: #646970;
 					font-size: 13px;
+				}
+
+				.shopglut-plugins-header .button-primary {
+					display: inline-flex;
+					align-items: center;
+					gap: 5px;
+					white-space: nowrap;
+					flex-shrink: 0;
+				}
+
+				.shopglut-plugins-header .spinner {
+					vertical-align: middle;
+					margin: 0 0 0 10px;
+					float: none;
 				}
 
 				.shopglut-plugins-grid {
@@ -326,32 +351,19 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					text-align: center;
 				}
 
-				.shopglut-plugins-footer {
-					display: flex;
-					align-items: center;
-					gap: 10px;
-					padding-top: 15px;
-					border-top: 1px solid #ddd;
-				}
-
-				.shopglut-check-updates {
-					display: flex;
-					align-items: center;
-					gap: 5px;
-				}
-
-				.shopglut-check-updates .dashicons {
-					font-size: 16px;
-				}
-
-				.shopglut-plugins-footer .spinner {
-					float: none;
-					margin: 0;
-				}
-
 				@media (max-width: 600px) {
 					.shopglut-plugins-grid {
 						grid-template-columns: 1fr;
+					}
+
+					.shopglut-plugins-header {
+						flex-direction: column;
+						gap: 15px;
+					}
+
+					.shopglut-plugins-header .button-primary {
+						width: 100%;
+						justify-content: center;
 					}
 				}
 			</style>
@@ -361,10 +373,10 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 				// Check for Updates button
 				$('#shopglut-check-updates-btn').on('click', function() {
 					var $btn = $(this);
-					var $spinner = $btn.next('.spinner');
+					var $spinner = $('#shopglut-check-updates-spinner');
 
 					$btn.prop('disabled', true);
-					$spinner.css('display', 'inline-block');
+					$spinner.show();
 
 					$.ajax({
 						url: ajaxurl,
@@ -380,7 +392,7 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 						},
 						complete: function() {
 							$btn.prop('disabled', false);
-							$spinner.css('display', 'none');
+							$spinner.hide();
 						}
 					});
 				});

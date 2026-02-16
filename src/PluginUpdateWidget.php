@@ -39,13 +39,14 @@ class ShopGlut_PluginUpdateWidget {
     }
 
     public function enqueue_scripts() {
-        // Only show on ShopGlut pages
+        // Only show on ShopGlut pages - register widget for footer
         $screen = get_current_screen();
         if (!$screen || strpos($screen->id, 'shopglut') === false) {
             return;
         }
 
-        wp_enqueue_script('shopglut-update-widget', plugins_url('shopglut.js', __FILE__), array('jquery'), SHOPGLUT_VERSION, true);
+        // Enqueue jQuery for widget functionality
+        wp_enqueue_script('jquery');
     }
 
     public function render_widget() {
@@ -92,8 +93,9 @@ class ShopGlut_PluginUpdateWidget {
                 <span class="shopglut-widget-badge"><?php echo count($available_updates); ?></span>
             </div>
 
-            <div class="shopglut-widget-content" style="display: none;">
+            <div class="shopglut-widget-content">
                 <div class="shopglut-widget-title">Plugin Updates Available</div>
+                <div class="shopglut-widget-subtitle">Click to view details</div>
 
                 <?php foreach ($available_updates as $slug => $plugin): ?>
                     <div class="shopglut-widget-item" data-plugin="<?php echo esc_attr($slug); ?>">
@@ -107,15 +109,6 @@ class ShopGlut_PluginUpdateWidget {
                                     <span class="latest">v<?php echo esc_html($plugin['latest_version']); ?></span>
                                 </div>
                             </div>
-                            <button class="shopglut-widget-dismiss" data-plugin="<?php echo esc_attr($slug); ?>">✕</button>
-                        </div>
-                        <div class="shopglut-widget-actions">
-                            <a href="<?php echo esc_url($plugin['url']); ?>" target="_blank" class="shopglut-widget-view">
-                                <span class="dashicons dashicons-external"></span> View
-                            </a>
-                            <a href="<?php echo esc_url($plugin['zip_url']); ?>" target="_blank" class="shopglut-widget-download">
-                                <span class="dashicons dashicons-download"></span> Download
-                            </a>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -131,18 +124,18 @@ class ShopGlut_PluginUpdateWidget {
 
         <style>
         .shopglut-update-widget {
-            position: fixed;
-            top: 50%;
-            right: 20px;
+            position: fixed !important;
+            top: 50% !important;
+            right: 20px !important;
             transform: translateY(-50%);
-            z-index: 99999;
+            z-index: 999999 !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
         }
 
         .shopglut-widget-header {
             position: relative;
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             cursor: pointer;
@@ -151,62 +144,84 @@ class ShopGlut_PluginUpdateWidget {
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: pulse-bell 2s infinite;
+        }
+
+        @keyframes pulse-bell {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .shopglut-widget-header:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) !important;
+            animation-play-state: paused;
             box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
         }
 
         .shopglut-widget-icon {
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .shopglut-widget-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -4px;
+            right: -4px;
             background: #ff4757;
             color: white;
             font-size: 11px;
             font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 10px;
+            padding: 3px 7px;
+            border-radius: 12px;
             border: 2px solid #fff;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         .shopglut-widget-content {
             position: absolute;
-            right: 60px;
+            right: 66px;
             top: 0;
-            width: 280px;
+            width: 300px;
             background: #fff;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             overflow: hidden;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transform: scale(0.9);
+            transform-origin: right center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .shopglut-widget-content.show {
             opacity: 1;
             visibility: visible;
+            transform: scale(1);
         }
 
         .shopglut-widget-title {
-            padding: 15px 15px 10px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 15px 15px 5px;
+            font-size: 15px;
+            font-weight:  600;
             color: #1d2327;
-            border-bottom: 1px solid #f0f0f1;
+        }
+
+        .shopglut-widget-subtitle {
+            padding: 0 15px 15px;
+            font-size: 12px;
+            color: #646970;
         }
 
         .shopglut-widget-item {
-            padding: 12px 15px;
+            padding: 15px;
             border-bottom: 1px solid #f0f0f1;
-            transition: background 0.2s ease;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .shopglut-widget-item:last-child {
@@ -215,17 +230,18 @@ class ShopGlut_PluginUpdateWidget {
 
         .shopglut-widget-item:hover {
             background: #f8f9fa;
+            padding-left: 20px;
         }
 
         .shopglut-widget-plugin {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            pointer-events: none;
         }
 
         .shopglut-widget-plugin-icon {
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .shopglut-widget-plugin-info {
@@ -233,15 +249,15 @@ class ShopGlut_PluginUpdateWidget {
         }
 
         .shopglut-widget-plugin-name {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: #1d2327;
         }
 
         .shopglut-widget-plugin-versions {
-            font-size: 12px;
+            font-size: 13px;
             color: #646970;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .shopglut-widget-plugin-versions .current {
@@ -254,62 +270,12 @@ class ShopGlut_PluginUpdateWidget {
         }
 
         .shopglut-widget-plugin-versions .arrow {
-            margin: 0 4px;
+            margin: 0 6px;
             color: #2271b1;
         }
 
-        .shopglut-widget-dismiss {
-            background: none;
-            border: none;
-            color: #646970;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 16px;
-            line-height: 1;
-            transition: color 0.2s ease;
-        }
-
-        .shopglut-widget-dismiss:hover {
-            color: #d63638;
-        }
-
-        .shopglut-widget-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        .shopglut-widget-actions a {
-            text-decoration: none;
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .shopglut-widget-view {
-            background: #f0f0f1;
-            color: #1d2327;
-        }
-
-        .shopglut-widget-view:hover {
-            background: #e0e0e1;
-        }
-
-        .shopglut-widget-download {
-            background: #2271b1;
-            color: white;
-        }
-
-        .shopglut-widget-download:hover {
-            background: #135e96;
-        }
-
         .shopglut-widget-footer {
-            padding: 10px 15px;
+            padding: 12px 15px;
             background: #f8f9fa;
             border-top: 1px solid #f0f0f1;
             display: flex;
@@ -318,22 +284,21 @@ class ShopGlut_PluginUpdateWidget {
         }
 
         .shopglut-widget-refresh {
-            background: #fff;
-            border: 1px solid #ddd;
-            color: #1d2327;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
+            background: #2271b1;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             transition: all 0.2s ease;
         }
 
         .shopglut-widget-refresh:hover {
-            background: #f0f0f1;
-            border-color: #ccc;
+            background: #135e96;
         }
 
         .shopglut-widget-refresh .dashicons {
@@ -360,33 +325,38 @@ class ShopGlut_PluginUpdateWidget {
 
             .shopglut-widget-content {
                 top: auto;
-                bottom: 60px;
+                bottom: 66px;
                 right: 0;
             }
         }
         </style>
-
         <script>
-        jQuery(document).ready(function($) {
-            var $widget = $('#shopglut-update-widget');
-            var $header = $widget.find('.shopglut-widget-header');
-            var $content = $widget.find('.shopglut-widget-content');
+        (function($) {
+            'use strict';
 
-            // Toggle widget content
-            $header.on('click', function(e) {
+            // Use event delegation for dynamically added widget
+            $(document).on('click', '#shopglut-update-widget .shopglut-widget-header', function(e) {
                 e.stopPropagation();
+                var $content = $(this).siblings('.shopglut-widget-content');
                 $content.toggleClass('show');
             });
 
             // Close when clicking outside
             $(document).on('click', function(e) {
-                if (!$widget.is(e.target) && !$widget.has(e.target).length) {
-                    $content.removeClass('show');
+                if (!$(e.target).closest('#shopglut-update-widget').length) {
+                    $('#shopglut-update-widget .shopglut-widget-content').removeClass('show');
+                }
+            });
+
+            // Plugin item click - redirect to settings
+            $(document).on('click', '.shopglut-widget-item', function(e) {
+                if (!$(e.target).closest('.shopglut-widget-actions, .shopglut-widget-dismiss').length) {
+                    window.location.href = '<?php echo admin_url('admin.php?page=shopglut_integration_settings#tab=more-plugins'); ?>';
                 }
             });
 
             // Dismiss individual update
-            $('.shopglut-widget-dismiss').on('click', function(e) {
+            $(document).on('click', '.shopglut-widget-dismiss', function(e) {
                 e.stopPropagation();
                 var $item = $(this).closest('.shopglut-widget-item');
                 var plugin = $(this).data('plugin');
@@ -402,16 +372,11 @@ class ShopGlut_PluginUpdateWidget {
                     success: function() {
                         $item.fadeOut(300, function() {
                             $(this).remove();
-                            // Update badge count
                             var count = $('.shopglut-widget-item').length;
-                            if (count === 1) {
-                                // Last item being removed
-                                $('.shopglut-widget-badge').text('0');
-                                setTimeout(function() {
-                                    $widget.fadeOut(300);
-                                }, 500);
+                            if (count === 0) {
+                                $('#shopglut-update-widget').fadeOut(300);
                             } else {
-                                $('.shopglut-widget-badge').text(count - 1);
+                                $('.shopglut-widget-badge').text(count);
                             }
                         });
                     }
@@ -419,7 +384,7 @@ class ShopGlut_PluginUpdateWidget {
             });
 
             // Check for updates
-            $('#shopglut-widget-refresh-btn').on('click', function() {
+            $(document).on('click', '#shopglut-widget-refresh-btn', function() {
                 var $btn = $(this);
                 var $spinner = $btn.next('.spinner');
 
@@ -444,7 +409,7 @@ class ShopGlut_PluginUpdateWidget {
                     }
                 });
             });
-        });
+        })(jQuery);
         </script>
         <?php
     }
