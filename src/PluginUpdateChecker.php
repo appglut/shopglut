@@ -374,32 +374,8 @@ class ShopGlut_PluginUpdateChecker {
         require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
         require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
 
-        // Define the skin class here, after WordPress admin files are loaded
-        if (!class_exists('ShopGlut_Quiet_Upgrader_Skin')) {
-            class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
-                public function feedback($string, ...$args) {
-                    // Silence feedback
-                }
-
-                public function header() {
-                    // No header
-                }
-
-                public function footer() {
-                    // No footer
-                }
-
-                public function error($errors) {
-                    // Handle errors silently
-                }
-            }
-        }
-
-        // Create a custom upgrader skin
-        $skin = new ShopGlut_Quiet_Upgrader_Skin();
-
-        // Create upgrader instance
-        $upgrader = new Plugin_Upgrader($skin);
+        // Create upgrader instance with silent skin
+        $upgrader = new Plugin_Upgrader(new ShopGlut_Quiet_Upgrader_Skin());
 
         // Check if plugin was active before update
         $was_active = is_plugin_active($plugin_basename);
@@ -444,6 +420,29 @@ class ShopGlut_PluginUpdateChecker {
             'shortcodeglut' => 'shortcodeglut/shortcodeglut.php'
         );
         return isset($basenames[$slug]) ? $basenames[$slug] : '';
+    }
+}
+
+// Define the upgrader skin class only when in admin context
+if (is_admin() && !class_exists('ShopGlut_Quiet_Upgrader_Skin')) {
+    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
+
+    class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
+        public function feedback($string, ...$args) {
+            // Silence feedback
+        }
+
+        public function header() {
+            // No header
+        }
+
+        public function footer() {
+            // No footer
+        }
+
+        public function error($errors) {
+            // Handle errors silently
+        }
     }
 }
 
