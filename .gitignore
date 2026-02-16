@@ -64,6 +64,3 @@ coverage/
 
 # Package manager
 package-lock.json
-
-# GitHub
-.github/
