@@ -31,6 +31,9 @@ define( 'SHOPGLUT_UPGRADE_URL', 'https://www.appglut.com' );
 // Autoloader for class loading
 require __DIR__ . '/autoloader.php';
 
+// Plugin Update Checker for related plugins
+require __DIR__ . '/src/PluginUpdateChecker.php';
+
 
 // Hook into WooCommerce initialization
 add_action( 'woocommerce_init', 'shopglut_plugin_initialize' );
