@@ -35,6 +35,7 @@ class ShopGlut_PluginUpdateChecker {
         add_action('admin_init', array($this, 'check_for_updates'));
         add_action('admin_notices', array($this, 'show_update_notices'));
         add_action('wp_ajax_shopglut_dismiss_plugin_update', array($this, 'dismiss_update'));
+        add_action('wp_ajax_shopglut_force_check_updates', array($this, 'ajax_force_check'));
     }
 
     /**
@@ -195,6 +196,48 @@ class ShopGlut_PluginUpdateChecker {
         update_option($this->option_name . '_dismissed', $dismissed);
 
         wp_send_json_success();
+    }
+
+    /**
+     * Handle AJAX force check updates request
+     */
+    public function ajax_force_check() {
+        check_ajax_referer('shopglut_check_updates', 'nonce');
+
+        // Clear the cache
+        delete_transient($this->option_name . '_last_check');
+
+        // Clear dismissed list to show updates again
+        delete_option($this->option_name . '_dismissed');
+
+        // Force check
+        $versions = get_option($this->option_name, array());
+
+        foreach ($this->related_plugins as $slug => $plugin) {
+            $release_info = $this->get_github_release($plugin['repo']);
+
+            if ($release_info && !isset($release_info['message'])) {
+                $published_at = $release_info['published_at'];
+                $version_date = $this->format_version_date($published_at);
+
+                $versions[$slug] = array(
+                    'name' => $plugin['name'],
+                    'version' => $version_date,
+                    'published_at' => $published_at,
+                    'url' => $plugin['url'],
+                    'icon' => $plugin['icon'],
+                    'zip_url' => $this->get_zip_url($release_info)
+                );
+            }
+        }
+
+        update_option($this->option_name, $versions);
+        set_transient($this->option_name . '_last_check', time(), $this->cache_time);
+
+        wp_send_json_success(array(
+            'count' => count($versions),
+            'plugins' => array_keys($versions)
+        ));
     }
 
     /**

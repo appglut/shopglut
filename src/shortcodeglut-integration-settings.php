@@ -124,5 +124,27 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	)
 ) );
 
+// Create Related Plugins tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'id' => 'related_plugins_tab',
+	'title' => __( 'More Plugins', 'shopglut' ),
+	'icon' => 'fa fa-cubes',
+	'description' => __( 'Discover more plugins by AppGlut to enhance your WooCommerce store.', 'shopglut' ),
+) );
+
+// Create Related Plugins sub-tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'parent' => 'related_plugins_tab',
+	'title' => __( 'Available Plugins', 'shopglut' ),
+	'fields' => array(
+
+		array(
+			'id' => 'shopglut_related_plugins_list',
+			'type' => 'related_plugins'
+		),
+
+	)
+) );
+
 // Allow other plugins to add settings
 do_action( 'shopglut_integration_settings', $SHOPGLUT_INTEGRATION_SETTINGS );
