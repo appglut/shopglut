@@ -211,20 +211,20 @@ class ModuleManager {
             ],
 
             // Business Solution Modules
-            'pdf_invoices' => [
-                'name' => __('Invoices & Packing Slips', 'shopglut'),
-                'description' => __('PDF Invoice Generator', 'shopglut'),
-                'type' => 'business',
-                'table_method' => null, // No database table needed
-                'icon' => 'fa-solid fa-file-invoice'
-            ],
-            'email_customizer' => [
-                'name' => __('Email Customizer', 'shopglut'),
-                'description' => __('Email Template Designer', 'shopglut'),
-                'type' => 'business',
-                'table_method' => null, // Has its own table creation
-                'icon' => 'fa-solid fa-envelope-open-text'
-            ]
+            // 'pdf_invoices' => [
+            //     'name' => __('Invoices & Packing Slips', 'shopglut'),
+            //     'description' => __('PDF Invoice Generator', 'shopglut'),
+            //     'type' => 'business',
+            //     'table_method' => null, // No database table needed
+            //     'icon' => 'fa-solid fa-file-invoice'
+            // ],
+            // 'email_customizer' => [
+            //     'name' => __('Email Customizer', 'shopglut'),
+            //     'description' => __('Email Template Designer', 'shopglut'),
+            //     'type' => 'business',
+            //     'table_method' => null, // Has its own table creation
+            //     'icon' => 'fa-solid fa-envelope-open-text'
+            // ]
         ];
     }
     

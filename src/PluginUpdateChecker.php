@@ -32,7 +32,13 @@ class ShopGlut_PluginUpdateChecker {
     private $cache_time = DAY_IN_SECONDS; // Check once per day
 
     public function __construct() {
-        add_action('admin_init', array($this, 'check_for_updates'));
+        // Scheduled update check (runs daily via WordPress cron)
+        add_action('shopglut_scheduled_plugin_updates', array($this, 'scheduled_check'));
+
+        // Run an initial check if no data exists yet
+        add_action('admin_init', array($this, 'maybe_initial_check'));
+
+        // Admin notices and AJAX handlers
         add_action('admin_notices', array($this, 'show_update_notices'));
         add_action('wp_ajax_shopglut_dismiss_plugin_update', array($this, 'dismiss_update'));
         add_action('wp_ajax_shopglut_force_check_updates', array($this, 'ajax_force_check'));
@@ -40,20 +46,36 @@ class ShopGlut_PluginUpdateChecker {
     }
 
     /**
-     * Check for updates from GitHub API
+     * Run initial check only if no version data exists yet
+     * This ensures fresh data is available after first activation
      */
-    public function check_for_updates() {
-        // Only check on the main shopglut admin page
-        if (!$this->is_shopglut_admin_page()) {
-            return;
-        }
+    public function maybe_initial_check() {
+        $versions = get_option($this->option_name, array());
 
+        // Only check if we have no data yet
+        if (empty($versions)) {
+            $this->check_for_updates();
+        }
+    }
+
+    /**
+     * Scheduled check - called by WordPress cron
+     */
+    public function scheduled_check() {
         $last_check = get_transient($this->option_name . '_last_check');
 
         if ($last_check && $last_check > time() - $this->cache_time) {
             return; // Already checked recently
         }
 
+        $this->check_for_updates();
+    }
+
+    /**
+     * Check for updates from GitHub API
+     * Called by scheduled cron or manually via force check
+     */
+    public function check_for_updates() {
         $versions = get_option($this->option_name, array());
 
         foreach ($this->related_plugins as $slug => $plugin) {
@@ -483,3 +505,29 @@ if (is_admin() && !class_exists('ShopGlut_Quiet_Upgrader_Skin')) {
 
 // Initialize the update checker
 new ShopGlut_PluginUpdateChecker();
+
+// Schedule plugin update checks on activation
+register_activation_hook(SHOPGLUT_FILE, 'shopglut_schedule_update_checks');
+register_deactivation_hook(SHOPGLUT_FILE, 'shopglut_clear_update_checks');
+
+/**
+ * Schedule the daily update check via WordPress cron
+ */
+function shopglut_schedule_update_checks() {
+	if (!wp_next_scheduled('shopglut_scheduled_plugin_updates')) {
+		wp_schedule_event(time(), 'daily', 'shopglut_scheduled_plugin_updates');
+	}
+
+	// Run initial check immediately on activation so data is available right away
+	if (class_exists('ShopGlut_PluginUpdateChecker')) {
+		$checker = new ShopGlut_PluginUpdateChecker();
+		$checker->check_for_updates();
+	}
+}
+
+/**
+ * Clear the scheduled update check
+ */
+function shopglut_clear_update_checks() {
+	wp_clear_scheduled_hook('shopglut_scheduled_plugin_updates');
+}

@@ -87,13 +87,6 @@ class FilterListTable extends \WP_List_Table {
 					global $wpdb;
 					$table_name = $wpdb->prefix . 'shopglut_shop_layouts';
 
-					// Check if table exists
-					$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) );
-					if ( $table_exists === null ) {
-						$display_values[] = sprintf( __( 'Unknown layout (ID: %d)', 'shopglut' ), str_replace( 'sglayout', '', $option ) );
-						continue;
-					}
-
 					// Check if the layout ID exists in the table
 					$layout_id = str_replace( 'sglayout', '', $option ); // Get the layout ID number (remove 'sglayout')
 					$cache_key = 'shopglut_layout_' . $layout_id;

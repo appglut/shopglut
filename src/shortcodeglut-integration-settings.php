@@ -44,7 +44,7 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 			'desc' => __( 'When enabled, ShortcodeGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
 			'text_on' => __( 'Yes', 'shopglut' ),
 			'text_off' => __( 'No', 'shopglut' ),
-			'default' => 0,
+			'default' => 1,
 		),
 
 	)
@@ -70,7 +70,7 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 			'desc' => __( 'When enabled, WishGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
 			'text_on' => __( 'Yes', 'shopglut' ),
 			'text_off' => __( 'No', 'shopglut' ),
-			'default' => 0,
+			'default' => 1,
 		),
 
 	)
@@ -96,7 +96,7 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 			'desc' => __( 'When enabled, CheckoutGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
 			'text_on' => __( 'Yes', 'shopglut' ),
 			'text_off' => __( 'No', 'shopglut' ),
-			'default' => 0,
+			'default' => 1,
 		),
 
 	)

@@ -31,14 +31,6 @@ class dataManage {
 
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'shopglut_enhancement_filters';
-
-			// Ensure the table exists before trying to insert
-			$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) === $table_name;
-			if ( ! $table_exists ) {
-				// Table doesn't exist, create it
-				\Shopglut\ShopGlutDatabase::create_showcase_filters();
-			}
-
 			$inserted = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$table_name,
 				array(
@@ -92,13 +84,6 @@ class dataManage {
 			$layout_name = sanitize_text_field( wp_unslash( $_POST['filter_name'] ) );
 
 			$table_name = $wpdb->prefix . 'shopglut_enhancement_filters';
-
-			// Ensure the table exists before trying to insert/update
-			$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) === $table_name;
-			if ( ! $table_exists ) {
-				// Table doesn't exist, create it
-				\Shopglut\ShopGlutDatabase::create_showcase_filters();
-			}
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$existing_record = $wpdb->get_row(
