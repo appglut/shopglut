@@ -1350,13 +1350,13 @@ class WooThemes {
 		$settings = $this->getThemeSettings( $active_theme );
 
 		// Generate and enqueue dynamic CSS
-		$css = $this->generateThemeCSS( $theme, $settings );
+		$css = $this->generateThemeCSS( $theme, $settings, $active_theme );
 		wp_register_style( 'shopglut-woo-theme', false );
 		wp_enqueue_style( 'shopglut-woo-theme' );
 		wp_add_inline_style( 'shopglut-woo-theme', $css );
 	}
 
-	private function generateThemeCSS( $theme, $settings ) {
+	private function generateThemeCSS( $theme, $settings, $active_theme = '' ) {
 		$css = '';
 
 		// Custom Header Styles

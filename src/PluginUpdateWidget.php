@@ -28,6 +28,13 @@ class ShopGlut_PluginUpdateWidget {
             'url' => 'https://github.com/appglut/shortcodeglut',
             'icon' => '⚡',
             'basename' => 'shortcodeglut/shortcodeglut.php'
+        ),
+        'productdetailsglut' => array(
+            'name' => 'ProductDetailsGlut',
+            'repo' => 'appglut/product-details-glut',
+            'url' => 'https://github.com/appglut/product-details-glut',
+            'icon' => '📦',
+            'basename' => 'product-details-glut/product-details-glut.php'
         )
     );
 

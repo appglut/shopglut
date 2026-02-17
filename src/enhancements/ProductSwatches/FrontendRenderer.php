@@ -589,7 +589,8 @@ class FrontendRenderer {
 		}
 
 		global $product;
-		if (!$product || !$product->is_type('variable')) {
+		// Ensure $product is a valid WC_Product object
+		if (!$product || !is_object($product) || !method_exists($product, 'is_type') || !$product->is_type('variable')) {
 			return;
 		}
 

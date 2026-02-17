@@ -980,7 +980,7 @@ class ShopGlutRegisterMenu {
 			// Include the WishlistMenuHandler file
 			if ( file_exists( WP_PLUGIN_DIR . '/wishglut/src/WishlistMenuHandler.php' ) ) {
 				require_once WP_PLUGIN_DIR . '/wishglut/src/WishlistMenuHandler.php';
-				$wishlist_handler = new \Shopglut\enhancements\wishlist\WishlistMenuHandler();
+				$wishlist_handler = new \Wishglut\WishlistMenuHandler();
 				$wishlist_handler->render();
 				return;
 			}

@@ -36,7 +36,7 @@ if ( ! function_exists( 'agl_array_search' ) ) {
  * @version 1.0.0
  *
  */
-if ( ! function_exists( 'agl_microtime' ) ) {
+if ( ! function_exists( 'agl_timeout' ) ) {
   function agl_timeout( $timenow, $starttime, $timeout = 30 ) {
     return ( ( $timenow - $starttime ) < $timeout ) ? true : false;
   }
