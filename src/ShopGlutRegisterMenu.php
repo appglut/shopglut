@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Shopglut\layouts\AllLayouts;
-use Shopglut\layouts\singleProduct\SingleProductListTable;
 use Shopglut\layouts\cartPage\CartPageListTable;
 use Shopglut\layouts\orderCompletePage\orderCompleteListTable;
 
@@ -1199,7 +1198,10 @@ class ShopGlutRegisterMenu {
 			);
 			add_screen_option( 'per_page', $args );
 
-			$layoutlist = new SingleProductListTable();
+			// Only load SingleProductListTable if ProductDetailsGlut is not active and class exists
+			if ( ! $this->is_productdetailsglut_active() && class_exists( 'Shopglut\\layouts\\singleProduct\\SingleProductListTable' ) ) {
+				$layoutlist = new \Shopglut\layouts\singleProduct\SingleProductListTable();
+			}
 		}
 
 
@@ -1596,6 +1598,33 @@ class ShopGlutRegisterMenu {
     		exit;
     	 endif;
     }
+
+
+	/**
+	 * Check if ProductDetailsGlut plugin is active
+	 *
+	 * @return bool True if ProductDetailsGlut is active
+	 */
+	private function is_productdetailsglut_active() {
+		// Check by active plugins list
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+
+		if ( is_multisite() ) {
+			// Get network active plugins
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+
+		// Check for product-details-glut/product-details-glut.php plugin
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'product-details-glut/product-details-glut.php' ) {
+				return true;
+			}
+		}
+
+		// Also check if the main class exists
+		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' );
+	}
 
 	public static function get_instance() {
 		static $instance;

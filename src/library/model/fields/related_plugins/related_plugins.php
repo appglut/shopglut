@@ -473,6 +473,13 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'icon' => '⚡',
 					'url' => 'https://github.com/appglut/shortcodeglut',
 					'basename' => 'shortcodeglut/shortcodeglut.php'
+				),
+				'product-details-glut' => array(
+					'name' => 'ProductDetailsGlut',
+					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
+					'icon' => '📦',
+					'url' => 'https://github.com/appglut/product-details-glut',
+					'basename' => 'product-details-glut/product-details-glut.php'
 				)
 			);
 		}

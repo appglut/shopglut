@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git pull:*)",
+      "Bash(git config:*)",
+      "Bash(git merge:*)",
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(echo \"<?php // Silence is golden ?>\")",
+      "Bash(git rm:*)",
+      "Bash(chmod:*)",
+      "Bash(git fetch:*)",
+      "Bash(git reset:*)",
+      "Bash(git -C /media/books-audio/wordpress-sites/shopglutpro/wp-content/plugins/wishglut branch -M main)",
+      "Bash(git -C /media/books-audio/wordpress-sites/shopglutpro/wp-content/plugins/wishglut push --set-upstream origin main)",
+      "Bash(git -C /media/books-audio/wordpress-sites/shopglutpro/wp-content/plugins/wishglut status -sb)"
+    ]
+  }
+}

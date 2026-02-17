@@ -2,7 +2,7 @@
 
 /**
  * Plugin Update Checker for Related Plugins
- * Checks GitHub releases for wishglut, checkoutglut, shortcodeglut
+ * Checks GitHub releases for wishglut, checkoutglut, shortcodeglut, product-details-glut
  */
 
 class ShopGlut_PluginUpdateChecker {
@@ -25,6 +25,12 @@ class ShopGlut_PluginUpdateChecker {
             'repo' => 'appglut/shortcodeglut',
             'url' => 'https://github.com/appglut/shortcodeglut',
             'icon' => '⚡'
+        ),
+        'product-details-glut' => array(
+            'name' => 'ProductDetailsGlut',
+            'repo' => 'appglut/product-details-glut',
+            'url' => 'https://github.com/appglut/product-details-glut',
+            'icon' => '📦'
         )
     );
 

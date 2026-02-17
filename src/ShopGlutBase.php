@@ -6,10 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Shopglut\layouts\AllLayouts;
-use Shopglut\layouts\singleProduct\chooseTemplates as SingleProductTemplates;
-use Shopglut\layouts\singleProduct\dataManage as SingleProductDataManage;
-
-
 use Shopglut\layouts\cartPage\chooseTemplates as CartPageTemplates;
 use Shopglut\layouts\cartPage\dataManage as CartPageDataManage;
 
@@ -93,8 +89,15 @@ class ShopGlutBase {
 		AllLayouts::get_instance();
 		AllEnhancements::get_instance();
 
-		SingleProductDataManage::get_instance();
-		SingleProductTemplates::get_instance();
+		// Only load embedded singleProduct module if ProductDetailsGlut is NOT active
+		if ( ! $this->is_productdetailsglut_active() ) {
+			if ( class_exists( 'Shopglut\\layouts\\singleProduct\\dataManage' ) ) {
+				\Shopglut\layouts\singleProduct\dataManage::get_instance();
+			}
+			if ( class_exists( 'Shopglut\\layouts\\singleProduct\\chooseTemplates' ) ) {
+				\Shopglut\layouts\singleProduct\chooseTemplates::get_instance();
+			}
+		}
 
 		CartPageTemplates::get_instance();
 		CartPageDataManage::get_instance();
@@ -185,7 +188,13 @@ class ShopGlutBase {
 		// Load required files
 		require_once SHOPGLUT_PATH . 'src/ModuleManager.php';
 		require_once SHOPGLUT_PATH . 'src/library/model/classes/setup.class.php';
-		require_once SHOPGLUT_PATH . 'src/layouts/singleProduct/singleLayout-settings.php';
+
+		// Only load embedded singleProduct settings if ProductDetailsGlut is NOT active AND file exists
+		$single_product_settings_file = SHOPGLUT_PATH . 'src/layouts/singleProduct/singleLayout-settings.php';
+		if ( ! $this->is_productdetailsglut_active() && file_exists( $single_product_settings_file ) ) {
+			require_once $single_product_settings_file;
+		}
+
 		require_once SHOPGLUT_PATH . 'src/layouts/cartPage/template-settings.php';
 		require_once SHOPGLUT_PATH . 'src/layouts/orderCompletePage/template-settings.php';
 		//require_once SHOPGLUT_PATH . 'src/layouts/accountPage/template-settings.php';
@@ -207,8 +216,8 @@ class ShopGlutBase {
 	    // require_once SHOPGLUT_PATH . 'src/showcases/Tabs/template-settings.php';
 	    // require_once SHOPGLUT_PATH . 'src/showcases/Accordions/template-settings.php';
 	    // Load shortcodeShowcase with universal loader
-	    // This loader automatically detects which plugin is loading and sets up compatibility	
-		
+	    // This loader automatically detects which plugin is loading and sets up compatibility
+
 		// Load business solutions modules
 		if ( file_exists( SHOPGLUT_PATH . 'src/business-solutions/index.php' ) ) {
 			require_once SHOPGLUT_PATH . 'src/business-solutions/index.php';
@@ -217,6 +226,32 @@ class ShopGlutBase {
 
 	public function shopglut_admin_footer_version() {
 		return '<span id="shopglut-footer-version" style="display: none;">ShopGlut ' . SHOPGLUT_VERSION . '</span>';
+	}
+
+	/**
+	 * Check if ProductDetailsGlut plugin is active
+	 *
+	 * @return bool True if ProductDetailsGlut is active
+	 */
+	private function is_productdetailsglut_active() {
+		// Check by active plugins list
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+
+		if ( is_multisite() ) {
+			// Get network active plugins
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+
+		// Check for product-details-glut/product-details-glut.php plugin
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'product-details-glut/product-details-glut.php' ) {
+				return true;
+			}
+		}
+
+		// Also check if the main class exists
+		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' );
 	}
 
 	public static function get_instance() {

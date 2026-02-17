@@ -99,22 +99,10 @@ class DataManage {
 				'description' => 'Product comparison layouts',
 				'module' => 'product_comparison'
 			),
-			'comparison_data' => array(
-				'table' => $wpdb->prefix . 'shopglut_product_comparisons',
-				'name' => 'Comparison Data',
-				'description' => 'Product comparison settings',
-				'module' => 'product_comparison'
-			),
 			'quickview' => array(
 				'table' => $wpdb->prefix . 'shopglut_quickview_layouts',
 				'name' => 'Quick View',
 				'description' => 'Quick view layouts',
-				'module' => 'quick_views'
-			),
-			'quickview_data' => array(
-				'table' => $wpdb->prefix . 'shopglut_product_quickview',
-				'name' => 'Quick View Data',
-				'description' => 'Quick view configurations',
 				'module' => 'quick_views'
 			),
 			'shortcodes' => array(

@@ -1,6 +1,6 @@
 <?php
 
-use Shopglut\layouts\singleProduct\dataManage as SingleProductDataManage;
+
 use Shopglut\layouts\cartPage\dataManage as CartDataManage;
 use Shopglut\layouts\orderCompletePage\dataManage as OrderCompleteDataManage;
 use Shopglut\layouts\accountPage\AccountPageDataManage;
@@ -559,7 +559,10 @@ if ( ! class_exists( 'AGSHOPGLUT_preview' ) ) {
 					return $allowed_html;
 				}, 10, 2);
 
-				$single_product_data_manage = new SingleProductDataManage();
+				// Only use SingleProductDataManage if ProductDetailsGlut is not active and class exists
+				if (class_exists('Shopglut\layouts\singleProduct\dataManage')) {
+					$single_product_data_manage = new SingleProductDataManage();
+				}
 
 				// Get base allowed HTML
 				$allowed_html = wp_kses_allowed_html( 'post' );

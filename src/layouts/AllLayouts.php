@@ -8,7 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Shopglut\layouts\shopLayout\chooseTemplates as ShopLayoutTemplates;
 use Shopglut\layouts\shopLayout\SettingsPage as ShopLayoutEditor;
 use Shopglut\layouts\shopLayout\ShopListTable;
-use Shopglut\layouts\singleProduct\chooseTemplates as SingleProductTemplates;
 use Shopglut\layouts\cartPage\chooseTemplates as CartPageTemplates;
 
 use Shopglut\layouts\orderCompletePage\chooseTemplates as OrdercompleteTemplates;
@@ -17,20 +16,17 @@ use Shopglut\layouts\orderCompletePage\OrdercompleteListTable;
 
 
 use Shopglut\layouts\accountPage\AccountPageChooseTemplates;
-use Shopglut\layouts\singleProduct\SettingsPage as SingleProductEditor;
 use Shopglut\layouts\cartPage\SettingsPage as CartPageEditor;
 use Shopglut\layouts\cartPage\SettingsPage as CartPageBuilderEditor;
 
 
 use Shopglut\layouts\accountPage\AccountPageSettingsPage as accountpageEditor;
-use Shopglut\layouts\singleProduct\SingleProductListTable;
 use Shopglut\layouts\cartPage\CartPageListTable;
 use Shopglut\layouts\accountPage\AccountPageListTable;
 use Shopglut\BusinessSolutions\AllBusinessSolutions;
 use Shopglut\layouts\cartPage\CartPageEntity;
 use Shopglut\layouts\orderCompletePage\orderCompletePageEntity as ordercompleteEntity;
 use Shopglut\layouts\accountPage\AccountPageEntity;
-use Shopglut\layouts\singleProduct\SingleLayoutEntity;
 use Shopglut\layouts\LayoutEntity;
 
 
@@ -104,7 +100,17 @@ class AllLayouts {
 
 	public function renderLayoutsPages() {
 
-		$singleProduct_editor = new SingleProductEditor();
+		// Only initialize singleProduct editor if ProductDetailsGlut is NOT active
+		if ( ! $this->is_productdetailsglut_active() ) {
+			if ( class_exists( 'Shopglut\\layouts\\singleProduct\\SettingsPage' ) ) {
+				$singleProduct_editor = new \Shopglut\layouts\singleProduct\SettingsPage();
+			} else {
+				$singleProduct_editor = null;
+			}
+		} else {
+			$singleProduct_editor = null;
+		}
+
 		$shopLayout_editor = new ShopLayoutEditor();
 		$cartpage_editor = new CartPageEditor();
 		$cartpage_editor = new CartPageBuilderEditor();
@@ -138,7 +144,7 @@ class AllLayouts {
 		}
 
 
-		if ( 'shopglut_layouts' === $page && 'single_product' === $editor && $layout_id > 0 ) {
+		if ( 'shopglut_layouts' === $page && 'single_product' === $editor && $layout_id > 0 && $singleProduct_editor !== null ) {
 			$singleProduct_editor->loadSingleProductEditor();
 		} elseif ( 'shopglut_layouts' === $page && 'shop' === $editor && $layout_id > 0 ) {
 			$shopLayout_editor->loadShopLayoutEditor();
@@ -150,7 +156,7 @@ class AllLayouts {
 			$accountpage_editor->loadAccountPageEditor();
 		} elseif ( 'shopglut_layouts' === $page && 'shop_templates' === $view ) {
 			$this->ShoplayoutTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && 'single_product_templates' === $view ) {
+		} elseif ( 'shopglut_layouts' === $page && ( 'single_product_templates' === $view || 'product_details_templates' === $view ) ) {
 			$this->SingleProductlayoutTemplatesPage();
 		} elseif ( 'shopglut_layouts' === $page && 'cartpage_templates' === $view ) {
 			$this->CartlayoutTemplatesPage();
@@ -164,6 +170,7 @@ class AllLayouts {
 					$this->renderLayoutsTable();
 					break;
 				case 'single_product':
+				case 'product_details':
 					$this->renderSingleProduct();
 					break;
 				case 'cartpage':
@@ -266,7 +273,7 @@ class AllLayouts {
 		$tabs = [
 			1 => [ 'id' => 'all_layouts', 'url' => admin_url( 'admin.php?page=shopglut_layouts' ), 'label' => '📋 ' . esc_html__( 'All Layouts', 'shopglut' ) ],
 			30 => [ 'id' => 'shop', 'url' => admin_url( 'admin.php?page=shopglut_layouts&view=shop' ), 'label' => '🏪 ' . esc_html__( 'Shop & Archive Layouts', 'shopglut' ) ],
-			5 => [ 'id' => 'single_product', 'url' => admin_url( 'admin.php?page=shopglut_layouts&view=single_product' ), 'label' => '📦 ' . esc_html__( 'Single Product', 'shopglut' ) ],
+			5 => [ 'id' => 'single_product', 'url' => admin_url( 'admin.php?page=shopglut_layouts&view=product_details' ), 'label' => '📦 ' . esc_html__( 'Single Product', 'shopglut' ) ],
 			10 => ['id' => 'cartpage', 'url' => admin_url('admin.php?page=shopglut_layouts&view=cartpage'), 'label' => '🛒 ' . esc_html__('Cart Page', 'shopglut')],
 			20 => ['id' => 'ordercomplete', 'url' => admin_url('admin.php?page=shopglut_layouts&view=ordercomplete'), 'label' => '✅ ' . esc_html__('Order Complete', 'shopglut')],
 			15 => ['id' => 'checkout', 'url' => admin_url('admin.php?page=shopglut_layouts&view=checkout'), 'label' => '💳 ' . esc_html__('Shop Checkout', 'shopglut')],
@@ -367,11 +374,38 @@ class AllLayouts {
 	public function SingleProductlayoutTemplatesPage() {
 		$active_menu = 'single_product';
 		$this->settingsPageHeader( $active_menu );
-		$shopLayout_templates = new SingleProductTemplates();
+
+		// Determine which templates class to use
+		$templates_class = null;
+		if ( class_exists( 'ProductDetailsGlut\\singleProduct\\chooseTemplates' ) ) {
+			$templates_class = 'ProductDetailsGlut\\singleProduct\\chooseTemplates';
+		} elseif ( class_exists( 'Shopglut\\layouts\\singleProduct\\chooseTemplates' ) ) {
+			$templates_class = 'Shopglut\\layouts\\singleProduct\\chooseTemplates';
+		}
+
+		if ( $templates_class === null ) {
+			echo '<p>' . esc_html__( 'Single Product templates not available.', 'shopglut' ) . '</p>';
+			return;
+		}
+
+		$shopLayout_templates = new $templates_class();
+
+		// Show notice if ProductDetailsGlut is active
+		$notice_html = '';
+		if ( $this->is_productdetailsglut_active() ) {
+			$notice_html = '<div class="notice notice-info" style="margin-bottom: 20px;"><p>';
+			$notice_html .= esc_html__( 'Templates are also available in the', 'shopglut' );
+			$notice_html .= ' <a href="' . esc_url( admin_url( 'admin.php?page=productdetailsglut_layouts&view=templates' ) ) . '">';
+			$notice_html .= esc_html__( 'ProductDetailsGlut plugin', 'shopglut' );
+			$notice_html .= '</a>.';
+			$notice_html .= '</p></div>';
+		}
+
 		?>
 		<div class="wrap shopglut-admin-contents shoplayouts-templates">
 			<h1><?php echo esc_html__( 'Prebuilt SingleProduct Templates', 'shopglut' ); ?></h1>
 			<p class="subheading"><?php echo esc_html__( 'Choose your desired template to customize', 'shopglut' ); ?></p>
+			<?php echo $notice_html; ?>
 			<?php $shopLayout_templates->loadSingleProductTemplates(); ?>
 		</div>
 		<?php
@@ -724,11 +758,21 @@ class AllLayouts {
 
 			// Verify nonce
 			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_layout_' . $layout_id ) ) {
-				// Delete the layout
-				\Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+				// Delete the layout - check if class exists for backward compatibility
+				if ( class_exists( 'Shopglut\\layouts\\singleProduct\\SingleLayoutEntity' ) ) {
+					\Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+				} else {
+					// Fallback to direct database deletion for backward compatibility
+					global $wpdb;
+					$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+					$wpdb->delete( $table_name, array( 'id' => $layout_id ), array( '%d' ) );
+					// Also delete meta data
+					$meta_table = $wpdb->prefix . 'shopglut_single_product_meta';
+					$wpdb->delete( $meta_table, array( 'layout_id' => $layout_id ), array( '%d' ) );
+				}
 
 				// Redirect to avoid resubmission
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=single_product&deleted=true' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=product_details&deleted=true' ) );
 				exit;
 			} else {
 				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
@@ -824,7 +868,18 @@ class AllLayouts {
 			if ( ! empty( $layout_ids ) ) {
 				$deleted_count = 0;
 				foreach ( $layout_ids as $layout_id ) {
-					$result = \Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+					// Check if class exists for backward compatibility
+					if ( class_exists( 'Shopglut\\layouts\\singleProduct\\SingleLayoutEntity' ) ) {
+						$result = \Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+					} else {
+						// Fallback to direct database deletion for backward compatibility
+						global $wpdb;
+						$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+						$result = $wpdb->delete( $table_name, array( 'id' => $layout_id ), array( '%d' ) );
+						// Also delete meta data
+						$meta_table = $wpdb->prefix . 'shopglut_single_product_meta';
+						$wpdb->delete( $meta_table, array( 'layout_id' => $layout_id ), array( '%d' ) );
+					}
 					if ( $result !== false ) {
 						$deleted_count++;
 					}
@@ -834,7 +889,7 @@ class AllLayouts {
 				$redirect_url = add_query_arg(
 					array(
 						'page' => 'shopglut_layouts',
-						'view' => 'single_product',
+						'view' => 'product_details',
 						'deleted' => 'bulk',
 						'count' => $deleted_count
 					),
@@ -854,7 +909,18 @@ class AllLayouts {
 			if ( ! empty( $layout_ids ) ) {
 				$deleted_count = 0;
 				foreach ( $layout_ids as $layout_id ) {
-					$result = \Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+					// Check if class exists for backward compatibility
+					if ( class_exists( 'Shopglut\\layouts\\singleProduct\\SingleLayoutEntity' ) ) {
+						$result = \Shopglut\layouts\singleProduct\SingleLayoutEntity::delete_layout( $layout_id );
+					} else {
+						// Fallback to direct database deletion for backward compatibility
+						global $wpdb;
+						$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+						$result = $wpdb->delete( $table_name, array( 'id' => $layout_id ), array( '%d' ) );
+						// Also delete meta data
+						$meta_table = $wpdb->prefix . 'shopglut_single_product_meta';
+						$wpdb->delete( $meta_table, array( 'layout_id' => $layout_id ), array( '%d' ) );
+					}
 					if ( $result !== false ) {
 						$deleted_count++;
 					}
@@ -864,7 +930,7 @@ class AllLayouts {
 				$redirect_url = add_query_arg(
 					array(
 						'page' => 'shopglut_layouts',
-						'view' => 'single_product',
+						'view' => 'product_details',
 						'deleted' => 'bulk',
 						'count' => $deleted_count
 					),
@@ -875,45 +941,83 @@ class AllLayouts {
 			}
 		}
 
-		// Prepare layouts table
-		$layouts_table = new SingleProductListTable();
-		$layouts_table->prepare_items();
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
-		
-		// Generate URLs for the action buttons
-		$templates_url = admin_url( 'admin.php?page=shopglut_layouts&view=single_product_templates' );
-		
-		$create_new_url = add_query_arg(
-			array(
-				'page' => 'shopglut_layouts',
-				'view' => 'single_product',
-				'action' => 'create_new',
-				'_wpnonce' => wp_create_nonce('create_new_layout_nonce')
-			),
-			admin_url('admin.php')
-		);
-		?>
-		<div class="wrap shopglut-admin-contents">
-			<h2><?php echo esc_html__( 'Single Product Layouts', 'shopglut' ); ?>
-				<a href="<?php echo esc_url( $templates_url ); ?>">
-					<span class="add-new-h2"><?php echo esc_html__( 'Create From Templates', 'shopglut' ); ?></span>
-				</a>
-			
-				<!-- <a href="<?php echo esc_url( $create_new_url ); ?>">
-					<span class="add-new-h2"><?php echo esc_html__( 'Create From New', 'shopglut' ); ?></span>
-				</a> -->
-			</h2>
 
-			<form method="post" id="shopglut-layouts-form">
-				<?php $layouts_table->display(); ?>
-			</form>
-		</div>
-		<?php //endif; ?>
-		<?php
-  }
+		// Determine which table class to use
+		$table_class = null;
+		if ( class_exists( 'ProductDetailsGlut\\singleProduct\\SingleProductListTable' ) ) {
+			$table_class = 'ProductDetailsGlut\\singleProduct\\SingleProductListTable';
+		} elseif ( class_exists( 'Shopglut\\layouts\\singleProduct\\SingleProductListTable' ) ) {
+			$table_class = 'Shopglut\\layouts\\singleProduct\\SingleProductListTable';
+		}
 
-  public function renderWooBuilderPage() {
+		// Check if we can display the table
+		if ( $table_class !== null ) {
+			// Prepare layouts table
+			$layouts_table = new $table_class();
+			$layouts_table->prepare_items();
+
+			// Generate URLs for the action buttons
+			$templates_url = admin_url( 'admin.php?page=shopglut_layouts&view=product_details_templates' );
+
+			$create_new_url = add_query_arg(
+				array(
+					'page' => 'shopglut_layouts',
+					'view' => 'product_details',
+					'action' => 'create_new',
+					'_wpnonce' => wp_create_nonce('create_new_layout_nonce')
+				),
+				admin_url('admin.php')
+			);
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Single Product Layouts', 'shopglut' ); ?>
+					<a href="<?php echo esc_url( $templates_url ); ?>">
+						<span class="add-new-h2"><?php echo esc_html__( 'Create From Templates', 'shopglut' ); ?></span>
+					</a>
+
+					<!-- <a href="<?php echo esc_url( $create_new_url ); ?>">
+						<span class="add-new-h2"><?php echo esc_html__( 'Create From New', 'shopglut' ); ?></span>
+					</a> -->
+				</h2>
+
+				<?php if ( $this->is_productdetailsglut_active() ) : ?>
+				<div class="notice notice-info" style="margin-bottom: 20px;">
+					<p>
+						<?php
+						echo esc_html__( 'Single Product layout functionality is also available in the', 'shopglut' );
+						echo ' <a href="' . esc_url( admin_url( 'admin.php?page=productdetailsglut_layouts' ) ) . '">';
+						echo esc_html__( 'ProductDetailsGlut plugin', 'shopglut' );
+						echo '</a>.';
+						?>
+					</p>
+				</div>
+				<?php endif; ?>
+
+				<form method="post" id="shopglut-layouts-form">
+					<?php $layouts_table->display(); ?>
+				</form>
+			</div>
+			<?php
+		} else {
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Single Product Layouts', 'shopglut' ); ?></h2>
+				<div class="notice notice-info">
+					<p>
+						<?php
+						echo esc_html__( 'Single Product layout functionality is not available.', 'shopglut' );
+						echo '<br>' . esc_html__( 'Please install and activate the ProductDetailsGlut plugin to manage single product layouts.', 'shopglut' );
+						?>
+					</p>
+				</div>
+			</div>
+			<?php
+		}
+	}
+
+	public function renderWooBuilderPage() {
 		$module_manager = \Shopglut\ModuleManager::get_instance();
 		$logo_url = SHOPGLUT_URL . 'global-assets/images/header-logo.svg';
 		?>
@@ -1177,7 +1281,7 @@ class AllLayouts {
 						<h3 style="margin: 0; color: #333;"><?php echo esc_html__( 'Single Product', 'shopglut' ); ?></h3>
 					</div>
 					<p style="color: #666; margin-bottom: 15px;"><?php echo esc_html__( 'Create stunning product detail pages with custom layouts and elements.', 'shopglut' ); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=single_product' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Layouts', 'shopglut' ); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=product_details' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Layouts', 'shopglut' ); ?></a>
 				</div>
 
 				<!-- Cart Page -->
@@ -1240,7 +1344,7 @@ class AllLayouts {
 	private function getModuleUrls() {
 		return [
 			// Layout Modules
-			'single_product' => admin_url( 'admin.php?page=shopglut_layouts&view=single_product' ),
+			'single_product' => admin_url( 'admin.php?page=shopglut_layouts&view=product_details' ),
 			'shop_layouts' => admin_url( 'admin.php?page=shopglut_layouts&view=shop' ),
 			'cart_page' => admin_url( 'admin.php?page=shopglut_layouts&view=cartpage' ),
 			'orderComplete_page' => admin_url( 'admin.php?page=shopglut_layouts&view=ordercomplete' ),
@@ -1455,6 +1559,32 @@ class AllLayouts {
 				__( 'Test email sending', 'shopglut' )
 			]
 		];
+	}
+
+	/**
+	 * Check if ProductDetailsGlut plugin is active
+	 *
+	 * @return bool True if ProductDetailsGlut is active
+	 */
+	private function is_productdetailsglut_active() {
+		// Check by active plugins list
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+
+		if ( is_multisite() ) {
+			// Get network active plugins
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+
+		// Check for product-details-glut/product-details-glut.php plugin
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'product-details-glut/product-details-glut.php' ) {
+				return true;
+			}
+		}
+
+		// Also check if the main class exists
+		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' );
 	}
 
 	public static function get_instance() {

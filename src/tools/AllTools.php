@@ -5,10 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Shopglut\layouts\singleProduct\chooseTemplates as SingleProductTemplates;
-use Shopglut\layouts\singleProduct\SingleProductListTable;
+
+
 use Shopglut\BusinessSolutions\PdfInvoices\PdfInvoicesHandler;
-use Shopglut\layouts\singleProduct\SingleLayoutEntity;
 use Shopglut\tools\productCustomField\ProductCustomFieldListTable;
 use Shopglut\tools\productCustomField\ProductCustomFieldSettingsPage;
 
