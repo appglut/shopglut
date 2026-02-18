@@ -2,13 +2,16 @@
 
 /**
  * Plugin Update Checker for Related Plugins
- * Public Version - For distribution to all users
+ * Public Version - No configuration needed by users
  *
- * Configure via wp-config.php:
- * define( 'SHOPGLUT_UPDATE_SERVER_URL', 'https://your-domain.com' );
+ * The update server URL is hardcoded below.
+ * Users don't need to configure anything!
  */
 
 class ShopGlut_PluginUpdateChecker {
+
+    // YOUR UPDATE SERVER - Change this to your domain
+    private $update_server_url = 'https://your-domain.com';
 
     private $related_plugins = array(
         'wishglut' => array(
@@ -40,14 +43,13 @@ class ShopGlut_PluginUpdateChecker {
     private $option_name = 'shopglut_related_plugins_versions';
     private $cache_time = DAY_IN_SECONDS; // Check once per day
 
-    // Update server configuration
-    private $update_server_url;
-
     public function __construct() {
-        // Initialize configuration
-        $this->update_server_url = defined('SHOPGLUT_UPDATE_SERVER_URL')
-            ? rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/')
-            : home_url(); // Default to current site
+        // Allow override via wp-config.php (optional, for testing)
+        if (defined('SHOPGLUT_UPDATE_SERVER_URL')) {
+            $this->update_server_url = rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/');
+        } else {
+            $this->update_server_url = rtrim($this->update_server_url, '/');
+        }
 
         // Scheduled update check (runs daily via WordPress cron)
         add_action('shopglut_scheduled_plugin_updates', array($this, 'scheduled_check'));
