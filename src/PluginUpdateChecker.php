@@ -11,7 +11,7 @@
 class ShopGlut_PluginUpdateChecker {
 
     // YOUR UPDATE SERVER - Change this to your domain
-    private $update_server_url = 'https://your-domain.com';
+    private $update_server_url = 'https://updates.appglut.com/plugins';
 
     private $related_plugins = array(
         'wishglut' => array(
@@ -106,7 +106,7 @@ class ShopGlut_PluginUpdateChecker {
      */
     private function check_from_self_hosted(&$versions) {
         foreach ($this->related_plugins as $slug => $plugin) {
-            $json_url = $this->update_server_url . '/appglutplugins/' . $slug . '-version.json';
+            $json_url = $this->update_server_url . '/' . $slug . '-version.json';
 
             $response = wp_remote_get($json_url, array(
                 'headers' => array(
@@ -133,7 +133,7 @@ class ShopGlut_PluginUpdateChecker {
                 'published_at' => $data['last_updated'] ?? '',
                 'url' => $data['homepage'] ?? '',
                 'icon' => $plugin['icon'],
-                'zip_url' => $this->update_server_url . '/appglutplugins/' . $slug . '.zip',
+                'zip_url' => $this->update_server_url . '/' . $slug . '.zip',
                 'description' => $plugin['description']
             );
         }
