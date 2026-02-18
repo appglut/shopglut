@@ -2,10 +2,11 @@
 
 /**
  * Plugin Update Checker for Related Plugins
- * Self-Hosted Version - Reads from appglutplugins folder on hosting
+ * Self-Hosted Version with Security - Reads from appglutplugins folder on hosting
  *
  * Configure via wp-config.php:
  * define( 'SHOPGLUT_UPDATE_SERVER_URL', 'https://your-domain.com' );
+ * define( 'SHOPGLUT_UPDATE_API_KEY', 'your-secret-api-key' );
  */
 
 class ShopGlut_PluginUpdateChecker {
@@ -14,22 +15,26 @@ class ShopGlut_PluginUpdateChecker {
         'wishglut' => array(
             'name' => 'WishGlut',
             'basename' => 'wishglut/wishglut.php',
-            'icon' => '🎁'
+            'icon' => '🎁',
+            'description' => 'Advanced wishlist plugin for WooCommerce with multiple wishlist lists'
         ),
         'checkoutglut' => array(
             'name' => 'CheckoutGlut',
             'basename' => 'checkoutglut/checkoutglut.php',
-            'icon' => '🛒'
+            'icon' => '🛒',
+            'description' => 'Customize WooCommerce checkout page with drag & drop builder'
         ),
         'shortcodeglut' => array(
             'name' => 'ShortcodeGlut',
             'basename' => 'shortcodeglut/shortcodeglut.php',
-            'icon' => '⚡'
+            'icon' => '⚡',
+            'description' => 'Powerful shortcode builder for WordPress with visual editor'
         ),
         'product-details-glut' => array(
             'name' => 'ProductDetailsGlut',
             'basename' => 'product-details-glut/product-details-glut.php',
-            'icon' => '📦'
+            'icon' => '📦',
+            'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
         )
     );
 
@@ -38,12 +43,17 @@ class ShopGlut_PluginUpdateChecker {
 
     // Update server configuration
     private $update_server_url;
+    private $api_key;
 
     public function __construct() {
-        // Initialize configuration - set your hosting URL here or in wp-config.php
+        // Initialize configuration
         $this->update_server_url = defined('SHOPGLUT_UPDATE_SERVER_URL')
             ? rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/')
-            : 'https://your-domain.com'; // CHANGE THIS to your actual domain
+            : home_url(); // Default to current site
+
+        $this->api_key = defined('SHOPGLUT_UPDATE_API_KEY')
+            ? SHOPGLUT_UPDATE_API_KEY
+            : '';
 
         // Scheduled update check (runs daily via WordPress cron)
         add_action('shopglut_scheduled_plugin_updates', array($this, 'scheduled_check'));
@@ -95,17 +105,33 @@ class ShopGlut_PluginUpdateChecker {
     }
 
     /**
-     * Check for updates from self-hosted server
-     * Reads version JSON files from appglutplugins folder
+     * Get API key for secure requests
+     */
+    private function get_api_key() {
+        if (empty($this->api_key)) {
+            // Generate a site-specific key if none defined
+            return md5(get_bloginfo('url') . 'shopglut-update-key');
+        }
+        return $this->api_key;
+    }
+
+    /**
+     * Check for updates from self-hosted server with security
      */
     private function check_from_self_hosted(&$versions) {
+        $api_key = $this->get_api_key();
+        $site_url = home_url();
+
         foreach ($this->related_plugins as $slug => $plugin) {
             $json_url = $this->update_server_url . '/appglutplugins/' . $slug . '-version.json';
 
+            // Add security parameters
             $response = wp_remote_get($json_url, array(
                 'headers' => array(
                     'Accept' => 'application/json',
-                    'User-Agent' => 'ShopGlut-Plugin-Checker'
+                    'User-Agent' => 'ShopGlut-Plugin-Checker',
+                    'X-ShopGlut-Key' => $api_key,
+                    'X-ShopGlut-Site' => $site_url
                 ),
                 'timeout' => 15
             ));
@@ -127,7 +153,8 @@ class ShopGlut_PluginUpdateChecker {
                 'published_at' => $data['last_updated'] ?? '',
                 'url' => $data['homepage'] ?? '',
                 'icon' => $plugin['icon'],
-                'zip_url' => $data['download_url'] ?? ''
+                'zip_url' => $this->update_server_url . '/appglutplugins/' . $slug . '.zip',
+                'description' => $plugin['description']
             );
         }
     }
@@ -202,9 +229,6 @@ class ShopGlut_PluginUpdateChecker {
                 <?php endif; ?>
                 <a href="<?php echo esc_url($plugin['url']); ?>" target="_blank" class="button button-small" style="margin-left: 10px;">
                     <?php esc_html_e('View Release', 'shopglut'); ?>
-                </a>
-                <a href="<?php echo esc_url($plugin['zip_url']); ?>" target="_blank" class="button button-primary button-small" style="margin-left: 5px;">
-                    <?php esc_html_e('Download', 'shopglut'); ?>
                 </a>
             </p>
         </div>
@@ -328,6 +352,12 @@ class ShopGlut_PluginUpdateChecker {
         if (!$plugin || !$this->is_valid_plugin($plugin)) {
             wp_send_json_error('Invalid plugin');
         }
+
+        // Add security headers to download URL
+        $zip_url = add_query_arg(array(
+            'shopglut_key' => $this->get_api_key(),
+            'shopglut_site' => home_url()
+        ), $zip_url);
 
         // Download and update the plugin
         $result = $this->update_plugin_from_zip($plugin, $zip_url);
