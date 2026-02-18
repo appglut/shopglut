@@ -2,7 +2,10 @@
 
 /**
  * Plugin Update Checker for Related Plugins
- * Checks GitHub releases for wishglut, checkoutglut, shortcodeglut, product-details-glut
+ * Self-Hosted Version - Reads from appglutplugins folder on hosting
+ *
+ * Configure via wp-config.php:
+ * define( 'SHOPGLUT_UPDATE_SERVER_URL', 'https://your-domain.com' );
  */
 
 class ShopGlut_PluginUpdateChecker {
@@ -10,26 +13,22 @@ class ShopGlut_PluginUpdateChecker {
     private $related_plugins = array(
         'wishglut' => array(
             'name' => 'WishGlut',
-            'repo' => 'appglut/wishglut',
-            'url' => 'https://github.com/appglut/wishglut',
+            'basename' => 'wishglut/wishglut.php',
             'icon' => '🎁'
         ),
         'checkoutglut' => array(
             'name' => 'CheckoutGlut',
-            'repo' => 'appglut/checkoutglut',
-            'url' => 'https://github.com/appglut/checkoutglut',
+            'basename' => 'checkoutglut/checkoutglut.php',
             'icon' => '🛒'
         ),
         'shortcodeglut' => array(
             'name' => 'ShortcodeGlut',
-            'repo' => 'appglut/shortcodeglut',
-            'url' => 'https://github.com/appglut/shortcodeglut',
+            'basename' => 'shortcodeglut/shortcodeglut.php',
             'icon' => '⚡'
         ),
         'product-details-glut' => array(
             'name' => 'ProductDetailsGlut',
-            'repo' => 'appglut/product-details-glut',
-            'url' => 'https://github.com/appglut/product-details-glut',
+            'basename' => 'product-details-glut/product-details-glut.php',
             'icon' => '📦'
         )
     );
@@ -37,7 +36,15 @@ class ShopGlut_PluginUpdateChecker {
     private $option_name = 'shopglut_related_plugins_versions';
     private $cache_time = DAY_IN_SECONDS; // Check once per day
 
+    // Update server configuration
+    private $update_server_url;
+
     public function __construct() {
+        // Initialize configuration - set your hosting URL here or in wp-config.php
+        $this->update_server_url = defined('SHOPGLUT_UPDATE_SERVER_URL')
+            ? rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/')
+            : 'https://your-domain.com'; // CHANGE THIS to your actual domain
+
         // Scheduled update check (runs daily via WordPress cron)
         add_action('shopglut_scheduled_plugin_updates', array($this, 'scheduled_check'));
 
@@ -53,12 +60,10 @@ class ShopGlut_PluginUpdateChecker {
 
     /**
      * Run initial check only if no version data exists yet
-     * This ensures fresh data is available after first activation
      */
     public function maybe_initial_check() {
         $versions = get_option($this->option_name, array());
 
-        // Only check if we have no data yet
         if (empty($versions)) {
             $this->check_for_updates();
         }
@@ -71,89 +76,60 @@ class ShopGlut_PluginUpdateChecker {
         $last_check = get_transient($this->option_name . '_last_check');
 
         if ($last_check && $last_check > time() - $this->cache_time) {
-            return; // Already checked recently
+            return;
         }
 
         $this->check_for_updates();
     }
 
     /**
-     * Check for updates from GitHub API
-     * Called by scheduled cron or manually via force check
+     * Check for updates from self-hosted server
      */
     public function check_for_updates() {
         $versions = get_option($this->option_name, array());
 
-        foreach ($this->related_plugins as $slug => $plugin) {
-            $release_info = $this->get_github_release($plugin['repo']);
-
-            if ($release_info && !isset($release_info['message'])) {
-                // Use tag_name as version (e.g., "v1.0.0" or "latest")
-                $tag_name = isset($release_info['tag_name']) ? $release_info['tag_name'] : 'latest';
-
-                // If tag is "latest", use date as fallback version
-                if ($tag_name === 'latest') {
-                    $published_at = $release_info['published_at'];
-                    $version = $this->format_version_date($published_at);
-                } else {
-                    // Remove 'v' prefix if present
-                    $version = ltrim($tag_name, 'v');
-                }
-
-                $versions[$slug] = array(
-                    'name' => $plugin['name'],
-                    'version' => $version,
-                    'tag_name' => $tag_name,
-                    'published_at' => $release_info['published_at'],
-                    'url' => $plugin['url'] . '/releases/tag/' . $tag_name,
-                    'icon' => $plugin['icon'],
-                    'zip_url' => $this->get_zip_url($release_info)
-                );
-            }
-        }
+        $this->check_from_self_hosted($versions);
 
         update_option($this->option_name, $versions);
         set_transient($this->option_name . '_last_check', time(), $this->cache_time);
     }
 
     /**
-     * Get release info from GitHub API
+     * Check for updates from self-hosted server
+     * Reads version JSON files from appglutplugins folder
      */
-    private function get_github_release($repo) {
-        $url = "https://api.github.com/repos/{$repo}/releases/latest";
+    private function check_from_self_hosted(&$versions) {
+        foreach ($this->related_plugins as $slug => $plugin) {
+            $json_url = $this->update_server_url . '/appglutplugins/' . $slug . '-version.json';
 
-        $response = wp_remote_get($url, array(
-            'headers' => array(
-                'Accept' => 'application/vnd.github.v3+json',
-                'User-Agent' => 'ShopGlut-Plugin-Checker'
-            ),
-            'timeout' => 15
-        ));
+            $response = wp_remote_get($json_url, array(
+                'headers' => array(
+                    'Accept' => 'application/json',
+                    'User-Agent' => 'ShopGlut-Plugin-Checker'
+                ),
+                'timeout' => 15
+            ));
 
-        if (is_wp_error($response)) {
-            return false;
+            if (is_wp_error($response)) {
+                continue;
+            }
+
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+
+            if (!isset($data['version'])) {
+                continue;
+            }
+
+            $versions[$slug] = array(
+                'name' => $data['name'] ?? $plugin['name'],
+                'version' => $data['version'],
+                'published_at' => $data['last_updated'] ?? '',
+                'url' => $data['homepage'] ?? '',
+                'icon' => $plugin['icon'],
+                'zip_url' => $data['download_url'] ?? ''
+            );
         }
-
-        $body = wp_remote_retrieve_body($response);
-        return json_decode($body, true);
-    }
-
-    /**
-     * Get ZIP download URL from release
-     */
-    private function get_zip_url($release) {
-        if (isset($release['assets'][0]['browser_download_url'])) {
-            return $release['assets'][0]['browser_download_url'];
-        }
-        return $release['html_url'];
-    }
-
-    /**
-     * Format published date as version
-     */
-    private function format_version_date($date) {
-        $timestamp = strtotime($date);
-        return date('Y.m.d', $timestamp);
     }
 
     /**
@@ -188,7 +164,7 @@ class ShopGlut_PluginUpdateChecker {
         $dismiss_nonce = wp_create_nonce('shopglut_dismiss_update');
 
         // Get current installed version if plugin is installed
-        $plugin_basename = $this->get_plugin_basename($slug);
+        $plugin_basename = $this->related_plugins[$slug]['basename'] ?? '';
         $current_version = '';
 
         if ($plugin_basename && function_exists('get_plugins')) {
@@ -196,6 +172,11 @@ class ShopGlut_PluginUpdateChecker {
             if (isset($plugins[$plugin_basename])) {
                 $current_version = $plugins[$plugin_basename]['Version'];
             }
+        }
+
+        // Only show if update is available
+        if ($current_version && version_compare($current_version, $plugin['version'], '>=')) {
+            return;
         }
 
         ?>
@@ -206,7 +187,6 @@ class ShopGlut_PluginUpdateChecker {
                 <?php if ($current_version) : ?>
                     <?php
                     printf(
-                        /* translators: 1: current version, 2: new version */
                         esc_html__('You have version %1$s installed. New version %2$s is available!', 'shopglut'),
                         esc_html($current_version),
                         esc_html($plugin['version'])
@@ -215,7 +195,6 @@ class ShopGlut_PluginUpdateChecker {
                 <?php else : ?>
                     <?php
                     printf(
-                        /* translators: %s: version number */
                         esc_html__('Version %s is now available!', 'shopglut'),
                         esc_html($plugin['version'])
                     );
@@ -280,34 +259,7 @@ class ShopGlut_PluginUpdateChecker {
 
         // Force check
         $versions = get_option($this->option_name, array());
-
-        foreach ($this->related_plugins as $slug => $plugin) {
-            $release_info = $this->get_github_release($plugin['repo']);
-
-            if ($release_info && !isset($release_info['message'])) {
-                // Use tag_name as version (e.g., "v1.0.0" or "latest")
-                $tag_name = isset($release_info['tag_name']) ? $release_info['tag_name'] : 'latest';
-
-                // If tag is "latest", use date as fallback version
-                if ($tag_name === 'latest') {
-                    $published_at = $release_info['published_at'];
-                    $version = $this->format_version_date($published_at);
-                } else {
-                    // Remove 'v' prefix if present
-                    $version = ltrim($tag_name, 'v');
-                }
-
-                $versions[$slug] = array(
-                    'name' => $plugin['name'],
-                    'version' => $version,
-                    'tag_name' => $tag_name,
-                    'published_at' => $release_info['published_at'],
-                    'url' => $plugin['url'] . '/releases/tag/' . $tag_name,
-                    'icon' => $plugin['icon'],
-                    'zip_url' => $this->get_zip_url($release_info)
-                );
-            }
-        }
+        $this->check_from_self_hosted($versions);
 
         update_option($this->option_name, $versions);
         set_transient($this->option_name . '_last_check', time(), $this->cache_time);
@@ -328,12 +280,10 @@ class ShopGlut_PluginUpdateChecker {
             return false;
         }
 
-        // Check for shopglut admin pages
         if (strpos($screen->id, 'shopglut') !== false || strpos($screen->id, 'shopglut-pro') !== false) {
             return true;
         }
 
-        // Also check for WooCommerce pages (since this is a WC plugin)
         if (strpos($screen->id, 'woocommerce') !== false) {
             return true;
         }
@@ -342,7 +292,7 @@ class ShopGlut_PluginUpdateChecker {
     }
 
     /**
-     * Force refresh check (call from settings page)
+     * Force refresh check
      */
     public function force_check() {
         delete_transient($this->option_name . '_last_check');
@@ -350,7 +300,7 @@ class ShopGlut_PluginUpdateChecker {
     }
 
     /**
-     * Get current versions for display in settings
+     * Get current versions for display
      */
     public function get_versions() {
         return get_option($this->option_name, array());
@@ -386,12 +336,10 @@ class ShopGlut_PluginUpdateChecker {
             wp_send_json_error($result->get_error_message());
         }
 
-        // Clear version cache to force refresh on next page load
+        // Clear version cache
         delete_option($this->option_name);
         delete_transient($this->option_name . '_last_check');
         delete_option($this->option_name . '_dismissed');
-
-        // Also clear WordPress plugin cache
         wp_cache_flush();
 
         wp_send_json_success(array(
@@ -411,26 +359,16 @@ class ShopGlut_PluginUpdateChecker {
         require_once ABSPATH . 'wp-admin/includes/class-plugin-upgrader.php';
         require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skins.php';
 
-        // Check if plugin was active before update
         $was_active = is_plugin_active($plugin_basename);
 
-        // Get plugin directory
-        $plugin_dir = dirname(WP_PLUGIN_DIR . '/' . $plugin_basename);
-
-        // Use File_Upload_Upgrader skin to handle download
         $skin = new WP_Ajax_Upgrader_Skin(array(
             'nonce' => 'shopglut_update_plugin',
             'url' => admin_url('admin-ajax.php?action=shopglut_update_plugin')
         ));
 
-        // Create upgrader instance
         $upgrader = new Plugin_Upgrader($skin);
 
-        // Download the ZIP file
-        $download_url = $zip_url;
-
-        // Use WordPress upgrade API
-        $result = $upgrader->install($download_url, array(
+        $result = $upgrader->install($zip_url, array(
             'overwrite_package' => true,
             'hook_extra' => array(
                 'type' => 'plugin',
@@ -446,18 +384,14 @@ class ShopGlut_PluginUpdateChecker {
             return new WP_Error('update_failed', 'Plugin update failed');
         }
 
-        // Reactivate if it was active
         if ($was_active) {
             $reactivate = activate_plugin($plugin_basename);
             if (is_wp_error($reactivate)) {
-                // Try to activate anyway, might be a minor issue
                 error_log('ShopGlut: Failed to reactivate plugin after update: ' . $reactivate->get_error_message());
             }
         }
 
-        // Clear plugin cache to force refresh
         wp_cache_flush();
-        delete_option('shopglut_related_plugins_versions');
 
         return true;
     }
@@ -472,41 +406,6 @@ class ShopGlut_PluginUpdateChecker {
         $plugins = get_plugins();
         return isset($plugins[$plugin_basename]);
     }
-
-    /**
-     * Get plugin basename from slug
-     */
-    private function get_plugin_basename($slug) {
-        $basenames = array(
-            'wishglut' => 'wishglut/wishglut.php',
-            'checkoutglut' => 'checkoutglut/checkoutglut.php',
-            'shortcodeglut' => 'shortcodeglut/shortcodeglut.php'
-        );
-        return isset($basenames[$slug]) ? $basenames[$slug] : '';
-    }
-}
-
-// Define the upgrader skin class only when in admin context
-if (is_admin() && !class_exists('ShopGlut_Quiet_Upgrader_Skin')) {
-    require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';
-
-    class ShopGlut_Quiet_Upgrader_Skin extends WP_Upgrader_Skin {
-        public function feedback($string, ...$args) {
-            // Silence feedback
-        }
-
-        public function header() {
-            // No header
-        }
-
-        public function footer() {
-            // No footer
-        }
-
-        public function error($errors) {
-            // Handle errors silently
-        }
-    }
 }
 
 // Initialize the update checker
@@ -516,24 +415,17 @@ new ShopGlut_PluginUpdateChecker();
 register_activation_hook(SHOPGLUT_FILE, 'shopglut_schedule_update_checks');
 register_deactivation_hook(SHOPGLUT_FILE, 'shopglut_clear_update_checks');
 
-/**
- * Schedule the daily update check via WordPress cron
- */
 function shopglut_schedule_update_checks() {
-	if (!wp_next_scheduled('shopglut_scheduled_plugin_updates')) {
-		wp_schedule_event(time(), 'daily', 'shopglut_scheduled_plugin_updates');
-	}
+    if (!wp_next_scheduled('shopglut_scheduled_plugin_updates')) {
+        wp_schedule_event(time(), 'daily', 'shopglut_scheduled_plugin_updates');
+    }
 
-	// Run initial check immediately on activation so data is available right away
-	if (class_exists('ShopGlut_PluginUpdateChecker')) {
-		$checker = new ShopGlut_PluginUpdateChecker();
-		$checker->check_for_updates();
-	}
+    if (class_exists('ShopGlut_PluginUpdateChecker')) {
+        $checker = new ShopGlut_PluginUpdateChecker();
+        $checker->check_for_updates();
+    }
 }
 
-/**
- * Clear the scheduled update check
- */
 function shopglut_clear_update_checks() {
-	wp_clear_scheduled_hook('shopglut_scheduled_plugin_updates');
+    wp_clear_scheduled_hook('shopglut_scheduled_plugin_updates');
 }

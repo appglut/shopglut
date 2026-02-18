@@ -452,34 +452,43 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 		}
 
 		private function get_related_plugins() {
+			// Get update server URL from config or use default
+			$update_server = defined('SHOPGLUT_UPDATE_SERVER_URL')
+				? rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/')
+				: 'https://your-domain.com';
+
 			return array(
 				'wishglut' => array(
 					'name' => 'WishGlut',
 					'description' => 'Advanced wishlist plugin for WooCommerce with multiple wishlist lists',
 					'icon' => '🎁',
-					'url' => 'https://github.com/appglut/wishglut',
-					'basename' => 'wishglut/wishglut.php'
+					'url' => $update_server . '/appglutplugins/wishglut-version.json',
+					'basename' => 'wishglut/wishglut.php',
+					'homepage' => 'https://github.com/appglut/wishglut'
 				),
 				'checkoutglut' => array(
 					'name' => 'CheckoutGlut',
 					'description' => 'Customize WooCommerce checkout page with drag & drop builder',
 					'icon' => '🛒',
-					'url' => 'https://github.com/appglut/checkoutglut',
-					'basename' => 'checkoutglut/checkoutglut.php'
+					'url' => $update_server . '/appglutplugins/checkoutglut-version.json',
+					'basename' => 'checkoutglut/checkoutglut.php',
+					'homepage' => 'https://github.com/appglut/checkoutglut'
 				),
 				'shortcodeglut' => array(
 					'name' => 'ShortcodeGlut',
 					'description' => 'Powerful shortcode builder for WordPress with visual editor',
 					'icon' => '⚡',
-					'url' => 'https://github.com/appglut/shortcodeglut',
-					'basename' => 'shortcodeglut/shortcodeglut.php'
+					'url' => $update_server . '/appglutplugins/shortcodeglut-version.json',
+					'basename' => 'shortcodeglut/shortcodeglut.php',
+					'homepage' => 'https://github.com/appglut/shortcodeglut'
 				),
 				'product-details-glut' => array(
 					'name' => 'ProductDetailsGlut',
 					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
 					'icon' => '📦',
-					'url' => 'https://github.com/appglut/product-details-glut',
-					'basename' => 'product-details-glut/product-details-glut.php'
+					'url' => $update_server . '/appglutplugins/product-details-glut-version.json',
+					'basename' => 'product-details-glut/product-details-glut.php',
+					'homepage' => 'https://github.com/appglut/product-details-glut'
 				)
 			);
 		}
