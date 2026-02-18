@@ -117,21 +117,28 @@ class ShopGlut_PluginUpdateChecker {
 
     /**
      * Check for updates from self-hosted server with security
+     * Uses PHP gateway for secure access
      */
     private function check_from_self_hosted(&$versions) {
         $api_key = $this->get_api_key();
         $site_url = home_url();
 
         foreach ($this->related_plugins as $slug => $plugin) {
-            $json_url = $this->update_server_url . '/appglutplugins/' . $slug . '-version.json';
+            // Use PHP gateway instead of direct file access
+            $gateway_url = $this->update_server_url . '/appglut-updates.php';
+            $query_params = array(
+                'plugin' => $slug,
+                'key' => $api_key,
+                'site' => $site_url,
+                'action' => 'info'
+            );
 
-            // Add security parameters
+            $json_url = add_query_arg($query_params, $gateway_url);
+
             $response = wp_remote_get($json_url, array(
                 'headers' => array(
                     'Accept' => 'application/json',
-                    'User-Agent' => 'ShopGlut-Plugin-Checker',
-                    'X-ShopGlut-Key' => $api_key,
-                    'X-ShopGlut-Site' => $site_url
+                    'User-Agent' => 'ShopGlut-Plugin-Checker/' . get_bloginfo('version')
                 ),
                 'timeout' => 15
             ));
@@ -153,7 +160,11 @@ class ShopGlut_PluginUpdateChecker {
                 'published_at' => $data['last_updated'] ?? '',
                 'url' => $data['homepage'] ?? '',
                 'icon' => $plugin['icon'],
-                'zip_url' => $this->update_server_url . '/appglutplugins/' . $slug . '.zip',
+                'zip_url' => $data['download_url'] ?? add_query_arg(array(
+                    'plugin' => $slug,
+                    'key' => $api_key,
+                    'action' => 'download'
+                ), $gateway_url),
                 'description' => $plugin['description']
             );
         }
@@ -353,11 +364,8 @@ class ShopGlut_PluginUpdateChecker {
             wp_send_json_error('Invalid plugin');
         }
 
-        // Add security headers to download URL
-        $zip_url = add_query_arg(array(
-            'shopglut_key' => $this->get_api_key(),
-            'shopglut_site' => home_url()
-        ), $zip_url);
+        // The ZIP URL already contains security parameters from the gateway
+        // No need to add them again
 
         // Download and update the plugin
         $result = $this->update_plugin_from_zip($plugin, $zip_url);
