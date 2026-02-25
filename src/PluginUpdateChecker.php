@@ -38,9 +38,9 @@ class ShopGlut_PluginUpdateChecker {
             'icon' => '📦',
             'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
         ),
-        'product-page-glut' => array(
+        'productpage-glut' => array(
             'name' => 'ProductPageGlut',
-            'basename' => 'product-page-glut/product-page-glut.php',
+            'basename' => 'productpage-glut/productpage-glut.php',
             'icon' => '📦',
             'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
         )

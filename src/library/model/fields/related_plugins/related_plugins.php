@@ -490,19 +490,12 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'basename' => 'shortcodeglut/shortcodeglut.php',
 					'homepage' => 'https://github.com/appglut/shortcodeglut'
 				),
-				'product-details-glut' => array(
-					'name' => 'ProductDetailsGlut',
-					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
-					'icon' => '📦',
-					'basename' => 'product-details-glut/product-details-glut.php',
-					'homepage' => 'https://github.com/appglut/product-details-glut'
-				),
-				'product-page-glut' => array(
+				'productpage-glut' => array(
 					'name' => 'ProductPageGlut',
 					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
 					'icon' => '📦',
-					'basename' => 'product-page-glut/product-page-glut.php',
-					'homepage' => 'https://github.com/appglut/product-page-glut'
+					'basename' => 'productpage-glut/productpage-glut.php',
+					'homepage' => 'https://github.com/appglut/productpage-glut'
 				)
 			);
 		}

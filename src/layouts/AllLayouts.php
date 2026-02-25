@@ -415,7 +415,7 @@ class AllLayouts {
 		if ( $this->is_productpageglut_active() ) {
 			$template_paths = array(
 				WP_PLUGIN_DIR . '/productpage-glut/src/layouts/productPage/chooseTemplates.php',
-				WP_PLUGIN_DIR . '/product-page-glut/src/productPageGlut/chooseTemplates.php'
+				WP_PLUGIN_DIR . '/productpage-glut/src/productPageGlut/chooseTemplates.php'
 			);
 			foreach ( $template_paths as $path ) {
 				if ( file_exists( $path ) ) {
@@ -587,7 +587,7 @@ class AllLayouts {
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-		$github_url = 'https://github.com/appglut/checkoutglut/releases/download/latest/checkoutglut.zip';
+		$github_url = 'https://updates.appglut.com/plugins/checkoutglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -633,10 +633,10 @@ class AllLayouts {
 					</p>
 					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
 						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-							<?php esc_html_e( 'CheckoutGlut is completely free! Download it from GitHub to unlock powerful checkout field features.', 'shopglut' ); ?>
+							<?php esc_html_e( 'CheckoutGlut is completely free! Download the plugin to unlock powerful checkout field features.', 'shopglut' ); ?>
 						</p>
 						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download CheckoutGlut', 'shopglut' ); ?>
 						</a>
 					</div>
 					<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -644,7 +644,7 @@ class AllLayouts {
 							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
 						</p>
 						<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
-							<li><?php esc_html_e( 'Download CheckoutGlut from GitHub', 'shopglut' ); ?></li>
+							<li><?php esc_html_e( 'Download CheckoutGlut plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Upload and activate the CheckoutGlut plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Return to this page to access the feature', 'shopglut' ); ?></li>
@@ -808,7 +808,7 @@ class AllLayouts {
 			// Include ProductLayoutEntity first (other classes depend on it)
 			$entity_paths = array(
 				WP_PLUGIN_DIR . '/productpage-glut/src/layouts/productPage/ProductLayoutEntity.php',
-				WP_PLUGIN_DIR . '/product-page-glut/src/productPageGlut/ProductPageGlutLayoutEntity.php'
+				WP_PLUGIN_DIR . '/productpage-glut/src/productPageGlut/ProductPageGlutLayoutEntity.php'
 			);
 			foreach ( $entity_paths as $path ) {
 				if ( file_exists( $path ) ) {
@@ -819,7 +819,7 @@ class AllLayouts {
 			// Include ProductPageListTable
 			$table_paths = array(
 				WP_PLUGIN_DIR . '/productpage-glut/src/layouts/productPage/ProductPageListTable.php',
-				WP_PLUGIN_DIR . '/product-page-glut/src/productPageGlut/ProductPageGlutListTable.php'
+				WP_PLUGIN_DIR . '/productpage-glut/src/productPageGlut/ProductPageGlutListTable.php'
 			);
 			foreach ( $table_paths as $path ) {
 				if ( file_exists( $path ) ) {
@@ -834,7 +834,7 @@ class AllLayouts {
 		$active_plugins = get_option( 'active_plugins', array() );
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-		$github_url = 'https://github.com/appglut/product-page-glut/releases/download/latest/product-page-glut.zip';
+		$github_url = 'https://updates.appglut.com/plugins/productpage-glut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		// If plugin doesn't exist or is not active, show integration page
@@ -886,10 +886,10 @@ class AllLayouts {
 								</p>
 								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-										<?php esc_html_e( 'ProductPageGlut is completely free! Download it from GitHub to unlock powerful product page building features.', 'shopglut' ); ?>
+										<?php esc_html_e( 'ProductPageGlut is completely free! Download the plugin to unlock powerful product page building features.', 'shopglut' ); ?>
 									</p>
 									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductPageGlut', 'shopglut' ); ?>
 									</a>
 								</div>
 								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -897,7 +897,7 @@ class AllLayouts {
 										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
 									</p>
 									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-										<li><?php esc_html_e( 'Download ProductPageGlut from GitHub', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Download ProductPageGlut plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Upload and activate the ProductPageGlut plugin', 'shopglut' ); ?></li>
 									</ol>
@@ -943,7 +943,7 @@ class AllLayouts {
 				elseif ( $this->is_productpageglut_active() ) {
 					$autoloader_paths = array(
 						WP_PLUGIN_DIR . '/productpage-glut/autoloader.php',
-						WP_PLUGIN_DIR . '/product-page-glut/autoloader.php'
+						WP_PLUGIN_DIR . '/productpage-glut/autoloader.php'
 					);
 					foreach ( $autoloader_paths as $autoloader_path ) {
 						if ( file_exists( $autoloader_path ) ) {
@@ -1092,7 +1092,7 @@ class AllLayouts {
 					elseif ( $this->is_productpageglut_active() ) {
 						$autoloader_paths = array(
 							WP_PLUGIN_DIR . '/productpage-glut/autoloader.php',
-							WP_PLUGIN_DIR . '/product-page-glut/autoloader.php'
+							WP_PLUGIN_DIR . '/productpage-glut/autoloader.php'
 						);
 						foreach ( $autoloader_paths as $autoloader_path ) {
 							if ( file_exists( $autoloader_path ) ) {
@@ -1174,7 +1174,7 @@ class AllLayouts {
 					elseif ( $this->is_productpageglut_active() ) {
 						$autoloader_paths = array(
 							WP_PLUGIN_DIR . '/productpage-glut/autoloader.php',
-							WP_PLUGIN_DIR . '/product-page-glut/autoloader.php'
+							WP_PLUGIN_DIR . '/productpage-glut/autoloader.php'
 						);
 						foreach ( $autoloader_paths as $autoloader_path ) {
 							if ( file_exists( $autoloader_path ) ) {
@@ -1313,7 +1313,7 @@ class AllLayouts {
 			$active_plugins = get_option( 'active_plugins', array() );
 			$is_active = in_array( $plugin_slug, $active_plugins );
 			$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-			$github_url = 'https://github.com/appglut/product-page-glut/releases/download/latest/product-page-glut.zip';
+			$github_url = 'https://updates.appglut.com/plugins/productpage-glut.zip';
 			$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 			?>
 			<div class="wrap shopglut-admin-contents">
@@ -1360,10 +1360,10 @@ class AllLayouts {
 								</p>
 								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-										<?php esc_html_e( 'ProductPageGlut is completely free! Download it from GitHub to unlock powerful product page building features.', 'shopglut' ); ?>
+										<?php esc_html_e( 'ProductPageGlut is completely free! Download the plugin to unlock powerful product page building features.', 'shopglut' ); ?>
 									</p>
 									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductPageGlut', 'shopglut' ); ?>
 									</a>
 								</div>
 								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -1371,7 +1371,7 @@ class AllLayouts {
 										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
 									</p>
 									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-										<li><?php esc_html_e( 'Download ProductPageGlut from GitHub', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Download ProductPageGlut plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Upload and activate the ProductPageGlut plugin', 'shopglut' ); ?></li>
 									</ol>
@@ -1954,7 +1954,7 @@ class AllLayouts {
 		foreach ( $active_plugins as $plugin ) {
 			if ( $plugin === 'productpage-glut/productpage-glut.php'
 				|| $plugin === 'productpage-glut/productpageglut.php'
-				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php'
 				|| strpos( $plugin, 'productpage' ) !== false ) {
 				return true;
 			}
@@ -1986,7 +1986,7 @@ class AllLayouts {
 		// Check for both old and new plugins
 		foreach ( $active_plugins as $plugin ) {
 			if ( $plugin === 'product-details-glut/product-details-glut.php'
-				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php'
 				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}

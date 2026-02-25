@@ -477,7 +477,7 @@ class AllTools {
 			// Use ShortcodeGlut's Shortcode Showcase
 			$this->render_shortcodeglut_shortcode_showcase();
 		} else {
-			// Show GitHub download message when ShortcodeGlut is not active
+			// Show download message when ShortcodeGlut is not active
 			$this->render_shortcodeglut_download_message( 'shortcode_showcase' );
 		}
 		?>
@@ -500,7 +500,7 @@ class AllTools {
 			// Use ShortcodeGlut's Woo Templates
 			$this->render_shortcodeglut_woo_templates();
 		} else {
-			// Show GitHub download message when ShortcodeGlut is not active
+			// Show download message when ShortcodeGlut is not active
 			$this->render_shortcodeglut_download_message( 'woo_templates' );
 		}
 		?>
@@ -655,7 +655,7 @@ class AllTools {
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-		$github_url = 'https://github.com/appglut/shortcodeglut/releases/download/latest/shortcodeglut.zip';
+		$github_url = 'https://updates.appglut.com/plugins/shortcodeglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		$feature_titles = array(
@@ -716,11 +716,11 @@ class AllTools {
 							<?php esc_html_e( 'Free Plugin', 'shopglut' ); ?>
 						</p>
 						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 14px; line-height: 1.6;">
-							<?php esc_html_e( 'ShortcodeGlut is completely free! Download it from GitHub to unlock powerful shortcodes and template customization.', 'shopglut' ); ?>
+							<?php esc_html_e( 'ShortcodeGlut is completely free! Download the plugin to unlock powerful shortcodes and template customization.', 'shopglut' ); ?>
 						</p>
 						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary">
 							<i class="fa fa-cloud-download" style="margin-right: 5px;"></i>
-							<?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+							<?php esc_html_e( 'Download ShortcodeGlut', 'shopglut' ); ?>
 						</a>
 					</div>
 
@@ -729,7 +729,7 @@ class AllTools {
 							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
 						</p>
 						<ol style="margin: 0; padding-left: 0; list-style-position: inside;">
-							<li><?php esc_html_e( 'Download ShortcodeGlut from GitHub', 'shopglut' ); ?></li>
+							<li><?php esc_html_e( 'Download ShortcodeGlut plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Upload and activate the ShortcodeGlut plugin', 'shopglut' ); ?></li>
 							<li><?php esc_html_e( 'Return to this page to access the feature', 'shopglut' ); ?></li>

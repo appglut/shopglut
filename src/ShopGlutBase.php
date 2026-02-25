@@ -242,9 +242,9 @@ class ShopGlutBase {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for product-page-glut/product-page-glut.php or productpage-glut/productpage-glut.php plugin
+		// Check for productpage-glut/productpage-glut.php or productpage-glut/productpage-glut.php plugin
 		foreach ( $active_plugins as $plugin ) {
-			if ( $plugin === 'product-page-glut/product-page-glut.php'
+			if ( $plugin === 'productpage-glut/productpage-glut.php'
 				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}
@@ -271,10 +271,10 @@ class ShopGlutBase {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for both old (product-details-glut) and new (product-page-glut, productpage-glut) plugins
+		// Check for both old (product-details-glut) and new (productpage-glut, productpage-glut) plugins
 		foreach ( $active_plugins as $plugin ) {
 			if ( $plugin === 'product-details-glut/product-details-glut.php'
-				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php'
 				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}

@@ -971,7 +971,7 @@ class ShopGlutRegisterMenu {
 			return;
 		}
 
-		$github_url = 'https://github.com/appglut/wishglut/releases/download/latest/wishglut.zip';
+		$github_url = 'https://updates.appglut.com/plugins/wishglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		// If WishGlut plugin is active, render the WishlistMenuHandler
@@ -1105,15 +1105,15 @@ class ShopGlutRegisterMenu {
 						<h2><?php esc_html_e( 'Get WishGlut - Free Wishlist Plugin', 'shopglut' ); ?></h2>
 						<p><?php esc_html_e( 'Beautiful WooCommerce wishlist plugin with advanced features like wishlist sharing, social sharing, QR code, and popular products.', 'shopglut' ); ?></p>
 						<div class="shopglut-wishlist-notice">
-							<p><?php esc_html_e( 'WishGlut is completely free! Download it from GitHub to unlock powerful wishlist features.', 'shopglut' ); ?></p>
+							<p><?php esc_html_e( 'WishGlut is completely free! Download the plugin to unlock powerful wishlist features.', 'shopglut' ); ?></p>
 							<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero">
-								<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+								<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download WishGlut', 'shopglut' ); ?>
 							</a>
 						</div>
 						<div class="shopglut-wishlist-instructions">
 							<h4><?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?></h4>
 							<ol>
-								<li><?php esc_html_e( 'Download WishGlut from GitHub', 'shopglut' ); ?></li>
+								<li><?php esc_html_e( 'Download WishGlut plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Upload and activate the WishGlut plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Return to this page to access the feature', 'shopglut' ); ?></li>
@@ -1479,7 +1479,7 @@ class ShopGlutRegisterMenu {
     	$is_active = in_array( $plugin_slug, $active_plugins );
     	$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-    	$github_url = 'https://github.com/appglut/checkoutglut/releases/download/latest/checkoutglut.zip';
+    	$github_url = 'https://updates.appglut.com/plugins/checkoutglut.zip';
     	$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
     	if ( ! current_user_can( 'manage_options' ) ) {
@@ -1585,10 +1585,10 @@ class ShopGlutRegisterMenu {
     					</p>
     					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
     						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-    							<?php esc_html_e( 'CheckoutGlut is completely free! Download it from GitHub to unlock powerful checkout field features.', 'shopglut' ); ?>
+    							<?php esc_html_e( 'CheckoutGlut is completely free! Download the plugin to unlock powerful checkout field features.', 'shopglut' ); ?>
     						</p>
     						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-    							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+    							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download CheckoutGlut', 'shopglut' ); ?>
     						</a>
     					</div>
     					<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -1596,7 +1596,7 @@ class ShopGlutRegisterMenu {
     							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
     						</p>
     						<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
-    							<li><?php esc_html_e( 'Download CheckoutGlut from GitHub', 'shopglut' ); ?></li>
+    							<li><?php esc_html_e( 'Download CheckoutGlut plugin', 'shopglut' ); ?></li>
     							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
     							<li><?php esc_html_e( 'Upload and activate the CheckoutGlut plugin', 'shopglut' ); ?></li>
     						</ol>
@@ -1623,7 +1623,7 @@ class ShopGlutRegisterMenu {
     	$is_active = in_array( $plugin_slug, $active_plugins );
     	$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-    	$github_url = 'https://github.com/appglut/productpage-glut/releases/download/latest/productpage-glut.zip';
+    	$github_url = 'https://updates.appglut.com/plugins/productpage-glut.zip';
     	$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
     	if ( ! current_user_can( 'manage_options' ) ) {
@@ -1729,10 +1729,10 @@ class ShopGlutRegisterMenu {
     					</p>
     					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
     						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-    							<?php esc_html_e( 'ProductPageGlut is completely free! Download it from GitHub to unlock powerful product page building features.', 'shopglut' ); ?>
+    							<?php esc_html_e( 'ProductPageGlut is completely free! Download the plugin to unlock powerful product page building features.', 'shopglut' ); ?>
     						</p>
     						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-    							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+    							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download ProductPageGlut', 'shopglut' ); ?>
     						</a>
     					</div>
     					<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -1740,7 +1740,7 @@ class ShopGlutRegisterMenu {
     							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
     						</p>
     						<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
-    							<li><?php esc_html_e( 'Download ProductPageGlut from GitHub', 'shopglut' ); ?></li>
+    							<li><?php esc_html_e( 'Download ProductPageGlut plugin', 'shopglut' ); ?></li>
     							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
     							<li><?php esc_html_e( 'Upload and activate the ProductPageGlut plugin', 'shopglut' ); ?></li>
     						</ol>
@@ -1772,10 +1772,10 @@ class ShopGlutRegisterMenu {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for product-details-glut, product-page-glut, or productpage-glut plugins
+		// Check for product-details-glut, productpage-glut, or productpage-glut plugins
 		foreach ( $active_plugins as $plugin ) {
 			if ( $plugin === 'product-details-glut/product-details-glut.php'
-				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php'
 				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}

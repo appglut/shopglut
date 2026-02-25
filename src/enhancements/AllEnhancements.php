@@ -750,7 +750,7 @@ class AllEnhancements {
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
 
-		$github_url = 'https://github.com/appglut/wishglut/releases/download/latest/wishglut.zip';
+		$github_url = 'https://updates.appglut.com/plugins/wishglut.zip';
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -795,10 +795,10 @@ class AllEnhancements {
 						</p>
 						<div style="background: #fce4ec; border-left: 4px solid #e91e63; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
 							<p style="margin: 0 0 15px 0; color: #880e4f; font-size: 16px; font-weight: 600;">
-								<?php esc_html_e( 'WishGlut is completely free! Download it from GitHub to unlock powerful wishlist features.', 'shopglut' ); ?>
+								<?php esc_html_e( 'WishGlut is completely free! Download the plugin to unlock powerful wishlist features.', 'shopglut' ); ?>
 							</p>
 							<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-								<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+								<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download WishGlut', 'shopglut' ); ?>
 							</a>
 						</div>
 						<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
@@ -806,7 +806,7 @@ class AllEnhancements {
 								<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
 							</p>
 							<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
-								<li><?php esc_html_e( 'Download WishGlut from GitHub', 'shopglut' ); ?></li>
+								<li><?php esc_html_e( 'Download WishGlut plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Upload and activate the WishGlut plugin', 'shopglut' ); ?></li>
 								<li><?php esc_html_e( 'Return to this page to access the feature', 'shopglut' ); ?></li>
