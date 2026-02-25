@@ -32,7 +32,7 @@ function openHtmlDemoModal(templateId, moduleType) {
 
 	if (modal) {
 		// For enhancement modules and showcase modules, and single-product, load content via AJAX first
-		if ([ 'product-swatches', 'product-comparison', 'product-quickview', 'product-shopbanner', 'product-gallery', 'product-slider', 'product-tab', 'product-accordion'].includes(moduleType)) {
+		if (['single-product', 'product-swatches', 'product-comparison', 'product-quickview', 'product-shopbanner', 'product-gallery', 'product-slider', 'product-tab', 'product-accordion'].includes(moduleType)) {
 			loadEnhancementDemoContent(templateId, moduleType, modal);
 		} else {
 			modal.style.setProperty('display', 'flex', 'important');
@@ -85,7 +85,7 @@ function loadEnhancementDemoContent(templateId, moduleType, modal) {
 	}
 
 	const actionMap = {
-		//'single-product': 'shopglut_get_template_demo_content',
+		'single-product': 'shopglut_get_template_demo_content',
 		'product-swatches': 'get_swatches_demo_content',
 		'product-comparison': 'get_comparison_demo_content',
 		'product-quickview': 'get_quickview_demo_content',
@@ -102,8 +102,11 @@ function loadEnhancementDemoContent(templateId, moduleType, modal) {
 		return;
 	}
 
-	// Get modal body
-	const modalBody = modal.querySelector('.shopglut-template-modal-modal-body');
+	// Get modal body - try both class naming conventions
+	let modalBody = modal.querySelector('.productpageglut-template-modal-modal-body');
+	if (!modalBody) {
+		modalBody = modal.querySelector('.shopglut-template-modal-modal-body');
+	}
 
 	// Show modal immediately
 	modal.style.setProperty('display', 'flex', 'important');
@@ -138,7 +141,10 @@ function loadEnhancementDemoContent(templateId, moduleType, modal) {
 	.then(html => {
 		modalBody.innerHTML = html;
 		// Show close button when content loads
-		const closeButton = modal.querySelector('.shopglut-template-modal-close-modal');
+		let closeButton = modal.querySelector('.productpageglut-template-modal-close-modal');
+		if (!closeButton) {
+			closeButton = modal.querySelector('.shopglut-template-modal-close-modal');
+		}
 		if (closeButton) {
 			closeButton.classList.add('content-loaded');
 		}
@@ -188,7 +194,10 @@ function loadEnhancementDemoContent(templateId, moduleType, modal) {
 		}
 		modalBody.innerHTML = `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 300px; padding: 40px; text-align: center;"><div style="color: #dc3545; margin-bottom: 20px;">⚠️</div><p style="color: #dc3545; font-size: 16px; font-weight: 600; margin-bottom: 10px;">${errorMessage}</p><p style="color: #666; font-size: 14px;">Please refresh the page and try again.</p></div>`;
 		// Show close button even on error
-		const closeButton = modal.querySelector('.shopglut-template-modal-close-modal');
+		let closeButton = modal.querySelector('.productpageglut-template-modal-close-modal');
+		if (!closeButton) {
+			closeButton = modal.querySelector('.shopglut-template-modal-close-modal');
+		}
 		if (closeButton) {
 			closeButton.classList.add('content-loaded');
 		}
@@ -215,7 +224,7 @@ function closeHtmlDemoModal(moduleType) {
  */
 function getModalId(moduleType) {
 	const modalIds = {
-		//'single-product': 'shopglut-html-demo-modal',
+		'single-product': 'productpageglut-html-demo-modal',
 		'cart': 'shopglut-cart-html-demo-modal',
 		'order-complete': 'shopglut-ordercomplete-html-demo-modal',
 		'account': 'shopglut-account-html-demo-modal',
@@ -236,8 +245,10 @@ function getModalId(moduleType) {
  */
 document.addEventListener('click', function(event) {
 	if (event.target.classList.contains('shopglut-template-modal-modal-overlay') ||
+		event.target.classList.contains('productpageglut-template-modal-modal-overlay') ||
 		event.target.id === 'htmlDemoModal' ||
-		(event.target.classList.contains('shopglut-template-modal-image-modal') && event.target.id === 'htmlDemoModal')) {
+		(event.target.classList.contains('shopglut-template-modal-image-modal') && event.target.id === 'htmlDemoModal') ||
+		(event.target.classList.contains('productpageglut-template-modal-image-modal') && event.target.id === 'htmlDemoModal')) {
 		const moduleTypes = ['single-product', 'cart', 'order-complete', 'account', 'product-swatches', 'product-comparison', 'product-quickview', 'product-shopbanner', 'product-gallery', 'product-slider', 'product-tab', 'product-accordion'];
 		moduleTypes.forEach(function(moduleType) {
 			const modalId = getModalId(moduleType);

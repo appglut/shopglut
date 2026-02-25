@@ -72,7 +72,6 @@ use Shopglut\enhancements\ProductSwatches\dataManage as ProductSwatchesDataManag
 use Shopglut\enhancements\ProductSwatches\AttributeSwatchesManager;
 
 
-
 class ShopGlutBase {
 
 	// Declare properties to fix PHP 8.2+ deprecation warnings
@@ -89,8 +88,8 @@ class ShopGlutBase {
 		AllLayouts::get_instance();
 		AllEnhancements::get_instance();
 
-		// Only load embedded singleProduct module if ProductDetailsGlut is NOT active
-		if ( ! $this->is_productdetailsglut_active() ) {
+		// Only load embedded singleProduct module if ProductPageGlut is NOT active
+		if ( ! $this->is_productpageglut_active() ) {
 			if ( class_exists( 'Shopglut\\layouts\\singleProduct\\dataManage' ) ) {
 				\Shopglut\layouts\singleProduct\dataManage::get_instance();
 			}
@@ -189,9 +188,9 @@ class ShopGlutBase {
 		require_once SHOPGLUT_PATH . 'src/ModuleManager.php';
 		require_once SHOPGLUT_PATH . 'src/library/model/classes/setup.class.php';
 
-		// Only load embedded singleProduct settings if ProductDetailsGlut is NOT active AND file exists
+		// Only load embedded singleProduct settings if ProductPageGlut is NOT active AND file exists
 		$single_product_settings_file = SHOPGLUT_PATH . 'src/layouts/singleProduct/singleLayout-settings.php';
-		if ( ! $this->is_productdetailsglut_active() && file_exists( $single_product_settings_file ) ) {
+		if ( ! $this->is_productpageglut_active() && file_exists( $single_product_settings_file ) ) {
 			require_once $single_product_settings_file;
 		}
 
@@ -229,9 +228,38 @@ class ShopGlutBase {
 	}
 
 	/**
-	 * Check if ProductDetailsGlut plugin is active
+	 * Check if ProductPageGlut plugin is active
+	 *
+	 * @return bool True if ProductPageGlut is active
+	 */
+	private function is_productpageglut_active() {
+		// Check by active plugins list
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+
+		if ( is_multisite() ) {
+			// Get network active plugins
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+
+		// Check for product-page-glut/product-page-glut.php or productpage-glut/productpage-glut.php plugin
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
+				return true;
+			}
+		}
+
+		// Also check if the main class exists (including productpageglut variant)
+		return class_exists( 'ProductPageGlut\\ProductPageGlutBase' )
+			|| class_exists( 'Productpageglut\\ProductpageglutBase' );
+	}
+
+	/**
+	 * Check if ProductDetailsGlut plugin is active (legacy support)
 	 *
 	 * @return bool True if ProductDetailsGlut is active
+	 * @deprecated Use is_productpageglut_active() instead
 	 */
 	private function is_productdetailsglut_active() {
 		// Check by active plugins list
@@ -243,15 +271,19 @@ class ShopGlutBase {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for product-details-glut/product-details-glut.php plugin
+		// Check for both old (product-details-glut) and new (product-page-glut, productpage-glut) plugins
 		foreach ( $active_plugins as $plugin ) {
-			if ( $plugin === 'product-details-glut/product-details-glut.php' ) {
+			if ( $plugin === 'product-details-glut/product-details-glut.php'
+				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}
 		}
 
-		// Also check if the main class exists
-		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' );
+		// Also check if the main class exists (check both old and new class names)
+		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' )
+			|| class_exists( 'ProductPageGlut\\ProductPageGlutBase' )
+			|| class_exists( 'Productpageglut\\ProductpageglutBase' );
 	}
 
 	public static function get_instance() {

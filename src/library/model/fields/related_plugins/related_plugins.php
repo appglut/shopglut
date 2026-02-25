@@ -103,11 +103,19 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 											<?php esc_html_e( 'View Release', 'shopglut' ); ?>
 										</a>
 									<?php elseif ( $is_installed && $version_info ) : ?>
-										<a href="<?php echo esc_url( $plugin['url'] ); ?>" target="_blank" class="button button-small">
-											<?php esc_html_e( 'Learn More', 'shopglut' ); ?>
+										<a href="<?php echo esc_url( $version_info['url'] ); ?>" target="_blank" class="button button-small">
+											<?php esc_html_e( 'View Release', 'shopglut' ); ?>
+										</a>
+									<?php elseif ( $version_info ) : ?>
+										<a href="<?php echo esc_url( $version_info['url'] ); ?>" target="_blank" class="button button-small">
+											<?php esc_html_e( 'View Plugin', 'shopglut' ); ?>
+										</a>
+										<a href="<?php echo esc_url( $version_info['zip_url'] ); ?>" target="_blank" class="button button-secondary button-small">
+											<span class="dashicons dashicons-download"></span>
+											<?php esc_html_e( 'Download', 'shopglut' ); ?>
 										</a>
 									<?php else : ?>
-										<a href="<?php echo esc_url( $plugin['url'] ); ?>" target="_blank" class="button button-small">
+										<a href="<?php echo esc_url( $plugin['homepage'] ); ?>" target="_blank" class="button button-small">
 											<?php esc_html_e( 'View Plugin', 'shopglut' ); ?>
 										</a>
 									<?php endif; ?>
@@ -315,6 +323,11 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					gap: 4px;
 				}
 
+				.plugin-actions .button .dashicons {
+					font-size: 14px;
+					line-height: 1.5;
+				}
+
 				/* Update Progress Styles */
 				.update-progress {
 					margin-top: 10px;
@@ -452,17 +465,14 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 		}
 
 		private function get_related_plugins() {
-			// Get update server URL from config or use default
-			$update_server = defined('SHOPGLUT_UPDATE_SERVER_URL')
-				? rtrim(SHOPGLUT_UPDATE_SERVER_URL, '/')
-				: 'https://your-domain.com';
+			// All plugins use the same update server
+			$update_server = 'https://updates.appglut.com/plugins';
 
 			return array(
 				'wishglut' => array(
 					'name' => 'WishGlut',
 					'description' => 'Advanced wishlist plugin for WooCommerce with multiple wishlist lists',
 					'icon' => '🎁',
-					'url' => $update_server . '/appglutplugins/wishglut-version.json',
 					'basename' => 'wishglut/wishglut.php',
 					'homepage' => 'https://github.com/appglut/wishglut'
 				),
@@ -470,7 +480,6 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'name' => 'CheckoutGlut',
 					'description' => 'Customize WooCommerce checkout page with drag & drop builder',
 					'icon' => '🛒',
-					'url' => $update_server . '/appglutplugins/checkoutglut-version.json',
 					'basename' => 'checkoutglut/checkoutglut.php',
 					'homepage' => 'https://github.com/appglut/checkoutglut'
 				),
@@ -478,7 +487,6 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'name' => 'ShortcodeGlut',
 					'description' => 'Powerful shortcode builder for WordPress with visual editor',
 					'icon' => '⚡',
-					'url' => $update_server . '/appglutplugins/shortcodeglut-version.json',
 					'basename' => 'shortcodeglut/shortcodeglut.php',
 					'homepage' => 'https://github.com/appglut/shortcodeglut'
 				),
@@ -486,9 +494,15 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'name' => 'ProductDetailsGlut',
 					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
 					'icon' => '📦',
-					'url' => $update_server . '/appglutplugins/product-details-glut-version.json',
 					'basename' => 'product-details-glut/product-details-glut.php',
 					'homepage' => 'https://github.com/appglut/product-details-glut'
+				),
+				'product-page-glut' => array(
+					'name' => 'ProductPageGlut',
+					'description' => 'Beautiful WooCommerce single product page builder with 7+ templates',
+					'icon' => '📦',
+					'basename' => 'product-page-glut/product-page-glut.php',
+					'homepage' => 'https://github.com/appglut/product-page-glut'
 				)
 			);
 		}

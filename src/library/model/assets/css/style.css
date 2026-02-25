@@ -1089,6 +1089,19 @@ body.shopglut-admin-shopglut-shop-editor #wpfooter {
   display: none;
 }
 
+body.productpageglut-admin-productpageglut-shop-editor #adminmenuback,
+body.productpageglut-admin-productpageglut-shop-editor #adminmenuwrap,
+body.productpageglut-admin-productpageglut-shop-editor #wpadminbar,
+body.productpageglut-admin-productpageglut-shop-editor #wpfooter {
+  display: none;
+}
+
+body.productpageglut-admin-productpageglut-shop-editor #wpcontent {
+  margin-left: 0px;
+}
+
+
+
 body.shopglut-admin-shopglut-shop-editor #wpcontent {
   margin-left: 0px;
 }
@@ -7034,7 +7047,7 @@ div.shopg-layout-settings-wrapper > #side-sortables{
   width:375px !important;
 }
 
-.shopg-admin-edit-panel.shopg-layout-container{
+.shopg-admin-edit-panel{
     min-width:65% !important;
 }
 

@@ -23,7 +23,7 @@ class AllBusinessSolutions {
 					</div>
 					<div class="shopglut-page-header-banner__helplinks">
 						<span><a rel="noopener"
-								href="https://shopglut.appglut.com/?utm_source=shoglutplugin-admin&utm_medium=referral&utm_campaign=adminmenu"
+								href="https://documentation.appglut.com/?utm_source=shoglutplugin-admin&utm_medium=referral&utm_campaign=adminmenu"
 								target="_blank">
 								<span class="dashicons dashicons-admin-page"></span>
 								<?php echo esc_html__( 'Documentation', 'shopglut' ); ?>

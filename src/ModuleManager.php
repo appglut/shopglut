@@ -31,8 +31,8 @@ class ModuleManager {
         $this->modules = [
             // Layout Modules
             'single_product' => [
-                'name' => __('Single Product', 'shopglut'),
-                'description' => __('Product Page Builder', 'shopglut'),
+                'name' => __('Product Page Builder', 'shopglut'),
+                'description' => __('Design Stunning Product Pages', 'shopglut'),
                 'type' => 'layout',
                 'table_method' => 'create_single_layouts',
                 'icon' => 'fas fa-box-open'

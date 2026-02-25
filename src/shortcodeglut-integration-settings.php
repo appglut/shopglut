@@ -83,24 +83,24 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	'icon' => 'fa fa-check-square',
 ) );
 
-// Create ProductDetailsGlut tab
+// Create ProductPageGlut tab
 AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'id' => 'productdetailsglut_tab',
-	'title' => __( 'ProductDetailsGlut', 'shopglut' ),
+	'id' => 'productpageglut_tab',
+	'title' => __( 'ProductPageGlut', 'shopglut' ),
 	'icon' => 'fa fa-box-open',
 ) );
 
-// Create ProductDetailsGlut sub-tab
+// Create ProductPageGlut sub-tab
 AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'parent' => 'productdetailsglut_tab',
+	'parent' => 'productpageglut_tab',
 	'title' => __( 'General', 'shopglut' ),
 	'fields' => array(
 
 		array(
-			'id' => 'productdetailsglut-show-menu',
+			'id' => 'productpageglut-show-menu',
 			'type' => 'switcher',
-			'title' => __( 'Show ProductDetailsGlut Menu', 'shopglut' ),
-			'desc' => __( 'When enabled, ProductDetailsGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
+			'title' => __( 'Show ProductPageGlut Menu', 'shopglut' ),
+			'desc' => __( 'When enabled, ProductPageGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
 			'text_on' => __( 'Yes', 'shopglut' ),
 			'text_off' => __( 'No', 'shopglut' ),
 			'default' => 1,

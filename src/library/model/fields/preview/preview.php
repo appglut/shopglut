@@ -844,6 +844,27 @@ if ( ! class_exists( 'AGSHOPGLUT_preview' ) ) {
 
 			}
 
+			// Delegate to productpage-glut's preview field when on productpage-glut or shopglut admin page
+			if ( isset( $_GET['page'] ) && isset( $_GET['editor'] ) &&
+			     ( ( 'productpageglut_layouts' === $_GET['page'] && 'product_page' === $_GET['editor'] ) ||
+			       ( 'shopglut_layouts' === $_GET['page'] && 'productpageglut' === $_GET['editor'] ) )
+			) {
+
+				// Try to load productpage-glut's preview field
+				$productpageglut_preview_path = WP_PLUGIN_DIR . '/productpage-glut/src/library/model/fields/preview/preview.php';
+
+				if ( file_exists( $productpageglut_preview_path ) ) {
+					require_once $productpageglut_preview_path;
+
+					// Delegate to ProductPageGlut's preview class
+					if ( class_exists( 'AGPRODUCTPAGEGLUT_preview' ) ) {
+						$productpageglut_preview = new AGPRODUCTPAGEGLUT_preview( $this->field, $this->value, $this->unique, $this->where, $this->parent );
+						$productpageglut_preview->render();
+						return;
+					}
+				}
+			}
+
 			if ( isset( $_GET['page'] ) && 'shopglut_layouts' === $_GET['page'] && isset( $_GET['editor'] ) && 'cartpage' === $_GET['editor'] ) {
 				$layout_id = isset( $_GET['layout_id'] ) ? intval( $_GET['layout_id'] ) : 0;
 

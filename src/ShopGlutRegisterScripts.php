@@ -147,6 +147,17 @@ class ShopGlutRegisterScripts {
             [],
             file_exists( $notification_css_path ) ? filemtime( $notification_css_path ) : SHOPGLUT_VERSION
         );
+
+        // Load library model CSS (contains full-width editor styles)
+        $library_css_path = SHOPGLUT_PATH . 'src/library/model/assets/css/style.css';
+        if (file_exists($library_css_path)) {
+            wp_enqueue_style(
+                'shopglut-library-model',
+                SHOPGLUT_URL . 'src/library/model/assets/css/style.css',
+                [],
+                filemtime($library_css_path)
+            );
+        }
     }
 
     public function shopglut_plugin_js() {
@@ -213,8 +224,8 @@ class ShopGlutRegisterScripts {
 
         // Enqueue shared tabs script - universal tabs handler for all templates
         // Works in modals, AJAX loaded content, and regular pages
-        $tabs_script_path = SHOPGLUT_PATH . 'src/layouts/singleProduct/assets/singleProduct-tabs.js';
-        $tabs_script_url = SHOPGLUT_URL . 'src/layouts/singleProduct/assets/singleProduct-tabs.js';
+        $tabs_script_path = SHOPGLUT_PATH . 'src/enhancements/ProductSwatches/assets/singleProduct-tabs.js';
+        $tabs_script_url = SHOPGLUT_URL . 'src/enhancements/ProductSwatches/assets/singleProduct-tabs.js';
 
         wp_enqueue_script(
             'shopglut-tabs',
@@ -266,8 +277,8 @@ class ShopGlutRegisterScripts {
 
         // Enqueue shared tabs script - universal tabs handler for all templates
         // Works in modals, AJAX loaded content, and regular pages
-        $tabs_script_path = SHOPGLUT_PATH . 'src/layouts/singleProduct/assets/singleProduct-tabs.js';
-        $tabs_script_url = SHOPGLUT_URL . 'src/layouts/singleProduct/assets/singleProduct-tabs.js';
+        $tabs_script_path = SHOPGLUT_PATH . 'src/enhancements/ProductSwatches/assets/singleProduct-tabs.js';
+        $tabs_script_url = SHOPGLUT_URL . 'src/enhancements/ProductSwatches/assets/singleProduct-tabs.js';
 
         wp_enqueue_script(
             'shopglut-tabs',

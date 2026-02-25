@@ -4,6 +4,10 @@
  * Used by: Single Product, Cart, Order Complete, My Account
  */
 
+ .shopg-admin-edit-panel.shopg-layout-container{
+    min-width:65% !important;
+}
+
 /* ===================================
    WORDPRESS DEFAULT HEADING OVERRIDES
    Prevent WordPress admin styles from affecting template preview

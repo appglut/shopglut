@@ -37,6 +37,12 @@ class ShopGlut_PluginUpdateChecker {
             'basename' => 'product-details-glut/product-details-glut.php',
             'icon' => '📦',
             'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
+        ),
+        'product-page-glut' => array(
+            'name' => 'ProductPageGlut',
+            'basename' => 'product-page-glut/product-page-glut.php',
+            'icon' => '📦',
+            'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
         )
     );
 
@@ -133,7 +139,7 @@ class ShopGlut_PluginUpdateChecker {
                 'published_at' => $data['last_updated'] ?? '',
                 'url' => $data['homepage'] ?? '',
                 'icon' => $plugin['icon'],
-                'zip_url' => $this->update_server_url . '/' . $slug . '.zip',
+                'zip_url' => $data['download_url'] ?? ($this->update_server_url . '/' . $slug . '.zip'),
                 'description' => $plugin['description']
             );
         }

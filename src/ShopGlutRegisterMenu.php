@@ -133,7 +133,6 @@ class ShopGlutRegisterMenu {
             array( $this, 'renderCheckoutEditorIntegration' )
         );
 
-
          // Add a submenu item
 		add_submenu_page(
 			$this->menu_slug,
@@ -1188,6 +1187,20 @@ class ShopGlutRegisterMenu {
 			add_screen_option( 'per_page', $args );
 
 			$ordercompletelayoutlist = new orderCompleteListTable();
+		} else if ( ( 'toplevel_page_shopglut_layouts' === $current_screen->id ) &&
+			isset( $_GET['view'] ) && ( 'product_page' === $_GET['view'] || 'productpageglut' === $_GET['view'] ) ) {
+
+			$args = array(
+				'label' => esc_html__( 'Items per page', 'productpageglut' ),
+				'default' => 10,
+				'option' => 'productpageglut_layouts_per_page',
+			);
+			add_screen_option( 'per_page', $args );
+
+			// Load SingleProductListTable from productpage-glut if active
+			if ( class_exists( 'Productpageglut\\layouts\\singleProduct\\SingleProductListTable' ) ) {
+				$singlelayoutlist = new \Productpageglut\layouts\singleProduct\SingleProductListTable();
+			}
 		} else if ( 'toplevel_page_shopglut_layouts' === $current_screen->id && ! wp_verify_nonce( isset( $_POST['menu_nonce_check'] ), 'menu_nonce_check' )
 		) {
 
@@ -1599,6 +1612,150 @@ class ShopGlutRegisterMenu {
     	 endif;
     }
 
+    /**
+     * Render ProductPageGlut integration page
+     * Shows download/activate options when ProductPageGlut is not active
+     * Redirects to ProductPageGlut admin when plugin is active
+     */
+    public function renderProductpageglutIntegration() {
+    	$plugin_slug = 'productpage-glut/shopglut.php';
+    	$active_plugins = get_option( 'active_plugins', array() );
+    	$is_active = in_array( $plugin_slug, $active_plugins );
+    	$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+
+    	$github_url = 'https://github.com/appglut/productpage-glut/releases/download/latest/productpage-glut.zip';
+    	$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
+
+    	if ( ! current_user_can( 'manage_options' ) ) {
+    		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+    	}
+
+    	if ( $plugin_exists && ! $is_active ) :
+    		// Plugin installed but not active
+    		?>
+    		<div class="wrap shopglut-productpageglut-integration">
+    			<style>
+                    .shopglut-productpageglut-integration{
+                        margin:5px 5px 0px 0px;
+                    }
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header {
+    					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    					color: #ffffff;
+    					padding: 40px;
+    					text-align: center;
+    					border-radius: 8px;
+    					margin: 38px 0 30px 0;
+    				}
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header h1 {
+    					color: #ffffff;
+    					margin: 0 0 10px 0;
+    					font-size: 32px;
+    				}
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header p {
+    					color: rgba(255,255,255,0.9);
+    					margin: 0;
+    					font-size: 16px;
+    				}
+    			</style>
+
+    			<div class="shopglut-productpageglut-header">
+    				<h1>🛍️ <?php esc_html_e( 'ShopGlut Product Page Builder Integration', 'shopglut' ); ?></h1>
+    				<p><?php esc_html_e( 'Complete WooCommerce product page builder with custom fields, swatches, badges, and more', 'shopglut' ); ?></p>
+    			</div>
+
+    			<div style="max-width: 700px; margin: 40px auto;">
+    				<div class="shopglut-productpageglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+    					<div style="font-size: 64px; margin-bottom: 20px;">
+    						<i class="fa fa-shopping-cart" style="color: #2271b1;"></i>
+    					</div>
+    					<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
+    						<?php esc_html_e( 'ProductPageGlut is Ready to Activate!', 'shopglut' ); ?>
+    					</h1>
+    					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+    						<?php esc_html_e( 'Complete WooCommerce product page builder with custom fields, swatches, badges, wishlist, and comparison features.', 'shopglut' ); ?>
+    					</p>
+    					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
+    						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
+    							<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
+    						</p>
+    						<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero">
+    							<i class="fa fa-power-off" style="margin-right: 5px;"></i>
+    							<?php esc_html_e( 'Activate ProductPageGlut', 'shopglut' ); ?>
+    						</a>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	<?php elseif ( ! $plugin_exists && ! $is_active ) : ?>
+    		// Plugin not installed
+    		?>
+    		<div class="wrap shopglut-productpageglut-integration">
+    			<style>
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header {
+    					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    					color: #ffffff;
+    					padding: 40px;
+    					text-align: center;
+    					border-radius: 8px;
+    					margin: 30px 0 30px 0;
+    				}
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header h1 {
+    					color: #ffffff;
+    					margin: 0 0 10px 0;
+    					font-size: 32px;
+    				}
+    				.shopglut-productpageglut-integration .shopglut-productpageglut-header p {
+    					color: rgba(255,255,255,0.9);
+    					margin: 0;
+    					font-size: 16px;
+    				}
+    			</style>
+
+    			<div class="shopglut-productpageglut-header">
+    				<h1>🛍️ <?php esc_html_e( 'ShopGlut Product Page Builder Integration', 'shopglut' ); ?></h1>
+    				<p><?php esc_html_e( 'Complete WooCommerce product page builder with custom fields, swatches, badges, and more', 'shopglut' ); ?></p>
+    			</div>
+
+    			<div style="max-width: 700px; margin: 40px auto;">
+    				<div class="shopglut-productpageglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+    					<div style="font-size: 64px; margin-bottom: 20px;">
+    						<i class="fa fa-download" style="color: #2271b1;"></i>
+    					</div>
+    					<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
+    						<?php esc_html_e( 'Download ProductPageGlut Plugin', 'shopglut' ); ?>
+    					</h2>
+    					<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+    						<?php esc_html_e( 'Complete WooCommerce product page builder with custom fields, swatches, badges, wishlist, comparison, and quick view features.', 'shopglut' ); ?>
+    					</p>
+    					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
+    						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
+    							<?php esc_html_e( 'ProductPageGlut is completely free! Download it from GitHub to unlock powerful product page building features.', 'shopglut' ); ?>
+    						</p>
+    						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+    							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download from GitHub', 'shopglut' ); ?>
+    						</a>
+    					</div>
+    					<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
+    						<p style="margin: 0 0 10px 0; font-weight: 600;">
+    							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
+    						</p>
+    						<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
+    							<li><?php esc_html_e( 'Download ProductPageGlut from GitHub', 'shopglut' ); ?></li>
+    							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
+    							<li><?php esc_html_e( 'Upload and activate the ProductPageGlut plugin', 'shopglut' ); ?></li>
+    						</ol>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	<?php else : ?>
+    		// Plugin active - redirect to product page layouts
+    		<?php
+    		wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=singleproduct' ) );
+    		exit;
+    	 endif;
+    }
+
 
 	/**
 	 * Check if ProductDetailsGlut plugin is active
@@ -1615,15 +1772,19 @@ class ShopGlutRegisterMenu {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for product-details-glut/product-details-glut.php plugin
+		// Check for product-details-glut, product-page-glut, or productpage-glut plugins
 		foreach ( $active_plugins as $plugin ) {
-			if ( $plugin === 'product-details-glut/product-details-glut.php' ) {
+			if ( $plugin === 'product-details-glut/product-details-glut.php'
+				|| $plugin === 'product-page-glut/product-page-glut.php'
+				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
 				return true;
 			}
 		}
 
-		// Also check if the main class exists
-		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' );
+		// Also check if the main class exists (all variants)
+		return class_exists( 'ProductDetailsGlut\\ProductDetailsGlutBase' )
+			|| class_exists( 'ProductPageGlut\\ProductPageGlutBase' )
+			|| class_exists( 'Productpageglut\\ProductpageglutBase' );
 	}
 
 	public static function get_instance() {
