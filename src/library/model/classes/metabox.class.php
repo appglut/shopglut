@@ -456,6 +456,36 @@ if ( ! class_exists( 'AGSHOPGLUT_Metabox' ) ) {
 
 
 
+		} elseif ( 'productpageglut_layouts' || 'shopglut_layouts' === $page && 'product_page' || 'productpageglut' === $editor ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for layout data retrieval only
+			$post_id = isset( $_GET['layout_id'] ) ? absint( wp_unslash( $_GET['layout_id'] ) ) : 1;
+            
+			$table_name = $wpdb->prefix . 'shopglut_single_product_layout';
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query with caching added
+				$layout_options = $wpdb->get_var( $wpdb->prepare( "SELECT layout_settings FROM {$wpdb->prefix}shopglut_single_product_layout WHERE id = %d", $post_id ) );
+		   	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query with caching added		
+				$layout_template = $wpdb->get_var( $wpdb->prepare( "SELECT layout_template FROM {$wpdb->prefix}shopglut_single_product_layout WHERE id = %d", $post_id ) );
+			
+				
+			if ( isset( $layout_options ) && @unserialize( $layout_options ) !== false ) {
+				$layout_options_array = unserialize( $layout_options );
+			} else {
+				$layout_options_array = array();
+			}
+
+			if ( ! empty( $field['id'] ) ) {
+				$value = null;
+
+				// Check main settings first
+				if ( isset( $layout_options_array['shopg_singleproduct_settings_'.$layout_template][ $field['id'] ] ) ) {
+					$value = $layout_options_array['shopg_singleproduct_settings_'.$layout_template][ $field['id'] ];
+				}
+
+
+		  }
+          
+
 		} elseif ( 'shopglut_layouts' === $page && 'accountpage' === $editor ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for layout data retrieval only
 			$post_id = isset( $_GET['layout_id'] ) ? absint( wp_unslash( $_GET['layout_id'] ) ) : 1;

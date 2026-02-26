@@ -31,8 +31,8 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 						<p class="description"><?php esc_html_e( 'Check out our other WooCommerce plugins to enhance your store.', 'shopglut' ); ?></p>
 					</div>
 					<button type="button" class="button button-primary button-primary shopglut-check-updates" id="shopglut-check-updates-btn">
-						<span class="dashicons dashicons-update-alt"></span>
-						<?php esc_html_e( 'Check for Updates', 'shopglut' ); ?>
+						<span class="dashicons dashicons-update-alt shopglut-btn-icon"></span>
+						<span class="shopglut-btn-text"><?php esc_html_e( 'Check for Updates', 'shopglut' ); ?></span>
 					</button>
 					<span class="spinner" style="display:none;" id="shopglut-check-updates-spinner"></span>
 				</div>
@@ -280,6 +280,16 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					50% { opacity: 0.8; }
 				}
 
+				/* Spin animation for checking state */
+				.shopglut-btn-icon.spin-animation {
+					animation: spin 1s linear infinite;
+				}
+
+				@keyframes spin {
+					from { transform: rotate(0deg); }
+					to { transform: rotate(360deg); }
+				}
+
 				.plugin-status {
 					margin-bottom: 8px;
 				}
@@ -387,9 +397,15 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 				$('#shopglut-check-updates-btn').on('click', function() {
 					var $btn = $(this);
 					var $spinner = $('#shopglut-check-updates-spinner');
+					var $btnText = $btn.find('.shopglut-btn-text');
+					var $btnIcon = $btn.find('.shopglut-btn-icon');
+					var originalText = $btnText.text();
 
+					// Update button state
 					$btn.prop('disabled', true);
 					$spinner.show();
+					$btnText.text('<?php esc_html_e( 'Checking...', 'shopglut' ); ?>');
+					$btnIcon.addClass('spin-animation');
 
 					$.ajax({
 						url: ajaxurl,
@@ -401,7 +417,16 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 						success: function(response) {
 							if (response.success) {
 								location.reload();
+							} else {
+								// On error, revert button state
+								$btnText.text(originalText);
+								$btnIcon.removeClass('spin-animation');
 							}
+						},
+						error: function() {
+							// On error, revert button state
+							$btnText.text(originalText);
+							$btnIcon.removeClass('spin-animation');
 						},
 						complete: function() {
 							$btn.prop('disabled', false);
