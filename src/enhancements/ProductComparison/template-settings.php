@@ -1,4 +1,5 @@
 <?php  
+namespace Productcomparisonglut\enhancements\ProductComparison;
 if (!defined('ABSPATH')) {
     exit;
 }

@@ -37,14 +37,14 @@ class ModuleManager {
                 'table_method' => 'create_single_layouts',
                 'icon' => 'fas fa-box-open'
             ],
-             'cart_page' => [
+            'cart_page' => [
                 'name' => __('Cart Page', 'shopglut'),
                 'description' => __('Cart Layout Builder', 'shopglut'),
                 'type' => 'layout',
                 'table_method' => 'create_cartpage_layouts',
                 'icon' => 'fas fa-shopping-cart'
             ],
-              'checkout_field_editor' => [
+            'checkout_field_editor' => [
                 'name' => __('Checkout Field Editor', 'shopglut'),
                 'description' => __('Customize Checkout Fields', 'shopglut'),
                 'type' => 'layout',
@@ -52,32 +52,6 @@ class ModuleManager {
                 'icon' => 'fa-solid fa-credit-card'
             ],
 
-             'orderComplete_page' => [
-                'name' => __('OrderComplete Page', 'shopglut'),
-                'description' => __('Order Complete Builder', 'shopglut'),
-                'type' => 'layout',
-                'table_method' => 'create_ordercomplete_layouts',
-                'icon' => 'fas fa-check-double'
-            ],
-
-             'account_page' => [
-                'name' => __('My Account', 'shopglut'),
-                'description' => __('Account Page Builder', 'shopglut'),
-                'type' => 'layout',
-                'table_method' => 'create_accountpage_layouts',
-                'icon' => 'fas fa-user'
-            ],
-            
-
-            'shop_layouts' => [
-                'name' => __('Shop & Archive Layouts', 'shopglut'),
-                'description' => __('Shop & Archive Page Designer', 'shopglut'),
-                'type' => 'layout',
-                'table_method' => 'create_shop_layouts',
-                'icon' => 'fas fa-th-large'
-            ],
-        
-           
             // Enhancement Modules
             'wishlist' => [
                 'name' => __('Wishlist', 'shopglut'),
@@ -97,24 +71,17 @@ class ModuleManager {
                 'name' => __('Product Comparison', 'shopglut'),
                 'description' => __('Compare Products Table', 'shopglut'),
                 'type' => 'enhancement',
-                'table_method' => 'create_showcase_comparison', // Use the layouts table, not the duplicate
+                'table_method' => 'create_showcase_comparison',
                 'icon' => 'fas fa-balance-scale'
-            ],
-            'quick_views' => [
-                'name' => __('Quick View', 'shopglut'),
-                'description' => __('Product Popup Modal', 'shopglut'),
-                'type' => 'enhancement',
-                'table_method' => 'create_showcase_quickview', // Use the layouts table, not the duplicate
-                'icon' => 'fa-solid fa-forward-fast'
             ],
             'product_swatches' => [
                 'name' => __('Product Swatches', 'shopglut'),
                 'description' => __('Color Image Swatches', 'shopglut'),
                 'type' => 'enhancement',
-                'table_method' => null, // No database table needed
+                'table_method' => null,
                 'icon' => 'fas fa-palette'
             ],
-            
+
             // Tool Modules
             'acf_fields' => [
                 'name' => __('Product Custom Fields', 'shopglut'),
@@ -129,121 +96,19 @@ class ModuleManager {
                 'type' => 'tool',
                 'table_method' => 'create_shortcodes_showcase',
                 'icon' => 'fa-solid fa-code'
-            ],
-            // 'gallery_shortcode' => [
-            //     'name' => __('Gallery Shortcode', 'shopglut'),
-            //     'description' => __('Interactive Product Gallery Shortcodes', 'shopglut'),
-            //     'type' => 'tool',
-            //     'table_method' => 'create_gallery_shortcode',
-            //     'icon' => 'fas fa-images'
-            // ],
-            'woo_templates' => [
-                'name' => __('Product Templates', 'shopglut'),
-                'description' => __('Custom Display Templates', 'shopglut'),
-                'type' => 'tool',
-                'table_method' => 'create_woo_templates',
-                'icon' => 'fa-solid fa-hashtag'
-            ],
-            // 'sliders' => [
-            //     'name' => __('Sliders', 'shopglut'),
-            //     'description' => __('Product Image Sliders', 'shopglut'),
-            //     'type' => 'showcase',
-            //     'table_method' => null, // Has its own table creation
-            //     'icon' => 'fas fa-images'
-            // ],
-            // 'tabs' => [
-            //     'name' => __('Tabs', 'shopglut'),
-            //     'description' => __('Tabbed Content Sections', 'shopglut'),
-            //     'type' => 'showcase',
-            //     'table_method' => 'create_tabs_showcase',
-            //     'icon' => 'fas fa-folder-open'
-            // ],
-            // 'accordions' => [
-            //     'name' => __('Accordion', 'shopglut'),
-            //     'description' => __('Collapsible Content Sections', 'shopglut'),
-            //     'type' => 'showcase',
-            //     'table_method' => null,
-            //     'icon' => 'fas fa-list-ul'
-            // ],
-            // 'gallery' => [
-            //     'name' => __('Gallery', 'shopglut'),
-            //     'description' => __('Image Gallery Builder', 'shopglut'),
-            //     'type' => 'showcase',
-            //     'table_method' => null,
-            //     'icon' => 'fas fa-th-large'
-            // ],
-            'woo_themes' => [
-                'name' => __('Woo Theme', 'shopglut'),
-                'description' => __('Theme Customization Tools', 'shopglut'),
-                'type' => 'showcase',
-                'table_method' => null,
-                'icon' => 'fas fa-shopping-cart'
-            ],
-            'mega_menu' => [
-                'name' => __('Mega Menu', 'shopglut'),
-                'description' => __('Advanced Navigation Menus', 'shopglut'),
-                'type' => 'showcase',
-                'table_method' => null,
-                'icon' => 'fas fa-bars'
-            ],
-            'shop_filters' => [
-                'name' => __('Shop Filters', 'shopglut'),
-                'description' => __('Product Filter System', 'shopglut'),
-                'type' => 'enhancement',
-                'table_method' => 'create_showcase_filters',
-                'icon' => 'fas fa-filter'
-            ],
-            'mini_cart' => [
-                'name' => __('Mini Cart', 'shopglut'),
-                'description' => __('Enhanced Cart Drawer', 'shopglut'),
-                'type' => 'tool',
-                'table_method' => null,
-                'icon' => 'fas fa-shopping-basket'
-            ],
-            // 'shop_banner' => [
-            //     'name' => __('Shop Banner', 'shopglut'),
-            //     'description' => __('Custom Shop Banners', 'shopglut'),
-            //     'type' => 'showcase',
-            //     'table_method' => 'create_showcase_banners',
-            //     'icon' => 'fa-solid fa-ticket'
-            // ],
-            'login_register' => [
-                'name' => __('Login/Register Page', 'shopglut'),
-                'description' => __('Custom Login Pages', 'shopglut'),
-                'type' => 'layout',
-                'table_method' => null,
-                'icon' => 'fa-solid fa-user'
-            ],
-          
-            // Business Solution Modules
-            // 'pdf_invoices' => [
-            //     'name' => __('Invoices & Packing Slips', 'shopglut'),
-            //     'description' => __('PDF Invoice Generator', 'shopglut'),
-            //     'type' => 'business',
-            //     'table_method' => null, // No database table needed
-            //     'icon' => 'fa-solid fa-file-invoice'
-            // ],
-            // 'email_customizer' => [
-            //     'name' => __('Email Customizer', 'shopglut'),
-            //     'description' => __('Email Template Designer', 'shopglut'),
-            //     'type' => 'business',
-            //     'table_method' => null, // Has its own table creation
-            //     'icon' => 'fa-solid fa-envelope-open-text'
-            // ]
+            ]
         ];
     }
-    
+
     private function initialize_default_states() {
         // Core modules that should be enabled by default (always initialized in ShopGlutBase)
         $core_modules = [
             'single_product',
             'cart_page',
-            'orderComplete_page',
             'product_badges',
             'product_comparison',
             'product_swatches',
             'acf_fields',
-            'shop_layouts'
         ];
 
         // Set default states for all modules

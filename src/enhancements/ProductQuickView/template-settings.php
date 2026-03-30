@@ -1,4 +1,5 @@
 <?php  
+namespace Productquickviewglut\enhancements\ProductQuickView;
 if (!defined('ABSPATH')) {
     exit;
 }

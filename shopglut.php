@@ -2,7 +2,7 @@
 /*
  * Plugin Name: ShopGlut - Builder for WooCommerce
  * Description: Complete WooCommerce builder with 9 powerful modules including single product builder, cart page, checkout editor, order complete, wishlist, product custom fields, swatches, badges, and comparison for professional e-commerce sites
- * Version: 1.7.7
+ * Version: 1.7.8
  * Author: AppGlut
  * Author URI: https://www.appglut.com
  * Plugin URI: https://wordpress.org/plugins/shopglut/

@@ -1,4 +1,5 @@
 <?php
+namespace Accountpageglut\layouts\accountPage;
 if (!defined('ABSPATH')) {
     exit;
 }

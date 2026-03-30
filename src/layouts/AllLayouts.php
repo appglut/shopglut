@@ -1388,6 +1388,10 @@ class AllLayouts {
 	public function renderWooBuilderPage() {
 		$module_manager = \Shopglut\ModuleManager::get_instance();
 		$logo_url = SHOPGLUT_URL . 'global-assets/images/header-logo.svg';
+
+		// Get plugin versions info
+		$versions = get_option( 'shopglut_related_plugins_versions', array() );
+
 		?>
 		<div class="shopglut-page-header">
 			<div class="shopglut-page-header-wrap">
@@ -1422,13 +1426,13 @@ class AllLayouts {
 		<div class="wrap shopglut-admin-contents shopg-woo-builder">
 			<h1><?php echo esc_html__( 'WooCommerce Builder Modules', 'shopglut' ); ?></h1>
 			<p class="subheading">
-				<?php echo esc_html__( 'Choose your module to build and customize. Toggle switches to enable/disable modules.', 'shopglut' ); ?>
+				<?php echo esc_html__( 'Choose your module to build and customize your WooCommerce store.', 'shopglut' ); ?>
 			</p>
 
 			<style>
 				.shopglut-modules-grid {
 					display: grid;
-					grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+					grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 					gap: 20px;
 					margin-top: 20px;
 				}
@@ -1483,11 +1487,6 @@ class AllLayouts {
 					border-bottom: 1px solid #eee;
 					position: relative;
 				}
-				.shopglut-module-card-new .module-toggle {
-					position: absolute;
-					top: 15px;
-					right: 15px;
-				}
 				.shopglut-module-card-new .module-icon {
 					font-size: 36px;
 					margin-bottom: 10px;
@@ -1503,6 +1502,45 @@ class AllLayouts {
 					margin: 0;
 					line-height: 1.5;
 					font-size: 14px;
+				}
+				/* Version Info Styles */
+				.shopglut-module-card-new .module-versions {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 10px;
+					margin-bottom: 8px;
+				}
+				.shopglut-module-card-new .version-label {
+					font-size: 11px;
+					padding: 3px 8px;
+					border-radius: 3px;
+					background: #f0f0f1;
+					color: #646970;
+				}
+				.shopglut-module-card-new .version-label strong {
+					margin-left: 4px;
+				}
+				.shopglut-module-card-new .version-label.latest-version.update-available {
+					background: #edfaef;
+					color: #00a32a;
+					border: 1px solid #00a32a;
+				}
+				.shopglut-module-card-new .plugin-update-badge {
+					margin-bottom: 8px;
+				}
+				.shopglut-module-card-new .update-badge {
+					display: inline-block;
+					background: #d63638;
+					color: #fff;
+					padding: 3px 8px;
+					border-radius: 3px;
+					font-size: 11px;
+					font-weight: 600;
+					animation: pulse 2s infinite;
+				}
+				@keyframes pulse {
+					0%, 100% { opacity: 1; }
+					50% { opacity: 0.8; }
 				}
 				.shopglut-module-card-new .module-body {
 					padding: 15px 20px;
@@ -1544,8 +1582,16 @@ class AllLayouts {
 					text-align: center;
 					border-top: 1px solid #eee;
 				}
+				.shopglut-module-card-new .module-actions {
+					display: flex;
+					gap: 10px;
+					justify-content: center;
+					flex-wrap: wrap;
+				}
 				.shopglut-module-card-new .module-link {
-					display: inline-block;
+					display: inline-flex;
+					align-items: center;
+					gap: 5px;
 					padding: 10px 20px;
 					background: #2271b1;
 					color: #fff;
@@ -1559,8 +1605,17 @@ class AllLayouts {
 					background: #135e96;
 					color: #fff;
 				}
+				.shopglut-module-card-new .module-link.secondary {
+					background: #fff;
+					color: #2271b1;
+					border: 1px solid #2271b1;
+				}
+				.shopglut-module-card-new .module-link.secondary:hover {
+					background: #f0f6fc;
+				}
 				.shopglut-module-card-new.disabled .module-link {
 					background: #ccc;
+					border-color: #ccc;
 					pointer-events: none;
 				}
 				@media (max-width: 1200px) {
@@ -1578,30 +1633,67 @@ class AllLayouts {
 				$all_modules = $module_manager->get_modules();
 				$module_urls = $this->getModuleUrls();
 				$module_features = $this->getModuleFeatures();
+				$module_plugins = $this->getModulePluginInfo();
 
 				foreach ( $all_modules as $module_key => $module_info ) {
 					$is_enabled = $module_manager->is_module_enabled( $module_key );
 					$disabled_class = $is_enabled ? '' : 'disabled';
 					$module_url = isset( $module_urls[ $module_key ] ) ? $module_urls[ $module_key ] : '#';
 					$features = isset( $module_features[ $module_key ] ) ? $module_features[ $module_key ] : [];
+
+					// Get plugin version info
+					$plugin_info = isset( $module_plugins[ $module_key ] ) ? $module_plugins[ $module_key ] : null;
+					$current_version = null;
+					$latest_version = null;
+					$has_update = false;
+					$version_info = null;
+
+					if ( $plugin_info && isset( $plugin_info['basename'] ) ) {
+						$current_version = $this->is_plugin_installed( $plugin_info['basename'] ) ? $this->get_plugin_version( $plugin_info['basename'] ) : null;
+						$latest_version = isset( $versions[ $module_key ]['version'] ) ? $versions[ $module_key ]['version'] : null;
+						$has_update = $latest_version && $current_version && version_compare( $current_version, $latest_version, '<' );
+						$version_info = isset( $versions[ $module_key ] ) ? $versions[ $module_key ] : null;
+					}
 					?>
 					<div class="shopglut-module-card-new <?php echo esc_attr( $disabled_class ); ?>" data-module-card="<?php echo esc_attr( $module_key ); ?>">
 						<div class="module-loading-overlay">
 							<div class="module-loading-spinner"></div>
 						</div>
 						<div class="module-header">
-							<div class="module-toggle">
-								<label class="shopglut-switch">
-									<input type="checkbox" class="shopglut-module-toggle" data-module="<?php echo esc_attr( $module_key ); ?>" <?php checked( $is_enabled ); ?>>
-									<span class="shopglut-slider round"></span>
-								</label>
-							</div>
 							<div class="module-icon">
 								<i class="<?php echo esc_attr( $module_info['icon'] ); ?>"></i>
 							</div>
 							<h3><?php echo esc_html( $module_info['name'] ); ?></h3>
 							<p class="module-description"><?php echo esc_html( $module_info['description'] ); ?></p>
+
+							<!-- Version Info -->
+							<?php if ( $plugin_info ) : ?>
+								<div class="module-versions">
+									<?php if ( $current_version ) : ?>
+										<span class="version-label current-version">
+											<?php esc_html_e( 'Current:', 'shopglut' ); ?>
+											<strong><?php echo esc_html( $current_version ); ?></strong>
+										</span>
+									<?php endif; ?>
+
+									<?php if ( $latest_version ) : ?>
+										<span class="version-label latest-version <?php echo $has_update ? 'update-available' : ''; ?>">
+											<?php esc_html_e( 'Latest:', 'shopglut' ); ?>
+											<strong><?php echo esc_html( $latest_version ); ?></strong>
+										</span>
+									<?php endif; ?>
+								</div>
+
+								<?php if ( $has_update ) : ?>
+									<div class="plugin-update-badge">
+										<span class="update-badge">
+											<?php esc_html_e( 'Update Available!', 'shopglut' ); ?>
+										</span>
+									</div>
+								<?php endif; ?>
+							<?php endif; ?>
 						</div>
+
 						<?php if ( ! empty( $features ) ) : ?>
 						<div class="module-body">
 							<h4 class="module-features-title"><?php echo esc_html__( 'Features', 'shopglut' ); ?></h4>
@@ -1613,9 +1705,47 @@ class AllLayouts {
 						</div>
 						<?php endif; ?>
 						<div class="module-footer">
-							<a href="<?php echo esc_url( $module_url ); ?>" class="module-link <?php echo $is_enabled ? '' : 'disabled-link'; ?>">
-								<?php echo esc_html__( 'Configure', 'shopglut' ); ?>
-							</a>
+							<div class="module-actions">
+								<?php if ( $has_update && $version_info ) : ?>
+									<!-- Update Now button -->
+									<button type="button" class="module-link shopglut-update-plugin"
+										data-slug="<?php echo esc_attr( $module_key ); ?>"
+										data-basename="<?php echo esc_attr( $plugin_info['basename'] ); ?>"
+										data-zip="<?php echo esc_url( $version_info['zip_url'] ); ?>"
+										data-nonce="<?php echo esc_attr( wp_create_nonce( 'shopglut_update_plugin_' . $module_key ) ); ?>">
+										<span class="dashicons dashicons-update-alt"></span>
+										<?php esc_html_e( 'Update Now', 'shopglut' ); ?>
+									</button>
+								<?php endif; ?>
+
+								<?php if ( $is_enabled ) : ?>
+									<a href="<?php echo esc_url( $module_url ); ?>" class="module-link">
+										<span class="dashicons dashicons-admin-generic"></span>
+										<?php esc_html_e( 'Configure', 'shopglut' ); ?>
+									</a>
+								<?php else : ?>
+									<span class="module-link disabled" style="opacity: 0.6;">
+										<span class="dashicons dashicons-admin-generic"></span>
+										<?php esc_html_e( 'Not Available', 'shopglut' ); ?>
+									</span>
+								<?php endif; ?>
+
+								<?php if ( $plugin_info && $version_info ) : ?>
+									<?php if ( ! $current_version ) : ?>
+										<!-- Download Plugin button (not installed) -->
+										<a href="<?php echo esc_url( $version_info['zip_url'] ); ?>" target="_blank" class="module-link secondary">
+											<span class="dashicons dashicons-download"></span>
+											<?php esc_html_e( 'Download Plugin', 'shopglut' ); ?>
+										</a>
+									<?php elseif ( ! $has_update ) : ?>
+										<!-- View Release button (installed, up to date) -->
+										<a href="<?php echo esc_url( $version_info['url'] ); ?>" target="_blank" class="module-link secondary">
+											<span class="dashicons dashicons-media-text"></span>
+											<?php esc_html_e( 'View Release', 'shopglut' ); ?>
+										</a>
+									<?php endif; ?>
+								<?php endif; ?>
+							</div>
 						</div>
 					</div>
 					<?php
@@ -1624,6 +1754,55 @@ class AllLayouts {
 
 			</div>
 		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			// Update Plugin button
+			$('.shopglut-update-plugin').on('click', function() {
+				var $btn = $(this);
+				var slug = $btn.data('slug');
+				var basename = $btn.data('basename');
+				var zipUrl = $btn.data('zip');
+				var nonce = $btn.data('nonce');
+				var $card = $btn.closest('.shopglut-module-card-new');
+				var $progress = $card.find('.module-loading-overlay');
+
+				// Show progress
+				$btn.prop('disabled', true);
+				$progress.show();
+				$progress.find('.progress-text').text('<?php esc_html_e( 'Updating...', 'shopglut' ); ?>');
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'shopglut_update_plugin',
+						plugin: basename,
+						zip_url: zipUrl,
+						slug: slug,
+						nonce: nonce
+					},
+					success: function(response) {
+						if (response.success) {
+							$progress.find('.progress-text').text('<?php esc_html_e( 'Update complete! Reloading...', 'shopglut' ); ?>');
+							setTimeout(function() {
+								location.reload();
+							}, 1500);
+						} else {
+							$progress.hide();
+							$btn.prop('disabled', false);
+							alert('<?php esc_html_e( 'Update failed: ', 'shopglut' ); ?>' + (response.data || 'Unknown error'));
+						}
+					},
+					error: function() {
+						$progress.hide();
+						$btn.prop('disabled', false);
+						alert('<?php esc_html_e( 'Update failed: Server error', 'shopglut' ); ?>');
+					}
+				});
+			});
+		});
+		</script>
 		<?php
 	}
 
@@ -1712,41 +1891,19 @@ class AllLayouts {
 	private function getModuleUrls() {
 		return [
 			// Layout Modules
-			'productpageglut' => admin_url( 'admin.php?page=shopglut_layouts&view=product_page' ),
-			'shop_layouts' => admin_url( 'admin.php?page=shopglut_layouts&view=shop' ),
+			'single_product' => admin_url( 'admin.php?page=shopglut_layouts&view=product_page' ),
 			'cart_page' => admin_url( 'admin.php?page=shopglut_layouts&view=cartpage' ),
-			'orderComplete_page' => admin_url( 'admin.php?page=shopglut_layouts&view=ordercomplete' ),
-			'account_page' => admin_url( 'admin.php?page=shopglut_layouts&view=accountpage' ),
-			'login_register' => admin_url( 'admin.php?page=shopglut_login_register' ),
 			'checkout_field_editor' => admin_url( 'admin.php?page=shopglut_layouts&view=checkout' ),
 
 			// Enhancement Modules
 			'wishlist' => admin_url( 'admin.php?page=shopglut_enhancements&view=wishlist' ),
 			'product_badges' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_badges' ),
 			'product_comparison' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_comparisons' ),
-			'quick_views' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_quickview' ),
 			'product_swatches' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_swatches' ),
-			'shop_filters' => admin_url( 'admin.php?page=shopglut_filters' ),
 
 			// Tool Modules
 			'acf_fields' => admin_url( 'admin.php?page=shopglut_tools&view=acf_fields' ),
 			'shortcode_showcase' => admin_url( 'admin.php?page=shopglut_shortcode_showcase' ),
-			'gallery_shortcode' => admin_url( 'admin.php?page=shopglut_tools&view=gallery_shortcode' ),
-			'woo_templates' => admin_url( 'admin.php?page=shopglut_tools&view=woo_templates' ),
-			'mini_cart' => admin_url( 'admin.php?page=shopglut_tools&view=mini_cart' ),
-
-			// Showcase Modules
-			'sliders' => admin_url( 'admin.php?page=shopglut_showcases&view=sliders' ),
-			'tabs' => admin_url( 'admin.php?page=shopglut_showcases&view=tabs' ),
-			'accordions' => admin_url( 'admin.php?page=shopglut_showcases&view=accordions' ),
-			'gallery' => admin_url( 'admin.php?page=shopglut_showcases&view=gallery' ),
-			'woo_themes' => admin_url( 'admin.php?page=shopglut_tools&view=woo_themes' ),
-			'mega_menu' => admin_url( 'admin.php?page=shopglut_tools&view=mega_menu' ),
-			'shop_banner' => admin_url( 'admin.php?page=shopglut_showcases&view=shop_banner' ),
-
-			// Business Solution Modules
-			'pdf_invoices' => admin_url( 'admin.php?page=shopg_business_solution&view=pdf_invoices' ),
-			'email_customizer' => admin_url( 'admin.php?page=shopg_business_solution&view=email_customizer' ),
 		];
 	}
 
@@ -1762,41 +1919,11 @@ class AllLayouts {
 				__( 'Product image & gallery styles', 'shopglut' ),
 				__( 'Apply to all/specific products', 'shopglut' )
 			],
-			'productpageglut' => [
-				__( 'Multiple ready-to-use templates', 'shopglut' ),
-				__( 'Live preview with demo mode', 'shopglut' ),
-				__( 'Product image & gallery styles', 'shopglut' ),
-				__( 'Apply to all/specific products', 'shopglut' )
-			],
-			'shop_layouts' => [
-				__( 'Grid & list view layouts', 'shopglut' ),
-				__( 'Custom product cards', 'shopglut' ),
-				__( 'Ajax filtering & sorting', 'shopglut' ),
-				__( 'Pagination options', 'shopglut' )
-			],
 			'cart_page' => [
 				__( 'Custom cart table design', 'shopglut' ),
 				__( 'Product image & title styles', 'shopglut' ),
 				__( 'Order summary section', 'shopglut' ),
 				__( 'Security badges display', 'shopglut' )
-			],
-			'orderComplete_page' => [
-				__( 'Custom thank you pages', 'shopglut' ),
-				__( 'Order details display', 'shopglut' ),
-				__( 'Social sharing buttons', 'shopglut' ),
-				__( 'Related products', 'shopglut' )
-			],
-			'account_page' => [
-				__( 'Custom account dashboard', 'shopglut' ),
-				__( 'Order history display', 'shopglut' ),
-				__( 'Address management', 'shopglut' ),
-				__( 'Downloads section', 'shopglut' )
-			],
-			'login_register' => [
-				__( 'Custom login forms', 'shopglut' ),
-				__( 'Social login integration', 'shopglut' ),
-				__( 'Registration customization', 'shopglut' ),
-				__( 'Password reset styling', 'shopglut' )
 			],
 			'checkout_field_editor' => [
 				__( '15+ field types', 'shopglut' ),
@@ -1824,23 +1951,11 @@ class AllLayouts {
 				__( 'Product attribute sync', 'shopglut' ),
 				__( 'Responsive table design', 'shopglut' )
 			],
-			'quick_views' => [
-				__( 'Quick product preview', 'shopglut' ),
-				__( 'Ajax loading', 'shopglut' ),
-				__( 'Customizable modal', 'shopglut' ),
-				__( 'Add to cart from modal', 'shopglut' )
-			],
 			'product_swatches' => [
 				__( 'Color swatches', 'shopglut' ),
 				__( 'Image swatches', 'shopglut' ),
 				__( 'Label swatches', 'shopglut' ),
 				__( 'Round/square styles', 'shopglut' )
-			],
-			'shop_filters' => [
-				__( 'Ajax filtering', 'shopglut' ),
-				__( 'Price range slider', 'shopglut' ),
-				__( 'Category filters', 'shopglut' ),
-				__( 'Attribute filters', 'shopglut' )
 			],
 
 			// Tool Modules
@@ -1855,84 +1970,83 @@ class AllLayouts {
 				__( 'Category-based display', 'shopglut' ),
 				__( 'Custom layout options', 'shopglut' ),
 				__( 'Filtering & sorting', 'shopglut' )
-			],
-			'gallery_shortcode' => [
-				__( 'Interactive product galleries', 'shopglut' ),
-				__( 'Lightbox support', 'shopglut' ),
-				__( 'Multiple layouts', 'shopglut' ),
-				__( 'Video support', 'shopglut' )
-			],
-			'woo_templates' => [
-				__( 'Multiple templates', 'shopglut' ),
-				__( 'Quick view templates', 'shopglut' ),
-				__( 'Loop item templates', 'shopglut' ),
-				__( 'Custom hooks support', 'shopglut' )
-			],
-			'mini_cart' => [
-				__( 'Slide-out cart drawer', 'shopglut' ),
-				__( 'Ajax cart updates', 'shopglut' ),
-				__( 'Customizable design', 'shopglut' ),
-				__( 'Cart totals display', 'shopglut' )
-			],
-
-			// Showcase Modules
-			'sliders' => [
-				__( 'Product image sliders', 'shopglut' ),
-				__( 'Touch & swipe support', 'shopglut' ),
-				__( 'Multiple transition effects', 'shopglut' ),
-				__( 'Responsive design', 'shopglut' )
-			],
-			'tabs' => [
-				__( 'Product content tabs', 'shopglut' ),
-				__( 'Vertical & horizontal layouts', 'shopglut' ),
-				__( 'Custom tab content', 'shopglut' ),
-				__( 'Smooth animations', 'shopglut' )
-			],
-			'accordions' => [
-				__( 'Collapsible content', 'shopglut' ),
-				__( 'Nested accordions', 'shopglut' ),
-				__( 'Custom styling', 'shopglut' ),
-				__( 'Smooth animations', 'shopglut' )
-			],
-			'gallery' => [
-				__( 'Image galleries', 'shopglut' ),
-				__( 'Masonry layout', 'shopglut' ),
-				__( 'Lightbox integration', 'shopglut' ),
-				__( 'Lazy loading', 'shopglut' )
-			],
-			'woo_themes' => [
-				__( 'Pre-built themes', 'shopglut' ),
-				__( 'Style customization', 'shopglut' ),
-				__( 'One-click apply', 'shopglut' ),
-				__( 'Responsive design', 'shopglut' )
-			],
-			'mega_menu' => [
-				__( 'Advanced navigation', 'shopglut' ),
-				__( 'Multi-column layouts', 'shopglut' ),
-				__( 'Widget support', 'shopglut' ),
-				__( 'Mobile responsive', 'shopglut' )
-			],
-			'shop_banner' => [
-				__( 'Custom banners', 'shopglut' ),
-				__( 'Timed promotions', 'shopglut' ),
-				__( 'Banner scheduling', 'shopglut' ),
-				__( 'Analytics tracking', 'shopglut' )
-			],
-
-			// Business Solution Modules
-			'pdf_invoices' => [
-				__( 'Generate PDF invoices', 'shopglut' ),
-				__( 'Custom templates', 'shopglut' ),
-				__( 'Bulk generation', 'shopglut' ),
-				__( 'Email attachments', 'shopglut' )
-			],
-			'email_customizer' => [
-				__( 'Drag & drop builder', 'shopglut' ),
-				__( 'Pre-built templates', 'shopglut' ),
-				__( 'Dynamic content', 'shopglut' ),
-				__( 'Test email sending', 'shopglut' )
 			]
 		];
+	}
+
+	/**
+	 * Get plugin information for each module
+	 * Maps module keys to their plugin basename and homepage
+	 */
+	private function getModulePluginInfo() {
+		return array(
+			// Layout Modules
+			'single_product' => array(
+				'basename' => 'productpage-glut/productpage-glut.php',
+				'homepage' => 'https://wordpress.org/plugins/productpage-glut/'
+			),
+			'cart_page' => array(
+				'basename' => 'cartpage-glut/cartpage-glut.php',
+				'homepage' => 'https://github.com/appglut/cartpage-glut'
+			),
+			'checkout_field_editor' => array(
+				'basename' => 'checkoutglut/checkoutglut.php',
+				'homepage' => 'https://github.com/appglut/checkoutglut'
+			),
+
+			// Enhancement Modules
+			'wishlist' => array(
+				'basename' => 'wishglut/wishglut.php',
+				'homepage' => 'https://github.com/appglut/wishglut'
+			),
+			'product_badges' => array(
+				'basename' => 'shopglut/shopglut.php',
+				'homepage' => 'https://wordpress.org/plugins/shopglut/'
+			),
+			'product_comparison' => array(
+				'basename' => 'shopglut/shopglut.php',
+				'homepage' => 'https://wordpress.org/plugins/shopglut/'
+			),
+			'product_swatches' => array(
+				'basename' => 'shopglut/shopglut.php',
+				'homepage' => 'https://wordpress.org/plugins/shopglut/'
+			),
+
+			// Tool Modules (all in shopglut)
+			'acf_fields' => array(
+				'basename' => 'shopglut/shopglut.php',
+				'homepage' => 'https://wordpress.org/plugins/shopglut/'
+			),
+			'shortcode_showcase' => array(
+				'basename' => 'shopglut/shopglut.php',
+				'homepage' => 'https://wordpress.org/plugins/shopglut/'
+			)
+		);
+	}
+
+	/**
+	 * Check if plugin is installed
+	 */
+	private function is_plugin_installed( $basename ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins = get_plugins();
+		return isset( $plugins[ $basename ] );
+	}
+
+	/**
+	 * Get plugin version
+	 */
+	private function get_plugin_version( $basename ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugins = get_plugins();
+		if ( isset( $plugins[ $basename ] ) ) {
+			return $plugins[ $basename ]['Version'];
+		}
+		return null;
 	}
 
 	/**

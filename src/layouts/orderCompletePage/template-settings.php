@@ -1,4 +1,5 @@
 <?php  
+namespace Ordercompleteglut\layouts\orderCompletePage;
 if (!defined('ABSPATH')) {
     exit;
 }
