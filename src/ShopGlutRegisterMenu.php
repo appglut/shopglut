@@ -1960,18 +1960,9 @@ class ShopGlutRegisterMenu {
 		endif;
 	}
 
-	public static function get_instance() {
-		static $instance;
-
-		if ( is_null( $instance ) ) {
-			$instance = new self();
-		}
-		return $instance;
-	}
 
 	/**
 		 * Render ProductCustomFieldGlut integration page
-		 * Shows download/activate options when ProductCustomFieldGlut is not active
 		 */
 		public function renderProductCustomFieldIntegration() {
 			$plugin_slug = 'productcustomfield-glut/productcustomfield-glut.php';
@@ -1995,21 +1986,18 @@ class ShopGlutRegisterMenu {
 							background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 							color: #ffffff; padding: 40px; text-align: center; border-radius: 8px; margin: 38px 0 30px 0;
 						}
-						.shopglut-productcustomfieldglut-integration .shopglut-productcustomfieldglut-header h1 {
-							color: #ffffff; margin: 0 0 10px 0; font-size: 32px;
-						}
 					</style>
 					<div class="shopglut-productcustomfieldglut-header">
 						<h1>📝 <?php esc_html_e( 'ProductCustomFieldGlut Integration', 'shopglut' ); ?></h1>
 						<p><?php esc_html_e( 'Add unlimited custom fields to WooCommerce product pages with beautiful designs', 'shopglut' ); ?></p>
 					</div>
 					<div style="max-width: 700px; margin: 40px auto;">
-						<div class="shopglut-productcustomfieldglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+						<div style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
 							<div style="font-size: 64px; margin-bottom: 20px;">📝</div>
 							<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
 								<?php esc_html_e( 'ProductCustomFieldGlut is Ready to Activate!', 'shopglut' ); ?>
 							</h1>
-							<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0;">
+							<p style="color: #50575e;">
 								<?php esc_html_e( 'Add unlimited custom fields to WooCommerce products with multiple field types and beautiful designs.', 'shopglut' ); ?>
 							</p>
 							<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px;">
@@ -2053,8 +2041,9 @@ class ShopGlutRegisterMenu {
 					</div>
 				</div>
 			<?php endif;
+		}
 
-	/**
+		/**
 		 * Render LoginRegisterGlut integration page
 		 */
 		public function renderLoginRegisterIntegration() {
@@ -2136,7 +2125,7 @@ class ShopGlutRegisterMenu {
 			<?php endif;
 		}
 
-	/**
+		/**
 		 * Render MiniCartGlut integration page
 		 */
 		public function renderMiniCartIntegration() {
@@ -2217,4 +2206,12 @@ class ShopGlutRegisterMenu {
 				</div>
 			<?php endif;
 		}
+	public static function get_instance() {
+		static $instance;
+
+		if ( is_null( $instance ) ) {
+			$instance = new self();
+		}
+		return $instance;
+	}
 }
