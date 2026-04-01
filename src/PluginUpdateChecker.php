@@ -43,6 +43,18 @@ class ShopGlut_PluginUpdateChecker {
             'basename' => 'productpage-glut/productpage-glut.php',
             'icon' => '📦',
             'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
+        ),
+        'shop-archivepage-glut' => array(
+            'name' => 'ShopArchivePageGlut',
+            'basename' => 'shop-archivepage-glut/shop-archivepage-glut.php',
+            'icon' => '🏪',
+            'description' => 'Beautiful WooCommerce shop and archive page builder with 19+ templates'
+        ),
+        'myaccount-glut' => array(
+            'name' => 'MyAccountGlut',
+            'basename' => 'myaccount-glut/myaccount-glut.php',
+            'icon' => '👤',
+            'description' => 'Complete WooCommerce my account page builder with custom dashboard and endpoints'
         )
     );
 

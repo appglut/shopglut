@@ -265,7 +265,10 @@ class ShopGlutPdfInvoicesAdvancedFeatures {
 		header( 'Content-Length: ' . filesize( $zip_path ) );
 		// Use WordPress filesystem for file operations
 		$content = file_get_contents( $zip_path );
-		echo wp_kses_post( $content );
+			if ( $content === false ) {
+				wp_die( esc_html__( 'Unable to read file.', 'shopglut' ) );
+			}
+			echo $content;
 		
 		wp_delete_file( $zip_path );
 		exit;

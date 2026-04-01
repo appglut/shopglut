@@ -521,6 +521,14 @@ if ( ! class_exists( 'AGSHOPGLUT_related_plugins' ) ) {
 					'icon' => '📦',
 					'basename' => 'productpage-glut/productpage-glut.php',
 					'homepage' => 'https://github.com/appglut/productpage-glut'
+					),
+					'myaccount-glut' => array(
+						'name' => 'MyAccountGlut',
+						'description' => 'Complete WooCommerce my account page builder with custom dashboard and endpoints',
+						'icon' => '👤',
+						'basename' => 'myaccount-glut/myaccount-glut.php',
+						'homepage' => 'https://github.com/appglut/myaccount-glut'
+					)
 				)
 			);
 		}

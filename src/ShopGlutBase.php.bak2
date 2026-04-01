@@ -137,22 +137,11 @@ class ShopGlutBase {
 			BadgeDataManage::get_instance();
 		}
 
-			// Only load embedded ProductComparison module if ProductComparisonGlut is NOT active
-			if ( ! $this->is_productcomparisonglut_active() ) {
-				ComparisonchooseTemplates::get_instance();
-				ProductComparisonDataManage::get_instance();
-			}
+		ComparisonchooseTemplates::get_instance();
+		ProductComparisonDataManage::get_instance();
 
-			// Only load embedded ProductQuickView module if ProductQuickViewGlut is NOT active
-			if ( ! $this->is_productquickviewglut_active() ) {
-				QuickViewchooseTemplates::get_instance();
-				QuickViewDataManage::get_instance();
-			}
-
-
-
-
-
+		// QuickViewchooseTemplates::get_instance();
+		// QuickViewDataManage::get_instance();
 
 
 		// SliderchooseTemplates::get_instance();
@@ -160,11 +149,8 @@ class ShopGlutBase {
 
 		// GalleryChooseTemplates::get_instance();
 
-		// Only load embedded ProductCustomField module if ProductCustomFieldGlut is NOT active
-		if ( ! $this->is_productcustomfieldglut_active() ) {
-			ProductCustomFieldDataManage::get_instance();
-			ProductCustomFieldHandler::get_instance();
-		}
+		ProductCustomFieldDataManage::get_instance();
+		ProductCustomFieldHandler::get_instance();
 
 		// Only load embedded ProductSwatches module if ProductSwatchesGlut is NOT active
 		if ( ! $this->is_productswatchesglut_active() ) {
@@ -173,15 +159,9 @@ class ShopGlutBase {
 			AttributeSwatchesManager::get_instance();
 		}
 
-		// Only load embedded LoginRegister module if LoginRegisterGlut is NOT active
-		if ( ! $this->is_loginregisterglut_active() ) {
-			LoginRegister::get_instance();
-		}
+		// LoginRegister::get_instance();
 
-		// Only load embedded MiniCart module if MiniCartGlut is NOT active
-		if ( ! $this->is_minicartglut_active() ) {
-			MiniCart::get_instance();
-		}
+		// MiniCart::get_instance();
 
 		// Initialize WooThemes
 		new WooThemes();
@@ -263,30 +243,16 @@ class ShopGlutBase {
 				require_once SHOPGLUT_PATH . 'src/enhancements/ProductBadges/product-badges-settings.php';
 			}
 		require_once SHOPGLUT_PATH . 'src/shortcodeglut-integration-settings.php';
-		// Only load embedded MiniCart settings if MiniCartGlut is NOT active
-		if ( ! $this->is_minicartglut_active() ) {
-			require_once SHOPGLUT_PATH . 'src/tools/miniCart/mini-cart-settings.php';
-		}
-			// Only load embedded ProductComparison settings if ProductComparisonGlut is NOT active
-			if ( ! $this->is_productcomparisonglut_active() ) {
-				require_once SHOPGLUT_PATH . 'src/enhancements/ProductComparison/template-settings.php';
-			}
-			// Only load embedded ProductQuickView settings if ProductQuickViewGlut is NOT active
-			if ( ! $this->is_productquickviewglut_active() ) {
-				require_once SHOPGLUT_PATH . 'src/enhancements/ProductQuickView/template-settings.php';
-			}
-
-
+		require_once SHOPGLUT_PATH . 'src/tools/miniCart/mini-cart-settings.php';
+		require_once SHOPGLUT_PATH . 'src/enhancements/ProductComparison/template-settings.php';
+		//require_once SHOPGLUT_PATH . 'src/enhancements/ProductQuickView/template-settings.php';
 		//require_once SHOPGLUT_PATH . 'src/BusinessSolutions/PdfInvoices/pdf-invoices-settings.php';
 		// Only load embedded shopLayout settings if ShopArchivePageGlut is NOT active AND file exists
 			$shop_layout_settings_file = SHOPGLUT_PATH . 'src/layouts/shopLayout/shopLayouts-config.php';
 			if ( ! $this->is_shoparchivepageglut_active() && file_exists( $shop_layout_settings_file ) ) {
 				require_once $shop_layout_settings_file;
 			}
-	     // Only load embedded ProductCustomField settings if ProductCustomFieldGlut is NOT active
-	     if ( ! $this->is_productcustomfieldglut_active() ) {
-	    	 require_once SHOPGLUT_PATH . 'src/tools/productCustomField/product-custom-field-settings.php';
-	     }
+	     require_once SHOPGLUT_PATH . 'src/tools/productCustomField/product-custom-field-settings.php';
 		// require_once SHOPGLUT_PATH . 'src/showcases/Gallery/templates/template1/template1-settings.php';
 		// require_once SHOPGLUT_PATH . 'src/showcases/ShopBanner/template-settings.php';
 		// require_once SHOPGLUT_PATH . 'src/showcases/Sliders/template-settings.php';
@@ -569,81 +535,6 @@ class ShopGlutBase {
 
 			// Also check if the main class exists
 			return class_exists( 'Productquickviewglut\\ProductquickviewglutBase' );
-		}
-
-		/**
-		 * Check if ProductCustomFieldGlut plugin is active
-		 *
-		 * @return bool True if ProductCustomFieldGlut is active
-		 */
-		private function is_productcustomfieldglut_active() {
-			$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
-
-			if ( is_multisite() ) {
-				// Get network active plugins
-				$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
-				$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
-			}
-
-			// Check for productcustomfield-glut/productcustomfield-glut.php plugin
-			foreach ( $active_plugins as $plugin ) {
-				if ( $plugin === 'productcustomfield-glut/productcustomfield-glut.php' ) {
-					return true;
-				}
-			}
-
-			// Also check if the main class exists
-			return class_exists( 'Productcustomfieldglut\\ProductcustomfieldglutBase' );
-		}
-
-		/**
-		 * Check if LoginRegisterGlut plugin is active
-		 *
-		 * @return bool True if LoginRegisterGlut is active
-		 */
-		private function is_loginregisterglut_active() {
-			$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
-
-			if ( is_multisite() ) {
-				// Get network active plugins
-				$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
-				$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
-			}
-
-			// Check for loginregister-glut/loginregister-glut.php plugin
-			foreach ( $active_plugins as $plugin ) {
-				if ( $plugin === 'loginregister-glut/loginregister-glut.php' ) {
-					return true;
-				}
-			}
-
-			// Also check if the main class exists
-			return class_exists( 'Loginregisterglut\\LoginregisterglutBase' );
-		}
-
-		/**
-		 * Check if MiniCartGlut plugin is active
-		 *
-		 * @return bool True if MiniCartGlut is active
-		 */
-		private function is_minicartglut_active() {
-			$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
-
-			if ( is_multisite() ) {
-				// Get network active plugins
-				$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
-				$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
-			}
-
-			// Check for minicart-glut/minicart-glut.php plugin
-			foreach ( $active_plugins as $plugin ) {
-				if ( $plugin === 'minicart-glut/minicart-glut.php' ) {
-					return true;
-				}
-			}
-
-			// Also check if the main class exists
-			return class_exists( 'Minicartglut\\MinicartglutBase' );
 		}
 
 	public static function get_instance() {

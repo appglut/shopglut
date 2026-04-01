@@ -55,6 +55,75 @@ class AllEnhancements {
 
 	public $not_implemented;
 
+
+	/**
+	 * Check if ProductBadgesGlut plugin is active
+	 */
+	private function is_productbadgesglut_active() {
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+		if ( is_multisite() ) {
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'productbadges-glut/productbadges-glut.php' ) {
+				return true;
+			}
+		}
+		return class_exists( 'Productbadgesglut\ProductbadgesglutBase' );
+	}
+
+	/**
+	 * Check if ProductSwatchesGlut plugin is active
+	 */
+	private function is_productswatchesglut_active() {
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+		if ( is_multisite() ) {
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'productswatches-glut/productswatches-glut.php' ) {
+				return true;
+			}
+		}
+		return class_exists( 'Productswatchesglut\\ProductswatchesglutBase' );
+	}
+
+	/**
+	 * Check if ProductComparisonGlut plugin is active
+	 */
+	private function is_productcomparisonglut_active() {
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+		if ( is_multisite() ) {
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'productcomparison-glut/productcomparison-glut.php' ) {
+				return true;
+			}
+		}
+		return class_exists( 'Comparisonglut\\ComparisonglutBase' );
+	}
+
+	/**
+	 * Check if ProductQuickViewGlut plugin is active
+	 */
+	private function is_productquickviewglut_active() {
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+		if ( is_multisite() ) {
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'productquickview-glut/productquickview-glut.php' ) {
+				return true;
+			}
+		}
+		return class_exists( 'Productquickviewglut\\ProductquickviewglutBase' );
+	}
+
 	public function __construct() {
 
 		add_filter( 'admin_body_class', array( $this, 'shopglutBodyClass' ) );
@@ -501,6 +570,91 @@ class AllEnhancements {
 	}
 
 	public function renderProductBadges() {
+		// Redirect to ProductBadgesGlut if it's active
+		if ( $this->is_productbadgesglut_active() ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=productbadgesglut' ) );
+			exit;
+		}
+		// Check if productbadges-glut plugin is available - if not, show integration page
+		$plugin_slug = 'productbadges-glut/productbadges-glut.php';
+		$active_plugins = get_option( 'active_plugins', array() );
+		$is_active = in_array( $plugin_slug, $active_plugins );
+		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+		$github_url = 'https://updates.appglut.com/plugins/productbadges-glut.zip';
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
+
+		// If plugin doesn't exist or is not active, show integration page
+		if ( ! $is_active ) {
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Product Badges', 'shopglut' ); ?></h2>
+
+				<?php if ( $plugin_exists && ! $is_active ) : ?>
+					<div class="shopglut-productbadgesglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-productbadgesglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-tag" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
+									<?php esc_html_e( 'ProductBadgesGlut is Ready to Activate!', 'shopglut' ); ?>
+								</h1>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Create and manage promotional badges for your WooCommerce products including sale badges, new product badges, and out of stock badges.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
+										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
+										<span><?php esc_html_e( 'Activate ProductBadgesGlut', 'shopglut' ); ?></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<?php else : ?>
+					<div class="shopglut-productbadgesglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-productbadgesglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
+									<?php esc_html_e( 'Download ProductBadgesGlut Plugin', 'shopglut' ); ?>
+								</h2>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Create and manage promotional badges for your WooCommerce products including sale badges, new product badges, and out of stock badges.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
+										<?php esc_html_e( 'ProductBadgesGlut is completely free! Download the plugin to unlock powerful badge management features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductBadgesGlut', 'shopglut' ); ?>
+									</a>
+								</div>
+								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
+									<p style="margin: 0 0 10px 0; font-weight: 600;">
+										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
+									</p>
+									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
+										<li><?php esc_html_e( 'Download ProductBadgesGlut plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Upload and activate the ProductBadgesGlut plugin', 'shopglut' ); ?></li>
+									</ol>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+			<?php
+			return;
+		}
+
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
 		?>
@@ -522,82 +676,6 @@ class AllEnhancements {
 		}
 		?>
 
-		<?php
-		// Check if productbadges-glut plugin is available
-		$plugin_slug = 'productbadges-glut/productbadges-glut.php';
-		$active_plugins = get_option( 'active_plugins', array() );
-		$is_active = in_array( $plugin_slug, $active_plugins );
-		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-
-		if ( ! $is_active ) {
-			?>
-			<div class="wrap shopglut-admin-contents">
-				<h2><?php echo esc_html__( 'Product Badges', 'shopglut' ); ?></h2>
-
-				<?php if ( $plugin_exists && ! $is_active ) : ?>
-					<div class="shopglut-productbadgesglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-productbadgesglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-awards" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-									<?php esc_html_e( 'ProductBadgesGlut is Ready to Activate!', 'shopglut' ); ?>
-								</h1>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Eye-catching product badges with 30+ templates including sale badges, new arrivals, best sellers, and custom labels.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-									</p>
-									<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug ) ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-										<span><?php esc_html_e( 'Activate ProductBadgesGlut', 'shopglut' ); ?></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				<?php else : ?>
-					<div class="shopglut-productbadgesglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-productbadgesglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-									<?php esc_html_e( 'Download ProductBadgesGlut Plugin', 'shopglut' ); ?>
-								</h2>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Eye-catching product badges with 30+ templates including sale badges, new arrivals, best sellers, and custom labels.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-										<?php esc_html_e( 'ProductBadgesGlut is completely free! Download the plugin to unlock powerful badge customization features.', 'shopglut' ); ?>
-									</p>
-									<a href="https://updates.appglut.com/plugins/productbadges-glut.zip" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductBadgesGlut', 'shopglut' ); ?>
-									</a>
-								</div>
-								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
-									<p style="margin: 0 0 10px 0; font-weight: 600;">
-										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
-									</p>
-									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-										<li><?php esc_html_e( 'Download ProductBadgesGlut plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins &rarr; Add New &rarr; Upload Plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Upload and activate the ProductBadgesGlut plugin', 'shopglut' ); ?></li>
-									</ol>
-								</div>
-							</div>
-						</div>
-				<?php endif; ?>
-			</div>
-			<?php
-			return;
-		}
-		?>
 
 		<?php if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
@@ -928,12 +1006,92 @@ class AllEnhancements {
 		?>
 
 		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); 
+			<?php //$this->renderNotImplementedMessage();
 			// ?>
 		<?php //else: ?>
 		<?php
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
+
+		// Check if shopfilter-glut plugin is available - if not, show integration page
+		$plugin_slug = 'shopfilter-glut/shopfilter-glut.php';
+		$active_plugins = get_option( 'active_plugins', array() );
+		$is_active = in_array( $plugin_slug, $active_plugins );
+		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+		$github_url = 'https://updates.appglut.com/plugins/shopfilter-glut.zip';
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
+
+		// If plugin doesn't exist or is not active, show integration page
+		if ( ! $is_active ) {
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Shop Filters', 'shopglut' ); ?></h2>
+
+				<?php if ( $plugin_exists && ! $is_active ) : ?>
+					<div class="shopglut-shopfilterglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-shopfilterglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-filter" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
+									<?php esc_html_e( 'ShopFilterGlut is Ready to Activate!', 'shopglut' ); ?>
+								</h1>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Complete WooCommerce shop filter builder with advanced filtering options for your shop pages.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
+										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
+										<span><?php esc_html_e( 'Activate ShopFilterGlut', 'shopglut' ); ?></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<?php else : ?>
+					<div class="shopglut-shopfilterglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-shopfilterglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
+									<?php esc_html_e( 'Download ShopFilterGlut Plugin', 'shopglut' ); ?>
+								</h2>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Complete WooCommerce shop filter builder with advanced filtering options for your shop pages.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
+										<?php esc_html_e( 'ShopFilterGlut is completely free! Download the plugin to unlock powerful shop filter building features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ShopFilterGlut', 'shopglut' ); ?>
+									</a>
+								</div>
+								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
+									<p style="margin: 0 0 10px 0; font-weight: 600;">
+										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
+									</p>
+									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
+										<li><?php esc_html_e( 'Download ShopFilterGlut plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Upload and activate the ShopFilterGlut plugin', 'shopglut' ); ?></li>
+									</ol>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+			<?php
+			return;
 		}
 
 		// Check if shop_filters module is enabled
@@ -1080,15 +1238,15 @@ class AllEnhancements {
 			$module_manager->render_disabled_module_message( 'product_swatches' );
 			return;
 		}
-		?>
-
-		<?php
-		// Check if productswatches-glut plugin is available
+		// Check if productswatches-glut plugin is available - if not, show integration page
 		$plugin_slug = 'productswatches-glut/productswatches-glut.php';
 		$active_plugins = get_option( 'active_plugins', array() );
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+		$github_url = 'https://updates.appglut.com/plugins/productswatches-glut.zip';
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
+		// If plugin doesn't exist or is not active, show integration page
 		if ( ! $is_active ) {
 			?>
 			<div class="wrap shopglut-admin-contents">
@@ -1111,7 +1269,7 @@ class AllEnhancements {
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
 										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
 									</p>
-									<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug ) ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
 										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
 										<span><?php esc_html_e( 'Activate ProductSwatchesGlut', 'shopglut' ); ?></span>
 									</a>
@@ -1119,6 +1277,7 @@ class AllEnhancements {
 							</div>
 						</div>
 					</div>
+
 				<?php else : ?>
 					<div class="shopglut-productswatchesglut-integration">
 						<div style="max-width: 700px; margin: 20px auto;">
@@ -1136,7 +1295,7 @@ class AllEnhancements {
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
 										<?php esc_html_e( 'ProductSwatchesGlut is completely free! Download the plugin to unlock powerful swatch customization features.', 'shopglut' ); ?>
 									</p>
-									<a href="https://updates.appglut.com/plugins/productswatches-glut.zip" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
 										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductSwatchesGlut', 'shopglut' ); ?>
 									</a>
 								</div>
@@ -1146,20 +1305,19 @@ class AllEnhancements {
 									</p>
 									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
 										<li><?php esc_html_e( 'Download ProductSwatchesGlut plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins &rarr; Add New &rarr; Upload Plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Upload and activate the ProductSwatchesGlut plugin', 'shopglut' ); ?></li>
 									</ol>
 								</div>
 							</div>
 						</div>
+					</div>
 				<?php endif; ?>
 			</div>
 			<?php
 			return;
 		}
-		?>
 
-		<?php
 		// Get all WooCommerce product attributes
 		$product_attributes = wc_get_attribute_taxonomies();
 
@@ -2753,28 +2911,15 @@ class AllEnhancements {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
-
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-
-		//if($this->not_implemented):
-		//	$this->renderNotImplementedMessage();
-		// else:
-		// Check if product_comparison module is enabled
-		$module_manager = \Shopglut\ModuleManager::get_instance();
-		if ( ! $module_manager->is_module_enabled( 'product_comparison' ) ) {
-			$module_manager->render_disabled_module_message( 'product_comparison' );
-			return;
-		}
-		?>
-
-		<?php
-		// Check if productcomparison-glut plugin is available
+		// Check if productcomparison-glut plugin is available - if not, show integration page
 		$plugin_slug = 'productcomparison-glut/productcomparison-glut.php';
 		$active_plugins = get_option( 'active_plugins', array() );
 		$is_active = in_array( $plugin_slug, $active_plugins );
 		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+		$github_url = 'https://updates.appglut.com/plugins/productcomparison-glut.zip';
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
 
+		// If plugin doesn't exist or is not active, show integration page
 		if ( ! $is_active ) {
 			?>
 			<div class="wrap shopglut-admin-contents">
@@ -2791,13 +2936,13 @@ class AllEnhancements {
 									<?php esc_html_e( 'ProductComparisonGlut is Ready to Activate!', 'shopglut' ); ?>
 								</h1>
 								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Powerful product comparison feature with customizable comparison tables and side-by-side product analysis.', 'shopglut' ); ?>
+									<?php esc_html_e( 'Complete WooCommerce product comparison builder with advanced comparison features and customizable comparison tables.', 'shopglut' ); ?>
 								</p>
 								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
 										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
 									</p>
-									<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug ) ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
 										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
 										<span><?php esc_html_e( 'Activate ProductComparisonGlut', 'shopglut' ); ?></span>
 									</a>
@@ -2805,6 +2950,7 @@ class AllEnhancements {
 							</div>
 						</div>
 					</div>
+
 				<?php else : ?>
 					<div class="shopglut-productcomparisonglut-integration">
 						<div style="max-width: 700px; margin: 20px auto;">
@@ -2816,13 +2962,92 @@ class AllEnhancements {
 									<?php esc_html_e( 'Download ProductComparisonGlut Plugin', 'shopglut' ); ?>
 								</h2>
 								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Powerful product comparison feature with customizable comparison tables and side-by-side product analysis.', 'shopglut' ); ?>
+									<?php esc_html_e( 'Complete WooCommerce product comparison builder with advanced comparison features and customizable comparison tables.', 'shopglut' ); ?>
+		// Check if productquickview-glut plugin is available - if not, show integration page
+		$plugin_slug = 'productquickview-glut/productquickview-glut.php';
+		$active_plugins = get_option( 'active_plugins', array() );
+		$is_active = in_array( $plugin_slug, $active_plugins );
+		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
+		$github_url = 'https://updates.appglut.com/plugins/productquickview-glut.zip';
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
+
+		// If plugin doesn't exist or is not active, show integration page
+		if ( ! $is_active ) {
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Quick View', 'shopglut' ); ?></h2>
+
+				<?php if ( $plugin_exists && ! $is_active ) : ?>
+					<div class="shopglut-productquickviewglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-productquickviewglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-visibility" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
+									<?php esc_html_e( 'ProductQuickViewGlut is Ready to Activate!', 'shopglut' ); ?>
+								</h1>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Beautiful quick view modal for WooCommerce products with customizable templates and quick add to cart functionality.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
+										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
+										<span><?php esc_html_e( 'Activate ProductQuickViewGlut', 'shopglut' ); ?></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<?php else : ?>
+					<div class="shopglut-productquickviewglut-integration">
+						<div style="max-width: 700px; margin: 20px auto;">
+							<div class="shopglut-productquickviewglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+								<div style="font-size: 64px; margin-bottom: 20px;">
+									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
+								</div>
+								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
+									<?php esc_html_e( 'Download ProductQuickViewGlut Plugin', 'shopglut' ); ?>
+								</h2>
+								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+									<?php esc_html_e( 'Beautiful quick view modal for WooCommerce products with customizable templates and quick add to cart functionality.', 'shopglut' ); ?>
+								</p>
+								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
+									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
+										<?php esc_html_e( 'ProductQuickViewGlut is completely free! Download the plugin to unlock powerful quick view features.', 'shopglut' ); ?>
+									</p>
+									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductQuickViewGlut', 'shopglut' ); ?>
+									</a>
+								</div>
+								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
+									<p style="margin: 0 0 10px 0; font-weight: 600;">
+										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
+									</p>
+									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
+										<li><?php esc_html_e( 'Download ProductQuickViewGlut plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Upload and activate the ProductQuickViewGlut plugin', 'shopglut' ); ?></li>
+									</ol>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+			<?php
+			return;
+		}
 								</p>
 								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
 									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
 										<?php esc_html_e( 'ProductComparisonGlut is completely free! Download the plugin to unlock powerful comparison features.', 'shopglut' ); ?>
 									</p>
-									<a href="https://updates.appglut.com/plugins/productcomparison-glut.zip" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
+									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
 										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductComparisonGlut', 'shopglut' ); ?>
 									</a>
 								</div>
@@ -2832,20 +3057,32 @@ class AllEnhancements {
 									</p>
 									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
 										<li><?php esc_html_e( 'Download ProductComparisonGlut plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins &rarr; Add New &rarr; Upload Plugin', 'shopglut' ); ?></li>
+										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
 										<li><?php esc_html_e( 'Upload and activate the ProductComparisonGlut plugin', 'shopglut' ); ?></li>
 									</ol>
 								</div>
 							</div>
 						</div>
+					</div>
 				<?php endif; ?>
 			</div>
 			<?php
 			return;
 		}
-		?>
 
-		<?php
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
+
+		//if($this->not_implemented):
+		//	$this->renderNotImplementedMessage();
+		// else:
+		// Check if product_comparison module is enabled
+		$module_manager = \Shopglut\ModuleManager::get_instance();
+		if ( ! $module_manager->is_module_enabled( 'product_comparison' ) ) {
+			$module_manager->render_disabled_module_message( 'product_comparison' );
+			return;
+		}
+
 		// Handle individual delete action
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
 			$layout_id = absint( $_GET['layout_id'] );
@@ -2898,86 +3135,7 @@ class AllEnhancements {
 			$module_manager->render_disabled_module_message( 'quick_views' );
 			return;
 		}
-		?>
 
-		<?php
-		// Check if productquickview-glut plugin is available
-		$plugin_slug = 'productquickview-glut/productquickview-glut.php';
-		$active_plugins = get_option( 'active_plugins', array() );
-		$is_active = in_array( $plugin_slug, $active_plugins );
-		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-
-		if ( ! $is_active ) {
-			?>
-			<div class="wrap shopglut-admin-contents">
-				<h2><?php echo esc_html__( 'Quick View', 'shopglut' ); ?></h2>
-
-				<?php if ( $plugin_exists && ! $is_active ) : ?>
-					<div class="shopglut-productquickviewglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-productquickviewglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-visibility" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-									<?php esc_html_e( 'ProductQuickViewGlut is Ready to Activate!', 'shopglut' ); ?>
-								</h1>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Beautiful quick view popup for products with customizable templates and smooth animations.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-									</p>
-									<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug ) ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-										<span><?php esc_html_e( 'Activate ProductQuickViewGlut', 'shopglut' ); ?></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				<?php else : ?>
-					<div class="shopglut-productquickviewglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-productquickviewglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-									<?php esc_html_e( 'Download ProductQuickViewGlut Plugin', 'shopglut' ); ?>
-								</h2>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Beautiful quick view popup for products with customizable templates and smooth animations.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-										<?php esc_html_e( 'ProductQuickViewGlut is completely free! Download the plugin to unlock powerful quick view features.', 'shopglut' ); ?>
-									</p>
-									<a href="https://updates.appglut.com/plugins/productquickview-glut.zip" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ProductQuickViewGlut', 'shopglut' ); ?>
-									</a>
-								</div>
-								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
-									<p style="margin: 0 0 10px 0; font-weight: 600;">
-										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
-									</p>
-									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-										<li><?php esc_html_e( 'Download ProductQuickViewGlut plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins &rarr; Add New &rarr; Upload Plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Upload and activate the ProductQuickViewGlut plugin', 'shopglut' ); ?></li>
-									</ol>
-								</div>
-							</div>
-						</div>
-				<?php endif; ?>
-			</div>
-			<?php
-			return;
-		}
-		?>
-
-		<?php
 		// Handle individual delete action
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
 			$layout_id = absint( $_GET['layout_id'] );

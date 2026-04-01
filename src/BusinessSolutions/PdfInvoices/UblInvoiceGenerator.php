@@ -557,7 +557,10 @@ class ShopGlutUblInvoiceGenerator {
 		header( 'Content-Length: ' . filesize( $file_path ) );
 		// Use WordPress filesystem for file operations
 		$content = file_get_contents( $file_path );
-		echo wp_kses_post( $content );
+			if ( $content === false ) {
+				wp_die( esc_html__( 'Unable to read file.', 'shopglut' ) );
+			}
+			echo $content;
 		exit;
 	}
 }
