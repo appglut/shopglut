@@ -5,28 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Shopglut\layouts\shopLayout\chooseTemplates as ShopLayoutTemplates;
-use Shopglut\layouts\shopLayout\SettingsPage as ShopLayoutEditor;
-use Shopglut\layouts\shopLayout\ShopListTable;
-use Shopglut\layouts\cartPage\chooseTemplates as CartPageTemplates;
+// use Shopglut\layouts\shopLayout\chooseTemplates as ShopLayoutTemplates;
+// use Shopglut\layouts\shopLayout\SettingsPage as ShopLayoutEditor;
+// use Shopglut\layouts\shopLayout\ShopListTable;
+// use Shopglut\layouts\cartPage\chooseTemplates as CartPageTemplates;
 
-use Shopglut\layouts\orderCompletePage\chooseTemplates as OrdercompleteTemplates;
-use Shopglut\layouts\orderCompletePage\SettingsPage as orderCompletePagePreBuilderEditor;
-use Shopglut\layouts\orderCompletePage\OrdercompleteListTable;
-
-
-use Shopglut\layouts\accountPage\AccountPageChooseTemplates;
-use Shopglut\layouts\cartPage\SettingsPage as CartPageEditor;
-use Shopglut\layouts\cartPage\SettingsPage as CartPageBuilderEditor;
+// use Shopglut\layouts\orderCompletePage\chooseTemplates as OrdercompleteTemplates;
+// use Shopglut\layouts\orderCompletePage\SettingsPage as orderCompletePagePreBuilderEditor;
+// use Shopglut\layouts\orderCompletePage\OrdercompleteListTable;
 
 
-use Shopglut\layouts\accountPage\AccountPageSettingsPage as accountpageEditor;
-use Shopglut\layouts\cartPage\CartPageListTable;
-use Shopglut\layouts\accountPage\AccountPageListTable;
-use Shopglut\BusinessSolutions\AllBusinessSolutions;
-use Shopglut\layouts\cartPage\CartPageEntity;
-use Shopglut\layouts\orderCompletePage\orderCompletePageEntity as ordercompleteEntity;
-use Shopglut\layouts\accountPage\AccountPageEntity;
+// use Shopglut\layouts\accountPage\AccountPageChooseTemplates;
+// use Shopglut\layouts\cartPage\SettingsPage as CartPageEditor;
+// use Shopglut\layouts\cartPage\SettingsPage as CartPageBuilderEditor;
+
+
+// use Shopglut\layouts\accountPage\AccountPageSettingsPage as accountpageEditor;
+// use Shopglut\layouts\cartPage\CartPageListTable;
+// use Shopglut\layouts\accountPage\AccountPageListTable;
+// use Shopglut\BusinessSolutions\AllBusinessSolutions;
+// use Shopglut\layouts\cartPage\CartPageEntity;
+// use Shopglut\layouts\orderCompletePage\orderCompletePageEntity as ordercompleteEntity;
+// use Shopglut\layouts\accountPage\AccountPageEntity;
 use Shopglut\layouts\LayoutEntity;
 
 
@@ -101,21 +101,22 @@ class AllLayouts {
 	public function renderLayoutsPages() {
 
 		// Only initialize singleProduct editor if ProductPageGlut is NOT active
-		if ( ! $this->is_productpageglut_active() ) {
-			if ( class_exists( 'ProductPageGlut\ProductPageGlut\\SettingsPage' ) ) {
-				$singleProduct_editor = new \Shopglut\layouts\singleProduct\SettingsPage();
-			} else {
-				$singleProduct_editor = null;
-			}
-		} else {
-			$singleProduct_editor = null;
-		}
+// 		if ( ! $this->is_productpageglut_active() ) {
+// 			if ( class_exists( 'ProductPageGlut\ProductPageGlut\\SettingsPage' ) ) {
+// 				$singleProduct_editor = new \Shopglut\layouts\singleProduct\SettingsPage();
+// 			} else {
+// 				$singleProduct_editor = null;
+// 			}
+// 		} else {
+// 			$singleProduct_editor = null;
+// 		}
 
-		$shopLayout_editor = new ShopLayoutEditor();
-		$cartpage_editor = new CartPageEditor();
-		$cartpage_editor = new CartPageBuilderEditor();
-		$ordercomplete_editor = new orderCompletePagePreBuilderEditor();
-		$accountpage_editor = new accountpageEditor();
+			// === COMMENTED OUT - MOVED TO STANDALONE PLUGIN ===
+			// 		$shopLayout_editor = new ShopLayoutEditor();
+			// 		$cartpage_editor = new CartPageEditor();
+			// 		$cartpage_editor = new CartPageBuilderEditor();
+			// 		$ordercomplete_editor = new orderCompletePagePreBuilderEditor();
+			// 		$accountpage_editor = new accountpageEditor();
 
 		// Sanitize and validate input - only in admin context
 		$page = '';
@@ -145,74 +146,77 @@ class AllLayouts {
 
 
 		// Handle productpageglut editor - use productpage-glut's editor if active, otherwise use shopglut's embedded editor
-		if ( 'shopglut_layouts' === $page && 'productpageglut' === $editor && $layout_id > 0 ) {
+// 		if ( 'shopglut_layouts' === $page && 'productpageglut' === $editor && $layout_id > 0 ) {
 			// Add filters to override URLs when used in shopglut context
-			add_filter( 'productpageglut_editor_back_page_slug', array( $this, 'filter_list_table_page_slug' ) );
-			add_filter( 'productpageglut_editor_back_view', array( $this, 'filter_list_table_view' ) );
-			add_filter( 'productpageglut_list_table_page_slug', array( $this, 'filter_list_table_page_slug' ) );
-			add_filter( 'productpageglut_list_table_editor_slug', array( $this, 'filter_list_table_editor_slug' ) );
-
-			if ( $this->is_productpageglut_active() && class_exists( 'Productpageglut\\layouts\\productPage\\SettingsPage' ) ) {
+// 			add_filter( 'productpageglut_editor_back_page_slug', array( $this, 'filter_list_table_page_slug' ) );
+// 			add_filter( 'productpageglut_editor_back_view', array( $this, 'filter_list_table_view' ) );
+// 			add_filter( 'productpageglut_list_table_page_slug', array( $this, 'filter_list_table_page_slug' ) );
+// 			add_filter( 'productpageglut_list_table_editor_slug', array( $this, 'filter_list_table_editor_slug' ) );
+// 
+// 			if ( $this->is_productpageglut_active() && class_exists( 'Productpageglut\\layouts\\productPage\\SettingsPage' ) ) {
 				// Load productpage-glut's editor
-				$productpageglut_editor = new \Productpageglut\layouts\productPage\SettingsPage();
-				$productpageglut_editor->loadSingleProductEditor();
-			} elseif ( $singleProduct_editor !== null ) {
+// 				$productpageglut_editor = new \Productpageglut\layouts\productPage\SettingsPage();
+// 				$productpageglut_editor->loadSingleProductEditor();
+// 			} elseif ( $singleProduct_editor !== null ) {
 				// Use shopglut's embedded editor
-				$singleProduct_editor->loadProductPageGlutEditor();
+// 				$singleProduct_editor->loadProductPageGlutEditor();
+// 			}
+			// === COMMENTED OUT - MOVED TO STANDALONE PLUGIN ===
+			// 		} elseif ( 'shopglut_layouts' === $page && 'shop' === $editor && $layout_id > 0 ) {
+			// 			$shopLayout_editor->loadShopLayoutEditor();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'cartpage' === $editor && $layout_id > 0 ) {
+			// 			$cartpage_editor->loadCartPageEditor();
+			// 		}  elseif ( 'shopglut_layouts' === $page && 'ordercomplete' === $editor && $layout_id > 0 ) {
+			// 			$ordercomplete_editor->loadOrdercompleteEditor();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'accountpage' === $editor && $layout_id > 0 ) {
+			// 			$accountpage_editor->loadAccountPageEditor();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'shop_templates' === $view ) {
+			// 			$this->ShoplayoutTemplatesPage();
+			// === KEEP ACTIVE - productpage-glut templates ===
+// 			} elseif ( 'shopglut_layouts' === $page && ( 'productpageglut_templates' === $view || 'product_page_templates' === $view ) ) {
+// 				$this->ProductPageLayoutTemplatesPage();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'cartpage_templates' === $view ) {
+			// 			$this->CartlayoutTemplatesPage();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'accountpage_templates' === $view ) {
+			// 			$this->AccountTemplatesPage();
+			// 		} elseif ( 'shopglut_layouts' === $page && 'ordercomplete_templates' === $view ) {
+			// 			$this->ThanklayoutTemplatesPage();
+			// 		}
+			if ( 'shopglut_layouts' === $page && ! empty( $view ) ) {
+				switch ( $view ) {
+					case 'shop':
+						$this->renderLayoutsTable();
+						break;
+					case 'productpageglut':
+					case 'product_page':
+						$this->renderProductPage();
+						break;
+					case 'cartpage':
+						$this->renderCart();
+						break;
+					case 'checkout':
+						$this->renderCheckout();
+						break;
+					case 'ordercomplete':
+						$this->renderOrderThankyou();
+						break;
+					case 'accountpage':
+						$this->renderMyAccount();
+						break;
+					// case 'quick_views':
+					//     $this->renderQuickView();
+					//     break;
+					default:
+						//$this->renderLayoutsTable();
+						break;
+				}
+			} elseif ( 'shopglut_layouts' === $page ) {
+				$this->renderWooCommerceLayouts();
+			} elseif ( 'shopg_woocommerce_builder' === $page ) {
+				$this->renderWooBuilderPage();
+			} else {
+				wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'shopglut' ) );
 			}
-		} elseif ( 'shopglut_layouts' === $page && 'shop' === $editor && $layout_id > 0 ) {
-			$shopLayout_editor->loadShopLayoutEditor();
-		} elseif ( 'shopglut_layouts' === $page && 'cartpage' === $editor && $layout_id > 0 ) {
-			$cartpage_editor->loadCartPageEditor();
-		}  elseif ( 'shopglut_layouts' === $page && 'ordercomplete' === $editor && $layout_id > 0 ) {
-			$ordercomplete_editor->loadOrdercompleteEditor();
-		} elseif ( 'shopglut_layouts' === $page && 'accountpage' === $editor && $layout_id > 0 ) {
-			$accountpage_editor->loadAccountPageEditor();
-		} elseif ( 'shopglut_layouts' === $page && 'shop_templates' === $view ) {
-			$this->ShoplayoutTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && ( 'productpageglut_templates' === $view || 'product_page_templates' === $view ) ) {
-			$this->ProductPageLayoutTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && 'cartpage_templates' === $view ) {
-			$this->CartlayoutTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && 'accountpage_templates' === $view ) {
-			$this->AccountTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && 'ordercomplete_templates' === $view ) {
-			$this->ThanklayoutTemplatesPage();
-		} elseif ( 'shopglut_layouts' === $page && ! empty( $view ) ) {
-			switch ( $view ) {
-				case 'shop':
-					$this->renderLayoutsTable();
-					break;
-				case 'productpageglut':
-				case 'product_page':
-					$this->renderProductPage();
-					break;
-				case 'cartpage':
-					$this->renderCart();
-					break;
-				case 'checkout':
-					$this->renderCheckout();
-					break;
-				case 'ordercomplete':
-					$this->renderOrderThankyou();
-					break;
-				case 'accountpage':
-					$this->renderMyAccount();
-					break;
-				// case 'quick_views':
-				//     $this->renderQuickView();
-				//     break;
-				default:
-					//$this->renderLayoutsTable();
-					break;
-			}
-		} elseif ( 'shopglut_layouts' === $page ) {
-			$this->renderWooCommerceLayouts();
-		} elseif ( 'shopg_woocommerce_builder' === $page ) {
-			$this->renderWooBuilderPage();
-		} else {
-			wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'shopglut' ) );
-		}
 
 	}
 
@@ -334,139 +338,32 @@ class AllLayouts {
 	}
 
 	public function renderLayoutsTable() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
-		// Check if shop_layouts module is enabled
-		$module_manager = \Shopglut\ModuleManager::get_instance();
-		if ( ! $module_manager->is_module_enabled( 'shop_layouts' ) ) {
-			$module_manager->render_disabled_module_message( 'shop_layouts' );
-			return;
-		}
-
-		// Check if shoparchivepageglut plugin is available - if not, show integration page
-		$plugin_slug = 'shop-archivepage-glut/shop-archivepage-glut.php';
-		$active_plugins = get_option( 'active_plugins', array() );
-		$is_active = in_array( $plugin_slug, $active_plugins );
-		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-		$github_url = 'https://updates.appglut.com/plugins/shop-archivepage-glut.zip';
-		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
-
-		// If plugin doesn't exist or is not active, show integration page
-		if ( ! $is_active ) {
-			?>
-			<div class="wrap shopglut-admin-contents">
-				<h2><?php echo esc_html__( 'Shop & Archive Layouts', 'shopglut' ); ?></h2>
-
-				<?php if ( $plugin_exists && ! $is_active ) : ?>
-					<div class="shopglut-shoparchivepageglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-shoparchivepageglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-store" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-									<?php esc_html_e( 'ShopArchivePageGlut is Ready to Activate!', 'shopglut' ); ?>
-								</h1>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Complete WooCommerce shop and archive page builder with professional templates, filtering, and product display options.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-									</p>
-									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-										<span><?php esc_html_e( 'Activate ShopArchivePageGlut', 'shopglut' ); ?></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				<?php else : ?>
-					<div class="shopglut-shoparchivepageglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-shoparchivepageglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-									<?php esc_html_e( 'Download ShopArchivePageGlut Plugin', 'shopglut' ); ?>
-								</h2>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Complete WooCommerce shop and archive page builder with professional templates, product filtering, grid/list layouts, and customization options.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-										<?php esc_html_e( 'ShopArchivePageGlut is completely free! Download the plugin to unlock powerful shop and archive page building features.', 'shopglut' ); ?>
-									</p>
-									<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-										<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download ShopArchivePageGlut', 'shopglut' ); ?>
-									</a>
-								</div>
-								<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
-									<p style="margin: 0 0 10px 0; font-weight: 600;">
-										<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
-									</p>
-									<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-										<li><?php esc_html_e( 'Download ShopArchivePageGlut plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Upload and activate the ShopArchivePageGlut plugin', 'shopglut' ); ?></li>
-									</ol>
-								</div>
-							</div>
-						</div>
-					</div>
-				<?php endif; ?>
-			</div>
-			<?php
-			return;
-		}
-
-		// Handle individual delete action
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
-			$layout_id = absint( $_GET['layout_id'] );
-
-			// Verify nonce
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_layout_' . $layout_id ) ) {
-				// Delete the layout using ShopLayoutEntity
-				\Shopglut\layouts\shopLayout\ShopLayoutEntity::delete_layout( $layout_id );
-
-				// Redirect to avoid resubmission - maintain the view parameter
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=shop&deleted=true' ) );
-				exit;
-			} else {
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
-			}
-		}
-
-		if ( isset( $_GET['deleted'] ) && $_GET['deleted'] === 'true' ) {
-			echo '<div class="updated notice"><p>' . esc_html__( 'Layout deleted successfully.', 'shopglut' ) . '</p></div>';
-		}
-		$layouts_table = new ShopListTable();
-		$layouts_table->prepare_items();
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h2><?php echo esc_html__( 'Layouts', 'shopglut' ); ?><a
-					href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=shop_templates' ) ); ?>"><span
-						class="add-new-h2"><?php echo esc_html__( 'Add New Layout', 'shopglut' ); ?></span></a></h2>
-			<form method="post">
-				<?php $layouts_table->display(); ?>
-			</form>
+			<h2><?php echo esc_html__( 'Shop & Archive Layouts', 'shopglut' ); ?></h2>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-store" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The shop and archive layouts feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
 		</div>
-		<?php //endif; ?>
 		<?php
+		return;
 	}
-
 	public function ShoplayoutTemplatesPage() {
 
 		$active_menu = 'layouts';
@@ -586,455 +483,115 @@ class AllLayouts {
 		<?php $thankLayout_templates->loadProductAccountPageTemplates();
 	}
 
-	public function renderCart() {
-			$active_menu = $this->activeMenuTab();
-		//$this->settingsPageHeader( $active_menu );
-		 //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
+		public function renderCart() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
-
-			// Check if cartpageglut plugin is available - if not, show integration page
-			$plugin_slug = 'cartpage-glut/cartpage-glut.php';
-			$active_plugins = get_option( 'active_plugins', array() );
-			$is_active = in_array( $plugin_slug, $active_plugins );
-			$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-			$github_url = 'https://updates.appglut.com/plugins/cartpage-glut.zip';
-			$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
-
-			// If plugin doesn't exist or is not active, show integration page
-			if ( ! $is_active ) {
-				$active_menu = $this->activeMenuTab();
-				$this->settingsPageHeader( $active_menu );
-				?>
-				<div class="wrap shopglut-admin-contents">
-					<h2><?php echo esc_html__( 'Cart Page Layouts', 'shopglut' ); ?></h2>
-
-					<?php if ( $plugin_exists && ! $is_active ) : ?>
-						<div class="shopglut-cartpageglut-integration">
-							<div style="max-width: 700px; margin: 20px auto;">
-								<div class="shopglut-cartpageglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
-									<div style="font-size: 64px; margin-bottom: 20px;">
-										<span class="dashicons dashicons-cart" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-									</div>
-									<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-										<?php esc_html_e( 'CartPageGlut is Ready to Activate!', 'shopglut' ); ?>
-									</h1>
-									<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-										<?php esc_html_e( 'Complete WooCommerce cart page builder with custom layouts, product management, and coupon integration.', 'shopglut' ); ?>
-									</p>
-									<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-										<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-											<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-										</p>
-										<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-											<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-											<span><?php esc_html_e( 'Activate CartPageGlut', 'shopglut' ); ?></span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					<?php else : ?>
-						<div class="shopglut-cartpageglut-integration">
-							<div style="max-width: 700px; margin: 20px auto;">
-								<div class="shopglut-cartpageglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-									<div style="font-size: 64px; margin-bottom: 20px;">
-										<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-									</div>
-									<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-										<?php esc_html_e( 'Download CartPageGlut Plugin', 'shopglut' ); ?>
-									</h2>
-									<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-										<?php esc_html_e( 'Complete WooCommerce cart page builder with custom layouts, product quantity management, and coupon features.', 'shopglut' ); ?>
-									</p>
-									<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-										<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-											<?php esc_html_e( 'CartPageGlut is completely free! Download the plugin to unlock powerful cart page building features.', 'shopglut' ); ?>
-										</p>
-										<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-											<span class="dashicons dashicons-cloud-download"></span> <?php esc_html_e( 'Download CartPageGlut', 'shopglut' ); ?>
-										</a>
-									</div>
-									<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
-										<p style="margin: 0 0 10px 0; font-weight: 600;">
-											<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
-										</p>
-										<ol style="margin: 0; padding-left: 20px; text-align: left; display: inline-block;">
-											<li><?php esc_html_e( 'Download CartPageGlut plugin', 'shopglut' ); ?></li>
-											<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
-											<li><?php esc_html_e( 'Upload and activate the CartPageGlut plugin', 'shopglut' ); ?></li>
-										</ol>
-									</div>
-								</div>
-							</div>
-						</div>
-					<?php endif; ?>
-				</div>
-				<?php
-				return;
-			}
-		// Handle individual delete action
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
-			$layout_id = absint( $_GET['layout_id'] );
-
-			// Verify nonce
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_layout_' . $layout_id ) ) {
-				// Delete the layout
-				CartPageEntity::delete_layout( $layout_id );
-
-				// Redirect to avoid resubmission
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=cartpage&deleted=true' ) );
-				exit;
-			} else {
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
-			}
-		}
-
-		if ( isset( $_GET['deleted'] ) && $_GET['deleted'] === 'true' ) {
-			echo '<div class="updated notice"><p>' . esc_html__( 'Layout deleted successfully.', 'shopglut' ) . '</p></div>';
-		}
-		$layouts_table = new CartPageListTable();
-		$layouts_table->prepare_items();
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h2><?php echo esc_html__( 'Cart Page Layouts', 'shopglut' ); ?><a
-					href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=cartpage_templates' ) ); ?>"><span
-						class="add-new-h2"><?php echo esc_html__( 'Add New Layout', 'shopglut' ); ?></span></a></h2>
-			<form method="post">
-				<?php $layouts_table->display(); ?>
-			</form>
-		</div>
-		<?php //endif; ?>
-		<?php
-	}
-
-	public function renderNotImplementedMessage() {
-		?>
-		<div style="padding: 50px 30px; background: #fff; margin: 20px; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04); border-radius: 6px;">
-			<div style="text-align: center;">
-				<div style="font-size: 48px; margin-bottom: 20px; opacity: 0.6;">
-					🚧
-				</div>
-				<h1 style="color: #dc3232; font-size: 24px; font-weight: 500; margin: 0 0 20px 0; line-height: 1.4;">
-					<?php echo esc_html__( 'Feature Not Available', 'shopglut' ); ?>
-				</h1>
-				<p style="color: #666; font-size: 16px; margin: 0 0 25px 0; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto;">
-					<?php echo esc_html__( 'This feature is currently under development. We are working to bring you enhanced functionality and customization options.', 'shopglut' ); ?>
-				</p>
-				<div style="padding: 15px; background: #f0f6fc; border: 1px solid #c3d9ed; border-radius: 4px; margin: 20px auto; max-width: 400px;">
-					<p style="color: #0073aa; font-size: 14px; margin: 0; font-weight: 500;">
-						<?php echo esc_html__( 'Please check back for updates in future releases.', 'shopglut' ); ?>
-					</p>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	public function renderCheckout() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-
-		// Check if CheckoutGlut plugin is active
-		$plugin_slug = 'checkoutglut/checkoutglut.php';
-		$active_plugins = get_option( 'active_plugins', array() );
-		$is_active = in_array( $plugin_slug, $active_plugins );
-		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-
-		$github_url = 'https://updates.appglut.com/plugins/checkoutglut.zip';
-		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
-		}
-
-		if ( $plugin_exists && ! $is_active ) : ?>
-			<!-- Plugin Installed - Show Activate Message -->
-			<div class="wrap shopglut-admin-contents" style="max-width: 700px; margin: 40px auto;">
-				<div class="shopglut-checkoutglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
+			<h2><?php echo esc_html__( 'Cart Page Layouts', 'shopglut' ); ?></h2>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
 					<div style="font-size: 64px; margin-bottom: 20px;">
-						<i class="fa fa-credit-card" style="color: #2271b1;"></i>
+						<span class="dashicons dashicons-cart" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
 					</div>
-					<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-						<?php esc_html_e( 'CheckoutGlut is Ready to Activate!', 'shopglut' ); ?>
-					</h1>
-					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-						<?php esc_html_e( 'Powerful WooCommerce checkout field editor with support for classic and block checkout.', 'shopglut' ); ?>
-					</p>
-					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-							<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-						</p>
-						<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero">
-							<i class="fa fa-power-off" style="margin-right: 5px;"></i>
-							<?php esc_html_e( 'Activate CheckoutGlut', 'shopglut' ); ?>
-						</a>
-					</div>
-				</div>
-			</div>
-		<?php elseif ( ! $plugin_exists && ! $is_active ) : ?>
-			<!-- Plugin Not Installed - Show Download Message -->
-			<div class="wrap shopglut-admin-contents" style="max-width: 700px; margin: 40px auto;">
-				<div class="shopglut-checkoutglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-					<div style="font-size: 64px; margin-bottom: 20px;">
-						<i class="fa fa-download" style="color: #2271b1;"></i>
-					</div>
-					<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-						<?php esc_html_e( 'Download CheckoutGlut Plugin', 'shopglut' ); ?>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
 					</h2>
-					<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-						<?php esc_html_e( 'Powerful WooCommerce checkout field editor with support for classic and block checkout, custom fields, field reordering, validation, and more.', 'shopglut' ); ?>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The cart page layouts feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
 					</p>
-					<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-						<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 16px; font-weight: 600;">
-							<?php esc_html_e( 'CheckoutGlut is completely free! Download the plugin to unlock powerful checkout field features.', 'shopglut' ); ?>
-						</p>
-						<a href="<?php echo esc_url( $github_url ); ?>" target="_blank" class="button button-primary button-hero" style="font-size: 16px; padding: 12px 30px;">
-							<i class="fa fa-cloud-download"></i> <?php esc_html_e( 'Download CheckoutGlut', 'shopglut' ); ?>
-						</a>
-					</div>
-					<div style="border-top: 1px solid #c3c4c7; padding-top: 25px; color: #646970; font-size: 14px; text-align: center;">
-						<p style="margin: 0 0 10px 0; font-weight: 600;">
-							<?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?>
-						</p>
-						<ol style="margin: 0; padding-left: 0; list-style-position: inline; text-align: left; display: inline-block;">
-							<li><?php esc_html_e( 'Download CheckoutGlut plugin', 'shopglut' ); ?></li>
-							<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
-							<li><?php esc_html_e( 'Upload and activate the CheckoutGlut plugin', 'shopglut' ); ?></li>
-							<li><?php esc_html_e( 'Return to this page to access the feature', 'shopglut' ); ?></li>
-						</ol>
-					</div>
 				</div>
 			</div>
-		<?php else : ?>
-			<!-- Plugin Active - Show Link to CheckoutGlut Admin -->
-			<div class="wrap shopglut-admin-contents">
-				<div style="max-width: 800px; margin: 12px auto; text-align: center;">
-					<div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 30px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-						<div style="margin-bottom: 30px;">
-							<div style="font-size: 64px; margin-bottom: 20px; opacity: 0.7;">
-								<i class="fa fa-credit-card" style="color: #4CAF50;"></i>
-							</div>
-							<h1 style="color: #2c3e50; font-size: 32px; font-weight: 600; margin: 0 0 15px 0; line-height: 1.3;">
-								<?php echo esc_html__( 'CheckoutGlut is Active!', 'shopglut' ); ?>
-							</h1>
-							<p style="color: #7f8c8d; font-size: 18px; margin: 0 0 40px 0; line-height: 1.6;">
-								<?php echo esc_html__( 'Your checkout field editor is now fully integrated. Click below to configure your checkout fields.', 'shopglut' ); ?>
-							</p>
-						</div>
-
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_checkout_fields' ) ); ?>" class="shopglut-wishlist-button">
-							<span><i class="fa fa-cog"></i></span>
-							<?php echo esc_html__( 'Go to Checkout Field Editor', 'shopglut' ); ?>
-						</a>
-					</div>
-				</div>
-			</div>
-		<?php endif;
-    }
-	
-	public function renderOrderThankyou() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
-		}
-
-		// Check if orderComplete_page module is enabled
-		$module_manager = \Shopglut\ModuleManager::get_instance();
-		if ( ! $module_manager->is_module_enabled( 'orderComplete_page' ) ) {
-			$module_manager->render_disabled_module_message( 'orderComplete_page' );
-			return;
-		}
-
-		// Handle individual delete action
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification happens below
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Sanitized and used for nonce verification
-			$layout_id = absint( $_GET['layout_id'] );
-
-			// Verify nonce
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This IS the nonce verification
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_layout_' . $layout_id ) ) {
-				// Delete the layout
-				$result = ordercompleteEntity::delete_layout( $layout_id );
-
-				// Cache clearing removed
-
-				// Redirect to avoid resubmission
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=ordercomplete&deleted=true' ) );
-				exit;
-			} else {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Debugging output
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) . '<br>Layout ID: ' . esc_html( $layout_id ) . '<br>Nonce: ' . esc_html( isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : 'not set' ) );
-			}
-		}
-
-		if ( isset( $_GET['deleted'] ) && $_GET['deleted'] === 'true' ) {
-			echo '<div class="updated notice"><p>' . esc_html__( 'Layout deleted successfully.', 'shopglut' ) . '</p></div>';
-		}
-		$layouts_table = new OrdercompleteListTable();
-		$layouts_table->prepare_items();
-		?>
-		<div class="wrap shopglut-admin-contents">
-			<h2><?php echo esc_html__( 'OrderComplete Page Layouts', 'shopglut' ); ?><a
-					href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=ordercomplete_templates' ) ); ?>"><span
-						class="add-new-h2"><?php echo esc_html__( 'Add New Layout', 'shopglut' ); ?></span></a></h2>
-			<form method="post">
-				<?php $layouts_table->display(); ?>
-			</form>
 		</div>
-		<?php //endif; ?>
-		<?php
-	}
-
-			public function renderMyAccount() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
-		}
-
-		// Check if myaccount-glut plugin is available - if not, show integration page
-		$plugin_slug = 'myaccount-glut/myaccount-glut.php';
-		$active_plugins = get_option( 'active_plugins', array() );
-		$is_active = in_array( $plugin_slug, $active_plugins );
-		$plugin_exists = file_exists( WP_PLUGIN_DIR . '/' . $plugin_slug );
-		$github_url = 'https://updates.appglut.com/plugins/myaccount-glut.zip';
-		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . $plugin_slug ), 'activate-plugin_' . $plugin_slug );
-
-		// If plugin doesn't exist or is not active, show integration page
-		if ( ! $is_active ) {
-			?>
-			<div class="wrap shopglut-admin-contents">
-				<h2><?php echo esc_html__( 'My Account Page Layouts', 'shopglut' ); ?></h2>
-
-				<?php if ( $plugin_exists && ! $is_active ) : ?>
-					<div class="shopglut-myaccountglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-myaccountglut-activate-notice" style="background: #fff; border: 1px solid #c3c4c7; padding: 40px; text-align: center;">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-admin-users" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h1 style="color: #1d2327; font-size: 28px; margin: 0 0 8px 0;">
-									<?php esc_html_e( 'MyAccountGlut is Ready to Activate!', 'shopglut' ); ?>
-								</h1>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Complete WooCommerce my account page builder with custom dashboard, endpoints, and beautiful layouts.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 20px; margin-bottom: 25px; text-align: center;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 15px; font-weight: 600;">
-										<?php esc_html_e( 'The plugin is already installed on your site. Just activate it to unlock all features.', 'shopglut' ); ?>
-									</p>
-									<a href="<?php echo esc_url( $activate_url ); ?>" class="button button-primary button-hero" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-										<span class="dashicons dashicons-yes-alt" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-										<span><?php esc_html_e( 'Activate MyAccountGlut', 'shopglut' ); ?></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				<?php else : ?>
-					<div class="shopglut-myaccountglut-integration">
-						<div style="max-width: 700px; margin: 20px auto;">
-							<div class="shopglut-myaccountglut-download-notice" style="background: #fff; border: 1px solid #e0e0e0; padding: 40px; text-align: center; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-								<div style="font-size: 64px; margin-bottom: 20px;">
-									<span class="dashicons dashicons-download" style="color: #2271b1; font-size: 64px; width: 64px; height: 64px;"></span>
-								</div>
-								<h2 style="color: #2c3e50; font-size: 28px; margin: 0 0 10px 0;">
-									<?php esc_html_e( 'Download MyAccountGlut Plugin', 'shopglut' ); ?>
-								</h2>
-								<p style="color: #50575e; font-size: 16px; margin: 0 0 30px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-									<?php esc_html_e( 'Complete WooCommerce my account page builder with custom dashboard, endpoints, and beautiful layouts for your customers.', 'shopglut' ); ?>
-								</p>
-								<div style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
-									<p style="margin: 0 0 15px 0; color: #0a4b78; font-size: 14px;">
-										<strong><?php esc_html_e( 'Installation Instructions:', 'shopglut' ); ?></strong>
-									</p>
-									<ol style="margin: 0 0 20px 20px; padding: 0; color: #0a4b78; font-size: 14px; text-align: left;">
-										<li><?php esc_html_e( 'Click the download button below to get the plugin zip file', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Go to Plugins → Add New → Upload Plugin', 'shopglut' ); ?></li>
-										<li><?php esc_html_e( 'Install and activate the plugin', 'shopglut' ); ?></li>
-									</ol>
-									<a href="<?php echo esc_url( $github_url ); ?>" class="button button-primary button-hero" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-										<span class="dashicons dashicons-download" style="margin: 0; font-size: 16px; width: 16px; height: 16px;"></span>
-										<span><?php esc_html_e( 'Download MyAccountGlut', 'shopglut' ); ?></span>
-									</a>
-								</div>
-								<p style="margin: 0; color: #64748b; font-size: 13px;">
-									<?php esc_html_e( 'After activation, return to this page to manage your account page layouts.', 'shopglut' ); ?>
-								</p>
-							</div>
-						</div>
-					</div>
-				<?php endif; ?>
-			</div>
 		<?php
 		return;
+	}
+		public function renderCheckout() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
-		// Check if account_page module is enabled
-		$module_manager = \Shopglut\ModuleManager::get_instance();
-		if ( ! $module_manager->is_module_enabled( 'account_page' ) ) {
-			$module_manager->render_disabled_module_message( 'account_page' );
-			return;
-		}
-
-		// Handle individual delete action
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
-			$layout_id = absint( $_GET['layout_id'] );
-
-			// Verify nonce
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_layout_' . $layout_id ) ) {
-				// Delete the layout
-				AccountPageEntity::delete_layout( $layout_id );
-
-				// Redirect to avoid resubmission
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_layouts&view=accountpage&deleted=true' ) );
-				exit;
-			} else {
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
-			}
-		}
-
-		if ( isset( $_GET['deleted'] ) && $_GET['deleted'] === 'true' ) {
-			echo '<div class="updated notice"><p>' . esc_html__( 'Layout deleted successfully.', 'shopglut' ) . '</p></div>';
-		}
-		$layouts_table = new AccountPageListTable();
-		$layouts_table->prepare_items();
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h2><?php echo esc_html__( 'My Account Page Layouts', 'shopglut' ); ?><a
-					href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_layouts&view=accountpage_templates' ) ); ?>"><span
-						class="add-new-h2"><?php echo esc_html__( 'Add New Layout', 'shopglut' ); ?></span></a></h2>
-			<form method="post">
-				<?php $layouts_table->display(); ?>
-			</form>
+			<h2><?php echo esc_html__( 'Checkout Page Layouts', 'shopglut' ); ?></h2>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-admin-home" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The checkout page layouts feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
 		</div>
-		<?php //endif; ?>
 		<?php
+		return;
+	}
+		public function renderOrderThankyou() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
+
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
+		?>
+		<div class="wrap shopglut-admin-contents">
+			<h2><?php echo esc_html__( 'Order Thank You Page Layouts', 'shopglut' ); ?></h2>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-yes-alt" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The order thank you page layouts feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+		<?php
+		return;
 	}
 
+	public function renderMyAccount() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
 
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
+		?>
+		<div class="wrap shopglut-admin-contents">
+			<h2><?php echo esc_html__( 'My Account Page Layouts', 'shopglut' ); ?></h2>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-admin-users" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The my account page layouts feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+		<?php
+		return;
+	}
 
 	public function renderProductPage() {
 		 //if($this->not_implemented):
@@ -1086,7 +643,9 @@ class AllLayouts {
 			$this->settingsPageHeader( $active_menu );
 			?>
 			<div class="wrap shopglut-admin-contents">
+				<?php if ( $plugin_exists && $is_active ) : ?>
 				<h2><?php echo esc_html__( 'Product Page Layouts', 'shopglut' ); ?></h2>
+				<?php endif; ?>
 
 				<?php if ( $plugin_exists && ! $is_active ) : ?>
 					<div class="shopglut-productpageglut-integration">
@@ -1879,6 +1438,12 @@ class AllLayouts {
 				$module_plugins = $this->getModulePluginInfo();
 
 				foreach ( $all_modules as $module_key => $module_info ) {
+					// Skip modules that are marked as coming soon
+					$is_coming_soon = isset( $module_info['coming_soon'] ) && $module_info['coming_soon'];
+					if ( $is_coming_soon ) {
+						continue;
+					}
+
 					$is_enabled = $module_manager->is_module_enabled( $module_key );
 					$disabled_class = $is_enabled ? '' : 'disabled';
 					$module_url = isset( $module_urls[ $module_key ] ) ? $module_urls[ $module_key ] : '#';
@@ -1934,8 +1499,13 @@ class AllLayouts {
 										</span>
 									</div>
 								<?php endif; ?>
+							<?php elseif ( isset( $is_coming_soon ) && $is_coming_soon ) : ?>
+								<div class="plugin-update-badge">
+									<span class="update-badge" style="background: #646970;">
+										<?php esc_html_e( 'Coming Soon', 'shopglut' ); ?>
+									</span>
+								</div>
 							<?php endif; ?>
-						</div>
 
 						<?php if ( ! empty( $features ) ) : ?>
 						<div class="module-body">
@@ -2133,20 +1703,9 @@ class AllLayouts {
 	 */
 	private function getModuleUrls() {
 		return [
-			// Layout Modules
-			'single_product' => admin_url( 'admin.php?page=shopglut_layouts&view=product_page' ),
-			'cart_page' => admin_url( 'admin.php?page=shopglut_layouts&view=cartpage' ),
-			'checkout_field_editor' => admin_url( 'admin.php?page=shopglut_layouts&view=checkout' ),
-
-			// Enhancement Modules
-			'wishlist' => admin_url( 'admin.php?page=shopglut_enhancements&view=wishlist' ),
-			'product_badges' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_badges' ),
-			'product_comparison' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_comparisons' ),
-			'product_swatches' => admin_url( 'admin.php?page=shopglut_enhancements&view=product_swatches' ),
-
-			// Tool Modules
-			'acf_fields' => admin_url( 'admin.php?page=shopglut_tools&view=acf_fields' ),
-			'shortcode_showcase' => admin_url( 'admin.php?page=shopglut_shortcode_showcase' ),
+			// Layout Modules - single_product points to external plugin
+			'single_product' => admin_url( 'admin.php?page=productpageglut_layouts' ),
+			// Other modules are coming soon - no URLs
 		];
 	}
 
@@ -2162,58 +1721,7 @@ class AllLayouts {
 				__( 'Product image & gallery styles', 'shopglut' ),
 				__( 'Apply to all/specific products', 'shopglut' )
 			],
-			'cart_page' => [
-				__( 'Custom cart table design', 'shopglut' ),
-				__( 'Product image & title styles', 'shopglut' ),
-				__( 'Order summary section', 'shopglut' ),
-				__( 'Security badges display', 'shopglut' )
-			],
-			'checkout_field_editor' => [
-				__( '15+ field types', 'shopglut' ),
-				__( 'Field reordering', 'shopglut' ),
-				__( 'Field validation', 'shopglut' ),
-				__( 'Import/export fields', 'shopglut' )
-			],
-
-			// Enhancement Modules
-			'wishlist' => [
-				__( 'Unlimited wishlist items', 'shopglut' ),
-				__( 'Guest wishlist support', 'shopglut' ),
-				__( 'Social sharing options', 'shopglut' ),
-				__( 'Add to wishlist button', 'shopglut' )
-			],
-			'product_badges' => [
-				__( 'Unlimited badges', 'shopglut' ),
-				__( 'Text & image badges', 'shopglut' ),
-				__( 'Sale badges', 'shopglut' ),
-				__( 'Custom positioning', 'shopglut' )
-			],
-			'product_comparison' => [
-				__( 'Unlimited comparison fields', 'shopglut' ),
-				__( 'Custom comparison tables', 'shopglut' ),
-				__( 'Product attribute sync', 'shopglut' ),
-				__( 'Responsive table design', 'shopglut' )
-			],
-			'product_swatches' => [
-				__( 'Color swatches', 'shopglut' ),
-				__( 'Image swatches', 'shopglut' ),
-				__( 'Label swatches', 'shopglut' ),
-				__( 'Round/square styles', 'shopglut' )
-			],
-
-			// Tool Modules
-			'acf_fields' => [
-				__( 'Multiple field types', 'shopglut' ),
-				__( 'Custom field groups', 'shopglut' ),
-				__( 'Display on frontend', 'shopglut' ),
-				__( 'Field validation', 'shopglut' )
-			],
-			'shortcode_showcase' => [
-				__( 'Product grid shortcodes', 'shopglut' ),
-				__( 'Category-based display', 'shopglut' ),
-				__( 'Custom layout options', 'shopglut' ),
-				__( 'Filtering & sorting', 'shopglut' )
-			]
+			// Other modules are coming soon - no features listed
 		];
 	}
 
@@ -2223,47 +1731,12 @@ class AllLayouts {
 	 */
 	private function getModulePluginInfo() {
 		return array(
-			// Layout Modules
+			// Layout Modules - only single_product has external plugin
 			'single_product' => array(
 				'basename' => 'productpage-glut/productpage-glut.php',
-				'homepage' => 'https://wordpress.org/plugins/productpage-glut/'
+				'homepage' => 'https://wordpress.org/plugins/productpageglut/'
 			),
-			'cart_page' => array(
-				'basename' => 'cartpage-glut/cartpage-glut.php',
-				'homepage' => 'https://github.com/appglut/cartpage-glut'
-			),
-			'checkout_field_editor' => array(
-				'basename' => 'checkoutglut/checkoutglut.php',
-				'homepage' => 'https://github.com/appglut/checkoutglut'
-			),
-
-			// Enhancement Modules
-			'wishlist' => array(
-				'basename' => 'wishglut/wishglut.php',
-				'homepage' => 'https://github.com/appglut/wishglut'
-			),
-			'product_badges' => array(
-				'basename' => 'shopglut/shopglut.php',
-				'homepage' => 'https://wordpress.org/plugins/shopglut/'
-			),
-			'product_comparison' => array(
-				'basename' => 'shopglut/shopglut.php',
-				'homepage' => 'https://wordpress.org/plugins/shopglut/'
-			),
-			'product_swatches' => array(
-				'basename' => 'shopglut/shopglut.php',
-				'homepage' => 'https://wordpress.org/plugins/shopglut/'
-			),
-
-			// Tool Modules (all in shopglut)
-			'acf_fields' => array(
-				'basename' => 'shopglut/shopglut.php',
-				'homepage' => 'https://wordpress.org/plugins/shopglut/'
-			),
-			'shortcode_showcase' => array(
-				'basename' => 'shopglut/shopglut.php',
-				'homepage' => 'https://wordpress.org/plugins/shopglut/'
-			)
+			// Other modules are coming soon - no plugin info
 		);
 	}
 

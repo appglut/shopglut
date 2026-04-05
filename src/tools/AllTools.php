@@ -93,7 +93,7 @@ class AllTools {
 
 		//$cartpage_editor = new CartPageBuilderEditor();
 
-			$product_custom_field_settings_page = new ProductCustomFieldSettingsPage();
+			//$product_custom_field_settings_page = new ProductCustomFieldSettingsPage();
 
 			
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for routing only
@@ -242,6 +242,9 @@ class AllTools {
 							break;
 						case 'product_custom_field':
 							$this->renderAcfSettingsTable();
+							break;
+						case 'shortcode_showcase':
+							$this->renderShortcodeShowcase();
 							break;
 						case 'woo_themes':
 							$this->renderWooThemes();
@@ -400,169 +403,224 @@ class AllTools {
 	}
 
 	public function renderAcfSettingsTable() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
-		// Check if acf_fields module is enabled
-		$module_manager = \Shopglut\ModuleManager::get_instance();
-		if ( ! $module_manager->is_module_enabled( 'acf_fields' ) ) {
-			$module_manager->render_disabled_module_message( 'acf_fields' );
-			return;
-		}
-
-		// Handle delete action
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification performed below
-		if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] && isset( $_GET['field_id'] ) ) {
-			$field_id = absint( $_GET['field_id'] );
-
-			// Verify nonce
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is performed here
-			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'shopglut_delete_product_custom_field_' . $field_id ) ) {
-				global $wpdb;
-				$table_name = \Shopglut\ShopGlutDatabase::table_product_custom_field_settings();
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Safe table name from internal function
-				$wpdb->delete( $table_name, array( 'id' => $field_id ), array( '%d' ) );
-				wp_safe_redirect( admin_url( 'admin.php?page=shopglut_tools&view=product_custom_field&product_custom_field_deleted=1' ) );
-				exit;
-			} else {
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
-			}
-		}
-
-		// Display success message if Product Custom Field was deleted
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for success message display only
-		if ( isset( $_GET['product_custom_field_deleted'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['product_custom_field_deleted'] ) ) ) {
-			echo '<div class="updated notice"><p>' . esc_html__( 'Custom field deleted successfully.', 'shopglut' ) . '</p></div>';
-		}
-
-		$product_custom_field_table = new ProductCustomFieldListTable();
-		$product_custom_field_table->prepare_items();
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h2>
-				<?php echo esc_html__( 'Product Custom Fields', 'shopglut' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=shopglut_tools&editor=product_custom_field&field_id=0' ) ); ?>" class="add-new-h2">
-					<?php echo esc_html__( 'Add New', 'shopglut' ); ?>
-				</a>
-			</h2>
-			<form method="post">
-				<?php $product_custom_field_table->display(); ?>
-			</form>
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-admin-customizer" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The product custom field feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
 		</div>
-		<?php //endif; ?>
 		<?php
+		return;
 	}
 
 	// New Render Methods for View-based Navigation
 	public function renderShortcodeShowcase() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
+
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
 		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
+		<div class="wrap shopglut-admin-contents">
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-shortcode" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The shortcode showcase feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
 		<?php
-		// Check if ShortcodeGlut plugin is active first
-		$shortcodeglut_active = $this->is_shortcodeglut_active();
-
-		if ( $shortcodeglut_active ) {
-			// Use ShortcodeGlut's Shortcode Showcase
-			$this->render_shortcodeglut_shortcode_showcase();
-		} else {
-			// Show download message when ShortcodeGlut is not active
-			$this->render_shortcodeglut_download_message( 'shortcode_showcase' );
-		}
-		?>
-		<?php //endif; ?>
-		<?php
+		return;
 	}
 
 	public function renderProductTemplates() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		// Check if ShortcodeGlut plugin is active first
-		$shortcodeglut_active = $this->is_shortcodeglut_active();
-
-		if ( $shortcodeglut_active ) {
-			// Use ShortcodeGlut's Woo Templates
-			$this->render_shortcodeglut_woo_templates();
-		} else {
-			// Show download message when ShortcodeGlut is not active
-			$this->render_shortcodeglut_download_message( 'woo_templates' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
-		?>
-		<?php //endif; ?>
-		<?php
-	}
 
-	public function renderLoginRegister() {
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
 		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		// Include the login register system
-		require_once SHOPGLUT_PATH . 'src/tools/loginRegister/LoginRegister.php';
-		$loginRegister = new \Shopglut\tools\loginRegister\LoginRegister();
-		$loginRegister->renderLoginRegisterContent();
-		?>
-		<?php //endif; ?>
-		<?php
-	}
-
-	public function renderMiniCart() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		// Use singleton instance from ShopGlutBase initialization
-		$miniCart = \Shopglut\tools\miniCart\MiniCart::get_instance();
-		$miniCart->renderMiniCartContent();
-		?>
-		<?php //endif; ?>
-		<?php
-	}
-
-	public function renderWooThemes() {
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<?php //if($this->not_implemented): ?>
-			<?php //$this->renderNotImplementedMessage(); ?>
-		<?php //else: ?>
-		<?php
-		$woo_themes = new WooThemes();
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for display mode only
-		if ( isset( $_GET['customize'] ) ) {
-			$woo_themes->renderCustomizer();
-		} else {
-			$woo_themes->renderThemesList();
+		<div class="wrap shopglut-admin-contents">
+			<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+				<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+					<div style="font-size: 64px; margin-bottom: 20px;">
+						<span class="dashicons dashicons-schedule" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+					</div>
+					<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+						<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+					</h2>
+					<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+						<?php esc_html_e( 'The WooCommerce templates feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+					</p>
+				</div>
+				</div>
+			</div>
+		</div>
+			<?php
+			return;
 		}
-		?>
-		<?php //endif; ?>
-		<?php
-	}
 
-	public function renderWooCommerceTools() {
+		public function renderWooThemes() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+			}
+
+			$active_menu = $this->activeMenuTab();
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-admin-appearance" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'The WooCommerce themes feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		public function renderLoginRegister() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+			}
+
+			$active_menu = $this->activeMenuTab();
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-admin-users" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'The login and register feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		public function renderMiniCart() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+			}
+
+			$active_menu = $this->activeMenuTab();
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-cart" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'The mini cart feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		public function renderWooBuilderPage() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+			}
+
+			$active_menu = $this->activeMenuTab();
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-building" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'The WooCommerce builder feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		public function renderWooBusiness() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+			}
+
+			$active_menu = $this->activeMenuTab();
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-businessperson" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Feature Not Added', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'The business solutions feature has not been added yet. This feature will be available in a future update.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		public function renderWooCommerceTools() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}

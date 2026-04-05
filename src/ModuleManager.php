@@ -35,80 +35,85 @@ class ModuleManager {
                 'description' => __('Design Stunning Product Pages', 'shopglut'),
                 'type' => 'layout',
                 'table_method' => 'create_single_layouts',
-                'icon' => 'fas fa-box-open'
+                'icon' => 'fas fa-box-open',
+                'external_plugin' => 'productpage-glut',
+                'plugin_url' => 'https://wordpress.org/plugins/productpageglut/'
             ],
             'cart_page' => [
                 'name' => __('Cart Page', 'shopglut'),
-                'description' => __('Cart Layout Builder', 'shopglut'),
+                'description' => __('Cart Layout Builder - Coming Soon', 'shopglut'),
                 'type' => 'layout',
                 'table_method' => 'create_cartpage_layouts',
-                'icon' => 'fas fa-shopping-cart'
+                'icon' => 'fas fa-shopping-cart',
+                'coming_soon' => true
             ],
             'checkout_field_editor' => [
                 'name' => __('Checkout Field Editor', 'shopglut'),
-                'description' => __('Customize Checkout Fields', 'shopglut'),
+                'description' => __('Customize Checkout Fields - Coming Soon', 'shopglut'),
                 'type' => 'layout',
                 'table_method' => 'create_checkout_fields',
-                'icon' => 'fa-solid fa-credit-card'
+                'icon' => 'fa-solid fa-credit-card',
+                'coming_soon' => true
             ],
 
             // Enhancement Modules
             'wishlist' => [
                 'name' => __('Wishlist', 'shopglut'),
-                'description' => __('Save Favorite Products', 'shopglut'),
+                'description' => __('Save Favorite Products - Coming Soon', 'shopglut'),
                 'type' => 'enhancement',
                 'table_method' => 'create_wishlist_table',
-                'icon' => 'fas fa-heart'
+                'icon' => 'fas fa-heart',
+                'coming_soon' => true
             ],
             'product_badges' => [
                 'name' => __('Product Badges', 'shopglut'),
-                'description' => __('Custom Product Labels', 'shopglut'),
+                'description' => __('Custom Product Labels - Coming Soon', 'shopglut'),
                 'type' => 'enhancement',
                 'table_method' => 'create_product_badges',
-                'icon' => 'fas fa-tags'
+                'icon' => 'fas fa-tags',
+                'coming_soon' => true
             ],
             'product_comparison' => [
                 'name' => __('Product Comparison', 'shopglut'),
-                'description' => __('Compare Products Table', 'shopglut'),
+                'description' => __('Compare Products Table - Coming Soon', 'shopglut'),
                 'type' => 'enhancement',
                 'table_method' => 'create_showcase_comparison',
-                'icon' => 'fas fa-balance-scale'
+                'icon' => 'fas fa-balance-scale',
+                'coming_soon' => true
             ],
             'product_swatches' => [
                 'name' => __('Product Swatches', 'shopglut'),
-                'description' => __('Color Image Swatches', 'shopglut'),
+                'description' => __('Color Image Swatches - Coming Soon', 'shopglut'),
                 'type' => 'enhancement',
                 'table_method' => null,
-                'icon' => 'fas fa-palette'
+                'icon' => 'fas fa-palette',
+                'coming_soon' => true
             ],
 
             // Tool Modules
             'acf_fields' => [
                 'name' => __('Product Custom Fields', 'shopglut'),
-                'description' => __('Product Custom Fields', 'shopglut'),
+                'description' => __('Product Custom Fields - Coming Soon', 'shopglut'),
                 'type' => 'tool',
                 'table_method' => 'create_product_custom_field_settings',
-                'icon' => 'fas fa-plus-circle'
+                'icon' => 'fas fa-plus-circle',
+                'coming_soon' => true
             ],
             'shortcode_showcase' => [
                 'name' => __('Shortcode Showcase', 'shopglut'),
-                'description' => __('Product Display Shortcodes', 'shopglut'),
+                'description' => __('Product Display Shortcodes - Coming Soon', 'shopglut'),
                 'type' => 'tool',
                 'table_method' => 'create_shortcodes_showcase',
-                'icon' => 'fa-solid fa-code'
+                'icon' => 'fa-solid fa-code',
+                'coming_soon' => true
             ]
         ];
     }
 
     private function initialize_default_states() {
-        // Core modules that should be enabled by default (always initialized in ShopGlutBase)
-        $core_modules = [
+        // Only single_product is available as external plugin
+        $available_modules = [
             'single_product',
-            'cart_page',
-            'product_badges',
-            'product_comparison',
-            'product_swatches',
-            'acf_fields',
         ];
 
         // Set default states for all modules
@@ -116,8 +121,8 @@ class ModuleManager {
             $option_name = 'shopglut_module_' . $module_key . '_enabled';
             // Only set if the option doesn't exist in the database
             if (get_option($option_name) === false) {
-                // Core modules are enabled by default, others are disabled
-                $default_enabled = in_array($module_key, $core_modules, true);
+                // Only available modules are enabled by default
+                $default_enabled = in_array($module_key, $available_modules, true);
                 add_option($option_name, $default_enabled);
             }
         }

@@ -21,9 +21,10 @@ AGSHOPGLUT::createOptions( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	'show_reset_section' => true,
 	'framework_class' => 'shopglut_integration_settings',
 	'footer_credit' => __( "ShopGlut", 'shopglut' ),
-	'menu_position' => 6,
+	'menu_position' => 5,
 ) );
 
+/*
 // Create a top-tab
 AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	'id' => 'shortcodes_tab',
@@ -81,32 +82,6 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	'id' => 'checkoutglut_tab',
 	'title' => __( 'CheckoutGlut', 'shopglut' ),
 	'icon' => 'fa fa-check-square',
-) );
-
-// Create ProductPageGlut tab
-AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'id' => 'productpageglut_tab',
-	'title' => __( 'ProductPageGlut', 'shopglut' ),
-	'icon' => 'fa fa-box-open',
-) );
-
-// Create ProductPageGlut sub-tab
-AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'parent' => 'productpageglut_tab',
-	'title' => __( 'General', 'shopglut' ),
-	'fields' => array(
-
-		array(
-			'id' => 'productpageglut-show-menu',
-			'type' => 'switcher',
-			'title' => __( 'Show ProductPageGlut Menu', 'shopglut' ),
-			'desc' => __( 'When enabled, ProductPageGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
-			'text_on' => __( 'Yes', 'shopglut' ),
-			'text_off' => __( 'No', 'shopglut' ),
-			'default' => 1,
-		),
-
-	)
 ) );
 
 // Create CheckoutGlut sub-tab
@@ -167,6 +142,33 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 		array(
 			'id' => 'shopglut_related_plugins_list',
 			'type' => 'related_plugins'
+		),
+
+	)
+) );
+*/
+
+// Create ProductPageGlut tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'id' => 'productpageglut_tab',
+	'title' => __( 'ProductPageGlut', 'shopglut' ),
+	'icon' => 'fa fa-box-open',
+) );
+
+// Create ProductPageGlut sub-tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'parent' => 'productpageglut_tab',
+	'title' => __( 'General', 'shopglut' ),
+	'fields' => array(
+
+		array(
+			'id' => 'productpageglut-show-menu',
+			'type' => 'switcher',
+			'title' => __( 'Show ProductPageGlut Menu', 'shopglut' ),
+			'desc' => __( 'When enabled, ProductPageGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
+			'text_on' => __( 'Yes', 'shopglut' ),
+			'text_off' => __( 'No', 'shopglut' ),
+			'default' => 1,
 		),
 
 	)

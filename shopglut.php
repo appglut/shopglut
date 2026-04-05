@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: ShopGlut - Builder for WooCommerce
- * Description: Complete WooCommerce builder with 9 powerful modules including single product builder, cart page, checkout editor, order complete, wishlist, product custom fields, swatches, badges, and comparison for professional e-commerce sites
+ * Description: Lightweight integration plugin. Product Page Builder available in ProductPage Glut plugin.
  * Version: 1.7.8
  * Author: AppGlut
  * Author URI: https://www.appglut.com
@@ -15,7 +15,7 @@
 defined( 'ABSPATH' ) or die;
 
 define( 'SHOPGLUT_NAME', 'ShopGlut' );
-define( 'SHOPGLUT_VERSION', '1.7.7' );
+define( 'SHOPGLUT_VERSION', '1.7.8' );
 define( 'SHOPGLUT_BASENAME', plugin_basename( __FILE__ ) );
 define( 'SHOPGLUT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SHOPGLUT_URL', plugin_dir_url( __FILE__ ) );
