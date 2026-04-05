@@ -444,7 +444,7 @@ class AllLayouts {
 		?>
 		<div class="wrap shopglut-admin-contents shoplayouts-templates">
 			<h1><?php echo esc_html__( 'Prebuilt SingleProduct Templates', 'shopglut' ); ?></h1>
-			<p class="subheading"><?php echo esc_html__( 'Choose your desired template to customize', 'shopglut' ); ?></p>
+			<p class="subheading" style="text-align: center;"><?php echo esc_html__( 'Choose your desired template to customize', 'shopglut' ); ?></p>
 			<?php echo $notice_html; ?>
 			<?php $shopLayout_templates->loadSingleProductTemplates(); ?>
 		</div>
