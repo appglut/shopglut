@@ -189,11 +189,16 @@ class AllLayouts {
 						break;
 					case 'productpageglut':
 					case 'product_page':
-						$this->renderProductPage();
+
+					case product_page_templates:
+					case single_product_templates:
+						$this->ProductPageLayoutTemplatesPage();
 						break;
-					case 'product_page_templates':
+t				case 'product_page_templates':
 					case 'single_product_templates':
 						$this->ProductPageLayoutTemplatesPage();
+						break;
+						$this->renderProductPage();
 						break;
 					case 'cartpage':
 						$this->renderCart();
