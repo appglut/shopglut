@@ -841,8 +841,12 @@ div#agshopglut_post_options {
   border: 1px solid #d9d9d9;
 }
 
-.shopglut_layout_contents .shopglut_php_scode {
+.shopglut_layout_shortcode.shopglut_layout_shortcode .shopglut_php_scode {
   padding-right: 10px;
+  display: inline-flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 4px !important;
 }
 
 .shopglut_php_scode .shopglut__sc-title {
@@ -856,6 +860,21 @@ div#agshopglut_post_options {
   margin-right: 5px;
   border: 1px solid #ededed;
   margin-left:7px;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+/* Responsive: Stack items on small screens */
+@media (max-width: 768px) {
+  .shopglut_layout_contents .shopglut_layout_shortcode {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .shopglut_layout_shortcode.shopglut_layout_shortcode .shopglut_php_scode {
+    width: 100% !important;
+  }
 }
 
 .shopglut_layout_contents span.shopglut__shortcode-selectable {
@@ -941,10 +960,10 @@ div#agshopglut_post_options {
   display: flex;
   background: #ffffff;
   border-radius: 8px;
-  padding-left: 25px;
+  padding-left: 8px;
   padding-bottom: 10px;
   padding-top: 7px;
-  padding-right: 25px;
+  padding-right: 8px;
 }
 
 .shopglut_layout_contents .shopglut_editor_header a {

@@ -338,17 +338,22 @@ class ShopGlutBase {
 			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
 		}
 
-		// Check for productpage-glut/productpage-glut.php or productpage-glut/productpage-glut.php plugin
+		// Check for productpage-glut (free) or productpage-glut-pro plugin
 		foreach ( $active_plugins as $plugin ) {
 			if ( $plugin === 'productpage-glut/productpage-glut.php'
-				|| $plugin === 'productpage-glut/productpage-glut.php' ) {
+				|| $plugin === 'productpage-glut/productpage-glut.php'
+				|| $plugin === 'productpage-glut-pro/productpage-glut-pro.php' ) {
 				return true;
 			}
 		}
 
-		// Also check if the main class exists (including productpageglut variant)
+		// Also check if the main class exists (including productpageglut variant and pro)
 		return class_exists( 'ProductPageGlut\\ProductPageGlutBase' )
-			|| class_exists( 'Productpageglut\\ProductpageglutBase' );
+			|| class_exists( 'Productpageglut\\ProductpageglutBase' )
+			|| class_exists( 'ProductPage_Glut_Pro' )
+			|| defined( 'PRODUCTPAGEGLUT_PRO_PATH' )
+			|| defined( 'PRODUCTPAGEGLUT_SINGLEPRODUCT_PRO_VERSION' )
+			|| defined( 'PRODUCTPAGEGLUT_PRO_BASENAME' );
 	}
 
 	/**

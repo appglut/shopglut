@@ -145,6 +145,28 @@ class AllLayouts {
 		}
 
 
+		// Handle cartpage editor - use cartpage-glut's editor if active
+		if ( 'shopglut_layouts' === $page && in_array( $editor, array( 'cart_page', 'cartpage' ), true ) && $layout_id > 0 ) {
+			if ( $this->is_cartpageglut_active() ) {
+				// Include Cartpageglut classes
+				$autoloader_paths = array(
+					WP_PLUGIN_DIR . '/cartpage-glut/autoloader.php',
+				);
+				foreach ( $autoloader_paths as $autoloader_path ) {
+					if ( file_exists( $autoloader_path ) ) {
+						include_once $autoloader_path;
+						break;
+					}
+				}
+
+				if ( class_exists( 'Cartpageglut\\layouts\\cartPage\\SettingsPage' ) ) {
+					$cartPage_editor = new \Cartpageglut\layouts\cartPage\SettingsPage();
+					$cartPage_editor->loadCartPageEditor();
+					return;
+				}
+			}
+		}
+
 		// Handle productpageglut editor - use productpage-glut's editor if active, otherwise use shopglut's embedded editor
 // 		if ( 'shopglut_layouts' === $page && 'productpageglut' === $editor && $layout_id > 0 ) {
 			// Add filters to override URLs when used in shopglut context
@@ -197,6 +219,10 @@ class AllLayouts {
 						break;
 					case 'cartpage':
 						$this->renderCart();
+						break;
+					case 'cartpage_templates':
+					case 'cart_page_templates':
+						$this->CartlayoutTemplatesPage();
 						break;
 					case 'checkout':
 						$this->renderCheckout();
@@ -452,15 +478,65 @@ class AllLayouts {
 	}
 
 	public function CartlayoutTemplatesPage() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
+
+		// Check if Cartpageglut is active
+		if ( ! $this->is_cartpageglut_active() ) {
+			$active_menu = 'cartpage';
+			$this->settingsPageHeader( $active_menu );
+			?>
+			<div class="wrap shopglut-admin-contents">
+				<h2><?php echo esc_html__( 'Cart Page Templates', 'shopglut' ); ?></h2>
+				<div class="shopglut-feature-not-added" style="max-width: 700px; margin: 40px auto;">
+					<div style="background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #d63638; padding: 40px; text-align: center; border-radius: 8px;">
+						<div style="font-size: 64px; margin-bottom: 20px;">
+							<span class="dashicons dashicons-cart" style="color: #d63638; font-size: 64px; width: 64px; height: 64px;"></span>
+						</div>
+						<h2 style="color: #1d2327; font-size: 28px; margin: 0 0 15px 0;">
+							<?php esc_html_e( 'Plugin Not Active', 'shopglut' ); ?>
+						</h2>
+						<p style="color: #50575e; font-size: 16px; margin: 0 0 20px 0; max-width: 500px; margin-left: auto; margin-right: auto;">
+							<?php esc_html_e( 'Please install and activate the CartpageGlut plugin to access cart page templates.', 'shopglut' ); ?>
+						</p>
+					</div>
+				</div>
+			</div>
+			<?php
+			return;
+		}
+
+		// Include Cartpageglut classes
+		$autoloader_paths = array(
+			WP_PLUGIN_DIR . '/cartpage-glut/autoloader.php',
+		);
+		foreach ( $autoloader_paths as $autoloader_path ) {
+			if ( file_exists( $autoloader_path ) ) {
+				include_once $autoloader_path;
+				break;
+			}
+		}
+
 		$active_menu = 'cartpage';
 		$this->settingsPageHeader( $active_menu );
-		$cartLayout_templates = new CartPageTemplates();
+
+		// Load the chooseTemplates class from Cartpageglut
+		$template_class = 'Cartpageglut\\layouts\\cartPage\\chooseTemplates';
+
+		if ( ! class_exists( $template_class ) ) {
+			echo '<p>' . esc_html__( 'Templates class not found. Please make sure CartpageGlut plugin is properly installed.', 'shopglut' ) . '</p>';
+			return;
+		}
+
+		$cartLayout_templates = new $template_class();
 		?>
 		<div class="wrap shopglut-admin-contents shoplayouts-templates">
-			<h1><?php echo esc_html__( 'PreBuilt Cart Layout Templates', 'shopglut' ); ?></h1>
+			<h1><?php echo esc_html__( 'Prebuilt Cart Page Templates', 'shopglut' ); ?></h1>
 			<p class="subheading"><?php echo esc_html__( 'Choose your desired template to customize', 'shopglut' ); ?></p>
+			<?php $cartLayout_templates->loadCartPageTemplates(); ?>
 		</div>
-		<?php $cartLayout_templates->loadCartPageTemplates();
+		<?php
 	}
 	
 	public function ThanklayoutTemplatesPage() {
@@ -492,6 +568,12 @@ class AllLayouts {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
 		}
 
+		// Check if Cartpageglut is active and render the list table
+		if ( $this->is_cartpageglut_active() ) {
+			$this->renderCartPageListTable();
+			return;
+		}
+
 		$active_menu = $this->activeMenuTab();
 		$this->settingsPageHeader( $active_menu );
 		?>
@@ -513,6 +595,145 @@ class AllLayouts {
 		</div>
 		<?php
 		return;
+	}
+
+	
+	/**
+	 * Render cart page layouts list table using Cartpageglut classes
+	 */
+	private function renderCartPageListTable() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shopglut' ) );
+		}
+
+		// Include Cartpageglut classes
+		$autoloader_paths = array(
+			WP_PLUGIN_DIR . '/cartpage-glut/autoloader.php',
+		);
+		foreach ( $autoloader_paths as $autoloader_path ) {
+			if ( file_exists( $autoloader_path ) ) {
+				include_once $autoloader_path;
+				break;
+			}
+		}
+
+		// Handle individual delete action FIRST - before any other actions
+		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['layout_id'] ) ) {
+			$layout_id = absint( $_GET['layout_id'] );
+
+			// Verify nonce
+			if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), \Cartpageglut\layouts\cartPage\Helper::get_delete_nonce_action( $layout_id ) ) ) {
+				// Delete the layout
+				\Cartpageglut\layouts\cartPage\CartPageEntity::delete_layout( $layout_id );
+
+				// Redirect to avoid resubmission
+				$redirect_url = add_query_arg(
+					array(
+						'page' => 'shopglut_layouts',
+						'view' => 'cartpage',
+						'deleted' => 'true'
+					),
+					admin_url( 'admin.php' )
+				);
+				wp_safe_redirect( $redirect_url );
+				exit;
+			} else {
+				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
+			}
+		}
+
+		// Show success/error messages
+		if ( isset( $_GET['deleted'] ) && $_GET['deleted'] === 'true' ) {
+			echo '<div class="updated notice"><p>' . esc_html__( 'Layout deleted successfully.', 'shopglut' ) . '</p></div>';
+		}
+
+		// Handle bulk delete action (check POST before any output)
+		if ( isset( $_POST['action'] ) && $_POST['action'] === 'delete' && isset( $_POST['user'] ) ) {
+			check_admin_referer( 'bulk-layouts' );
+
+			$layout_ids = array_map( 'absint', wp_unslash( $_POST['user'] ) );
+
+			if ( ! empty( $layout_ids ) ) {
+				$deleted_count = 0;
+				foreach ( $layout_ids as $layout_id ) {
+					$result = \Cartpageglut\layouts\cartPage\CartPageEntity::delete_layout( $layout_id );
+					if ( $result !== false ) {
+						$deleted_count++;
+					}
+				}
+
+				// Redirect to avoid resubmission and show success message
+				$redirect_url = add_query_arg(
+					array(
+						'page' => 'shopglut_layouts',
+						'view' => 'cartpage',
+						'deleted' => 'bulk',
+						'count' => $deleted_count
+					),
+					admin_url( 'admin.php' )
+				);
+				wp_safe_redirect( $redirect_url );
+				exit;
+			}
+		}
+
+		// Handle bulk delete from bottom dropdown
+		if ( isset( $_POST['action2'] ) && $_POST['action2'] === 'delete' && isset( $_POST['user'] ) ) {
+			check_admin_referer( 'bulk-layouts' );
+
+			$layout_ids = array_map( 'absint', wp_unslash( $_POST['user'] ) );
+
+			if ( ! empty( $layout_ids ) ) {
+				$deleted_count = 0;
+				foreach ( $layout_ids as $layout_id ) {
+					$result = \Cartpageglut\layouts\cartPage\CartPageEntity::delete_layout( $layout_id );
+					if ( $result !== false ) {
+						$deleted_count++;
+					}
+				}
+
+				// Redirect to avoid resubmission and show success message
+				$redirect_url = add_query_arg(
+					array(
+						'page' => 'shopglut_layouts',
+						'view' => 'cartpage',
+						'deleted' => 'bulk',
+						'count' => $deleted_count
+					),
+					admin_url( 'admin.php' )
+				);
+				wp_safe_redirect( $redirect_url );
+				exit;
+			}
+		}
+
+		// Prepare layouts table
+		$layouts_table = new \Cartpageglut\layouts\cartPage\CartPageListTable();
+		$layouts_table->prepare_items();
+		$active_menu = $this->activeMenuTab();
+		$this->settingsPageHeader( $active_menu );
+
+		// Generate URLs for the action buttons
+		$templates_url = add_query_arg(
+			array(
+				'page' => 'shopglut_layouts',
+				'view' => 'cartpage_templates'
+			),
+			admin_url('admin.php')
+		);
+		?>
+		<div class="wrap shopglut-admin-contents">
+			<h2><?php echo esc_html__( 'Cart Page Layouts', 'shopglut' ); ?>
+				<a href="<?php echo esc_url( $templates_url ); ?>">
+					<span class="add-new-h2"><?php echo esc_html__( 'Create From Templates', 'shopglut' ); ?></span>
+				</a>
+			</h2>
+
+			<form method="post" id="shopglut-layouts-form">
+				<?php $layouts_table->display(); ?>
+			</form>
+		</div>
+		<?php
 	}
 		public function renderCheckout() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -1799,6 +2020,36 @@ class AllLayouts {
 			|| class_exists( 'Productpageglut\\ProductpageglutBase' )
 			|| class_exists( 'ProductPageGlut\\ProductPageGlutBase' )
 			|| defined( 'PRODUCTPAGEGLUT_VERSION' );
+	}
+
+	/**
+	 * Check if Cartpageglut plugin is active
+	 *
+	 * @return bool True if Cartpageglut is active
+	 */
+	private function is_cartpageglut_active() {
+		// Check by active plugins list
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) );
+
+		if ( is_multisite() ) {
+			// Get network active plugins
+			$network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			$active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+		}
+
+		// Check for various possible plugin file names
+		foreach ( $active_plugins as $plugin ) {
+			if ( $plugin === 'cartpage-glut/cartpage-glut.php'
+				|| $plugin === 'cartpage-glut/cartpageglut.php'
+				|| strpos( $plugin, 'cartpage' ) !== false ) {
+				return true;
+			}
+		}
+
+		// Also check if the main classes exist
+		return class_exists( 'Cartpageglut\\layouts\\cartPage\\CartPageEntity' )
+			|| class_exists( 'Cartpageglut\\CartpageglutBase' )
+			|| defined( 'CARTPAGEGLUT_VERSION' );
 	}
 
 	/**
