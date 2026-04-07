@@ -21,107 +21,19 @@ class DataManage {
 	public static function get_all_table_names() {
 		global $wpdb;
 		return array(
+			// ProductPageGlut Plugin Tables
 			'single_product' => array(
 				'table' => $wpdb->prefix . 'shopglut_single_product_layout',
-				'name' => 'Single Product Layouts',
+				'name' => 'ProductPageGlut - Single Product Layouts',
 				'description' => 'Single Product page builder layouts',
-				'module' => 'single_product'
+				'module' => 'productpageglut'
 			),
-			'cart_page' => array(
+			// CartpageGlut Plugin Tables
+			'cartpage_glut' => array(
 				'table' => $wpdb->prefix . 'shopglut_cartpage_layouts',
-				'name' => 'Cart Page Layouts',
-				'description' => 'Cart page builder layouts',
-				'module' => 'cart_page'
-			),
-			'order_complete' => array(
-				'table' => $wpdb->prefix . 'shopglut_ordercomplete_layouts',
-				'name' => 'Order Complete Layouts',
-				'description' => 'Order complete page layouts',
-				'module' => 'orderComplete_page'
-			),
-			'account_page' => array(
-				'table' => $wpdb->prefix . 'shopglut_accountpage_layouts',
-				'name' => 'Account Page Layouts',
-				'description' => 'My Account page layouts',
-				'module' => 'account_page'
-			),
-			'shop_layouts' => array(
-				'table' => $wpdb->prefix . 'shopglut_shop_layouts',
-				'name' => 'Shop Page Layouts',
-				'description' => 'Shop page builder layouts',
-				'module' => 'shop_layouts'
-			),
-			'archive_layouts' => array(
-				'table' => $wpdb->prefix . 'shopglut_archive_layouts',
-				'name' => 'Archive Layouts',
-				'description' => 'Archive page layouts',
-				'module' => 'archive_layouts'
-			),
-			'product_swatches' => array(
-				'table' => $wpdb->prefix . 'shopglut_productswatches_layout',
-				'name' => 'Product Swatches',
-				'description' => 'Product swatches configurations',
-				'module' => 'product_swatches'
-			),
-			'product_badges' => array(
-				'table' => $wpdb->prefix . 'shopglut_product_badge_layouts',
-				'name' => 'Product Badges',
-				'description' => 'Product badge layouts',
-				'module' => 'product_badges'
-			),
-			'wishlist' => array(
-				'table' => $wpdb->prefix . 'shopglut_wishlist',
-				'name' => 'Wishlist Data',
-				'description' => 'User wishlist items and settings',
-				'module' => 'wishlist'
-			),
-			'shop_filters' => array(
-				'table' => $wpdb->prefix . 'shopglut_enhancement_filters',
-				'name' => 'Shop Filters',
-				'description' => 'Shop filter configurations',
-				'module' => 'shop_filters'
-			),
-			'woo_templates' => array(
-				'table' => $wpdb->prefix . 'shopglut_woo_templates',
-				'name' => 'Woo Templates',
-				'description' => 'Custom WooCommerce templates',
-				'module' => 'woo_templates'
-			),
-			'custom_fields' => array(
-				'table' => $wpdb->prefix . 'shopglut_product_custom_field_settings',
-				'name' => 'Custom Fields',
-				'description' => 'Product custom field settings',
-				'module' => 'acf_fields'
-			),
-			'comparison' => array(
-				'table' => $wpdb->prefix . 'shopglut_comparison_layouts',
-				'name' => 'Product Comparison',
-				'description' => 'Product comparison layouts',
-				'module' => 'product_comparison'
-			),
-			'quickview' => array(
-				'table' => $wpdb->prefix . 'shopglut_quickview_layouts',
-				'name' => 'Quick View',
-				'description' => 'Quick view layouts',
-				'module' => 'quick_views'
-			),
-			'shortcodes' => array(
-				'table' => $wpdb->prefix . 'shopglut_shortcodes_showcase',
-				'name' => 'Shortcode Showcase',
-				'description' => 'Shortcode configurations',
-				'module' => 'shortcode_showcase'
-			),
-			'mega_menu' => array(
-				'table' => $wpdb->prefix . 'shopglut_mega_menus',
-				'name' => 'Mega Menu',
-				'description' => 'Mega menu configurations',
-				'module' => 'mega_menu'
-			),
-			'user_actions' => array(
-				'table' => $wpdb->prefix . 'shopglut_user_actions',
-				'name' => 'User Actions',
-				'description' => 'User action tracking data',
-				'module' => 'core'
+				'name' => 'CartpageGlut - Cart Page Layouts',
+				'description' => 'CartpageGlut plugin cart page layouts',
+				'module' => 'cartpageglut'
 			),
 		);
 	}

@@ -103,27 +103,28 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 	)
 ) );
 
+*/
 // Create Data Management tab
-AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'id' => 'data_management_tab',
-	'title' => __( 'Data Management', 'shopglut' ),
-	'icon' => 'fa fa-database',
-) );
+// AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+// 	'id' => 'data_management_tab',
+// 	'title' => __( 'Data Management', 'shopglut' ),
+// 	'icon' => 'fa fa-database',
+// ) );
 
-// Create Data Management sub-tab
-AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
-	'parent' => 'data_management_tab',
-	'title' => __( 'Database Tables', 'shopglut' ),
-	'description' => __( '<div style="background: #fff3cd; border: 1px solid #ffc107; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 4px;"><strong>⚠️ Warning:</strong> These actions are destructive and cannot be undone. Always backup your database before performing these operations.</div>', 'shopglut' ),
-	'fields' => array(
+// // Create Data Management sub-tab
+// AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+// 	'parent' => 'data_management_tab',
+// 	'title' => __( 'Database Tables', 'shopglut' ),
+// 	'description' => __( '<div style="background: #fff3cd; border: 1px solid #ffc107; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 4px;"><strong>⚠️ Warning:</strong> These actions are destructive and cannot be undone. Always backup your database before performing these operations.</div>', 'shopglut' ),
+// 	'fields' => array(
 
-		array(
-			'id' => 'shopglut_db_tables_manager',
-			'type' => 'database_manager'
-		)
+// 		array(
+// 			'id' => 'shopglut_db_tables_manager',
+// 			'type' => 'database_manager'
+// 		)
 
-	)
-) );
+// 	)
+// ) );
 
 // Create Related Plugins tab
 AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
@@ -146,7 +147,29 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 
 	)
 ) );
-*/
+
+
+// Create Data Management tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'id' => 'data_management_tab',
+	'title' => __( 'Data Management', 'shopglut' ),
+	'icon' => 'fa fa-database',
+) );
+
+// Create Data Management sub-tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'parent' => 'data_management_tab',
+	'title' => __( 'Database Tables', 'shopglut' ),
+	'description' => __( '<div style="background: #fff3cd; border: 1px solid #ffc107; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 4px;"><strong>⚠️ Warning:</strong> These actions are destructive and cannot be undone. Always backup your database before performing these operations.</div>', 'shopglut' ),
+	'fields' => array(
+
+		array(
+			'id' => 'shopglut_db_tables_manager',
+			'type' => 'database_manager'
+		)
+
+	)
+) );
 
 // Create ProductPageGlut tab
 AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
@@ -166,6 +189,32 @@ AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
 			'type' => 'switcher',
 			'title' => __( 'Show ProductPageGlut Menu', 'shopglut' ),
 			'desc' => __( 'When enabled, ProductPageGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
+			'text_on' => __( 'Yes', 'shopglut' ),
+			'text_off' => __( 'No', 'shopglut' ),
+			'default' => 1,
+		),
+
+	)
+) );
+
+// Create CartpageGlut tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'id' => 'cartpageglut_tab',
+	'title' => __( 'CartpageGlut', 'shopglut' ),
+	'icon' => 'fa fa-shopping-cart',
+) );
+
+// Create CartpageGlut sub-tab
+AGSHOPGLUT::createSection( $SHOPGLUT_INTEGRATION_SETTINGS, array(
+	'parent' => 'cartpageglut_tab',
+	'title' => __( 'General', 'shopglut' ),
+	'fields' => array(
+
+		array(
+			'id' => 'cartpageglut-show-menu',
+			'type' => 'switcher',
+			'title' => __( 'Show CartpageGlut Menu', 'shopglut' ),
+			'desc' => __( 'When enabled, CartpageGlut will show its own admin menu even when ShopGlut is active.', 'shopglut' ),
 			'text_on' => __( 'Yes', 'shopglut' ),
 			'text_off' => __( 'No', 'shopglut' ),
 			'default' => 1,

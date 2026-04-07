@@ -41,6 +41,11 @@ class ShopGlutDatabase {
 		return $wpdb->prefix . 'shopglut_cartpage_layouts';
 	}
 
+	public static function table_cartpageglut_cart_layout() {
+		global $wpdb;
+		return $wpdb->prefix . 'shopglut_cartpage_layouts';
+	}
+
 	public static function table_ordercomplete_layouts() {
 		global $wpdb;
 		return $wpdb->prefix . 'shopglut_ordercomplete_layouts';

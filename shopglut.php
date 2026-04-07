@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: ShopGlut - Builder for WooCommerce
- * Description: Lightweight integration plugin. Product Page Builder available in ProductPage Glut plugin.
+ * Description: Lightweight integration plugin. Product Page Builder available in ProductPage Glut plugin. Cart Page Builder available in CartPage Glut plugin.
  * Version: 1.7.8
  * Author: AppGlut
  * Author URI: https://www.appglut.com

@@ -14,47 +14,17 @@ class ShopGlut_PluginUpdateChecker {
     private $update_server_url = 'https://updates.appglut.com/plugins';
 
     private $related_plugins = array(
-        'wishglut' => array(
-            'name' => 'WishGlut',
-            'basename' => 'wishglut/wishglut.php',
-            'icon' => '🎁',
-            'description' => 'Advanced wishlist plugin for WooCommerce with multiple wishlist lists'
-        ),
-        'checkoutglut' => array(
-            'name' => 'CheckoutGlut',
-            'basename' => 'checkoutglut/checkoutglut.php',
-            'icon' => '🛒',
-            'description' => 'Customize WooCommerce checkout page with drag & drop builder'
-        ),
-        'shortcodeglut' => array(
-            'name' => 'ShortcodeGlut',
-            'basename' => 'shortcodeglut/shortcodeglut.php',
-            'icon' => '⚡',
-            'description' => 'Powerful shortcode builder for WordPress with visual editor'
-        ),
-        'product-details-glut' => array(
-            'name' => 'ProductDetailsGlut',
-            'basename' => 'product-details-glut/product-details-glut.php',
-            'icon' => '📦',
-            'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
-        ),
         'productpage-glut' => array(
             'name' => 'ProductPageGlut',
             'basename' => 'productpage-glut/productpage-glut.php',
             'icon' => '📦',
             'description' => 'Beautiful WooCommerce single product page builder with 7+ templates'
         ),
-        'shop-archivepage-glut' => array(
-            'name' => 'ShopArchivePageGlut',
-            'basename' => 'shop-archivepage-glut/shop-archivepage-glut.php',
-            'icon' => '🏪',
-            'description' => 'Beautiful WooCommerce shop and archive page builder with 19+ templates'
-        ),
-        'myaccount-glut' => array(
-            'name' => 'MyAccountGlut',
-            'basename' => 'myaccount-glut/myaccount-glut.php',
-            'icon' => '👤',
-            'description' => 'Complete WooCommerce my account page builder with custom dashboard and endpoints'
+        'cartpage-glut' => array(
+            'name' => 'CartpageGlut',
+            'basename' => 'cartpage-glut/cartpage-glut.php',
+            'icon' => '🛒',
+            'description' => 'Complete WooCommerce cart page builder with drag & drop functionality'
         )
     );
 
