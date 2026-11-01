@@ -1,0 +1,108 @@
+{
+  "_Root-!~{004}~.js": {
+    "file": "assets/Root.css",
+    "src": "_Root-!~{004}~.js"
+  },
+  "_Root-B0itguKY.js": {
+    "file": "chunks/Root-B0itguKY.js",
+    "name": "Root",
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ],
+    "css": [
+      "assets/Root.css"
+    ]
+  },
+  "_vendor-antd-DisqpJ_q.js": {
+    "file": "chunks/vendor-antd-DisqpJ_q.js",
+    "name": "vendor-antd",
+    "imports": [
+      "_vendor-react-CJwAqr9E.js"
+    ]
+  },
+  "_vendor-fontawesome-lUcmFROP.js": {
+    "file": "chunks/vendor-fontawesome-lUcmFROP.js",
+    "name": "vendor-fontawesome",
+    "imports": [
+      "_vendor-react-CJwAqr9E.js"
+    ]
+  },
+  "_vendor-react-CJwAqr9E.js": {
+    "file": "chunks/vendor-react-CJwAqr9E.js",
+    "name": "vendor-react"
+  },
+  "assets/src/pages/index-app.jsx": {
+    "file": "app.js",
+    "name": "app",
+    "src": "assets/src/pages/index-app.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  },
+  "assets/src/pages/index-dashboard.jsx": {
+    "file": "dashboard.js",
+    "name": "dashboard",
+    "src": "assets/src/pages/index-dashboard.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  },
+  "assets/src/pages/index-layouts.jsx": {
+    "file": "layouts.js",
+    "name": "layouts",
+    "src": "assets/src/pages/index-layouts.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  },
+  "assets/src/pages/index-modules.jsx": {
+    "file": "modules.js",
+    "name": "modules",
+    "src": "assets/src/pages/index-modules.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  },
+  "assets/src/pages/index-panel.jsx": {
+    "file": "panel.js",
+    "name": "panel",
+    "src": "assets/src/pages/index-panel.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  },
+  "assets/src/pages/index-tools.jsx": {
+    "file": "tools.js",
+    "name": "tools",
+    "src": "assets/src/pages/index-tools.jsx",
+    "isEntry": true,
+    "imports": [
+      "_vendor-react-CJwAqr9E.js",
+      "_Root-B0itguKY.js",
+      "_vendor-fontawesome-lUcmFROP.js",
+      "_vendor-antd-DisqpJ_q.js"
+    ]
+  }
+}

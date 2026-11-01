@@ -1,0 +1,63 @@
+/* Top bar */
+.sg-header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  height: 60px; padding: 0 20px;
+  background: linear-gradient(135deg, #12101f 0%, #1e1638 55%, #2a1d52 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 18px rgba(18,16,31,0.18);
+}
+.sg-header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sg-header-right { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 140px; }
+.sg-logo-img { height: 30px; width: auto; display: block; }
+.sg-header-back {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px; border-radius: 8px;
+  font-size: 13px; background: rgba(255,255,255,0.06); transition: background .15s, color .15s;
+}
+.sg-header-back:hover { background: rgba(255,255,255,0.14); }
+.sg-header-nav { display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 10px; background: rgba(255,255,255,0.06); }
+.sg-header-nav a { padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; line-height: 1.2; white-space: nowrap; transition: background .15s, color .15s; }
+.sg-header-nav a:hover { background: rgba(255,255,255,0.08); }
+
+/* Links inside ShopGlut screens: replace WordPress's blue / purple and focus ring with ours. */
+#shopglut-root a, .sg-nav-drawer a { outline: none; box-shadow: none; text-decoration: none; }
+#shopglut-root a:focus-visible, .sg-nav-drawer a:focus-visible { outline: 2px solid rgba(124,58,237,0.6); outline-offset: 2px; border-radius: 6px; }
+#shopglut-root .sg-header-nav a, #shopglut-root .sg-header-back { color: rgba(255,255,255,0.72); }
+#shopglut-root .sg-header-nav a:hover, #shopglut-root .sg-header-nav a:focus, #shopglut-root .sg-header-back:hover, #shopglut-root .sg-header-back:focus { color: #fff; }
+#shopglut-root .sg-header-nav a.active { color: #fff; background: #7c3aed; }
+#shopglut-root .sg-header-nav a.sg-nav-pro { color: #fbbf24; }
+#shopglut-root .sg-header-nav a.sg-nav-pro.active { color: #fff; }
+
+/* Menu button and side menu */
+.sg-hamburger {
+  display: inline-flex; flex-direction: column; justify-content: center; gap: 4px; flex: none;
+  width: 38px; height: 38px; padding: 0 10px; border: 0; border-radius: 8px;
+  background: rgba(255,255,255,0.08); cursor: pointer; transition: background .15s;
+}
+.sg-hamburger:hover { background: rgba(255,255,255,0.16); }
+.sg-hamburger:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; }
+.sg-hamburger span { display: block; height: 2px; width: 100%; border-radius: 2px; background: #fff; }
+
+.sg-drawer-logo { height: 28px; width: auto; display: block; }
+.sg-nav-drawer .ant-drawer-close { color: rgba(255,255,255,0.75); }
+.sg-nav-drawer .ant-drawer-close:hover { color: #fff; background: rgba(255,255,255,0.16); }
+.sg-nav-list { display: flex; flex-direction: column; gap: 2px; padding: 4px 12px; }
+.sg-nav-group { margin: 12px 12px 4px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #94a3b8; }
+.sg-nav-group:empty { margin: 8px 12px; border-top: 1px solid #f0f0f5; }
+.sg-nav-drawer .sg-nav-list a, .sg-nav-drawer .sg-nav-foot a {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 10px;
+  color: #334155; font-size: 14px; font-weight: 500; transition: background .12s, color .12s;
+}
+.sg-nav-drawer .sg-nav-list a:hover, .sg-nav-drawer .sg-nav-foot a:hover { background: #f8f7fc; color: #0f172a; }
+.sg-nav-drawer .sg-nav-list a.active { background: #f3effe; color: #6d28d9; font-weight: 600; }
+.sg-nav-drawer .sg-nav-list a.sg-nav-pro { color: #b45309; }
+.sg-nav-list .ic, .sg-nav-foot .ic {
+  width: 30px; height: 30px; flex: none; border-radius: 8px; background: #f1f5f9; color: #64748b;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 13px;
+}
+.sg-nav-list a.active .ic { background: #7c3aed; color: #fff; }
+.sg-nav-foot { margin: 10px 12px 0; padding-top: 10px; border-top: 1px solid #f0f0f5; }
+
+@media (max-width: 960px) {
+  .sg-header-nav { display: none; }
+  .sg-header { padding: 0 12px; }
+}

@@ -1,0 +1,702 @@
+# Copyright (C) 2026 AppGlut
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: AppGlut Framework 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-18 10:00+0000\n"
+"X-Domain: appglut-framework\n"
+
+#: fields/backup.php:21
+msgid "The backup field is available in options panels only."
+msgstr ""
+
+#: fields/backup.php:29
+msgid "Export settings"
+msgstr ""
+
+#: fields/backup.php:29
+msgid "Download every saved option as a JSON file, or copy it to the clipboard."
+msgstr ""
+
+#: fields/backup.php:30
+msgid "Download JSON"
+msgstr ""
+
+#: fields/backup.php:31 fields/text.php:53 includes/class-shortcoder.php:216
+msgid "Copy"
+msgstr ""
+
+#: fields/backup.php:36
+msgid "Import settings"
+msgstr ""
+
+#: fields/backup.php:36
+msgid "Paste exported JSON or choose a file. Imported values are validated like a normal save."
+msgstr ""
+
+#: fields/backup.php:38
+msgid "Choose file"
+msgstr ""
+
+#: fields/backup.php:39
+msgid "Import"
+msgstr ""
+
+#: fields/choice.php:45
+msgid "No options available."
+msgstr ""
+
+#: fields/choice.php:272 fields/containers.php:117 fields/media.php:71 fields/media.php:119 fields/media.php:175
+msgid "Remove"
+msgstr ""
+
+#: fields/choice.php:274
+msgid "Add and press Enter…"
+msgstr ""
+
+#: fields/containers.php:73
+msgid "No items yet."
+msgstr ""
+
+#: fields/containers.php:79 includes/class-shortcoder.php:258
+msgid "Add item"
+msgstr ""
+
+#: fields/containers.php:108
+msgid "Drag to reorder"
+msgstr ""
+
+#: fields/containers.php:111
+msgid "Item"
+msgstr ""
+
+#: fields/containers.php:115
+msgid "Duplicate"
+msgstr ""
+
+#: fields/containers.php:158
+msgid "Key"
+msgstr ""
+
+#: fields/containers.php:163
+msgid "Value"
+msgstr ""
+
+#: fields/containers.php:301
+msgid "Enabled"
+msgstr ""
+
+#: fields/containers.php:302
+msgid "Disabled"
+msgstr ""
+
+#: fields/design.php:35
+msgid "Opacity"
+msgstr ""
+
+#: fields/design.php:37
+msgid "Reset"
+msgstr ""
+
+#: fields/design.php:90 fields/design.php:526
+msgid "Normal"
+msgstr ""
+
+#: fields/design.php:91
+msgid "Hover"
+msgstr ""
+
+#: fields/design.php:92
+msgid "Active"
+msgstr ""
+
+#: fields/design.php:93
+msgid "Visited"
+msgstr ""
+
+#: fields/design.php:94
+msgid "Focus"
+msgstr ""
+
+#: fields/design.php:176
+msgid "Start"
+msgstr ""
+
+#: fields/design.php:177
+msgid "End"
+msgstr ""
+
+#: fields/design.php:178
+msgid "Type"
+msgstr ""
+
+#: fields/design.php:178
+msgid "Linear"
+msgstr ""
+
+#: fields/design.php:178
+msgid "Radial"
+msgstr ""
+
+#: fields/design.php:181
+msgid "Angle"
+msgstr ""
+
+#: fields/design.php:182
+msgid "Start position"
+msgstr ""
+
+#: fields/design.php:183
+msgid "End position"
+msgstr ""
+
+#: fields/design.php:238
+msgid "X"
+msgstr ""
+
+#: fields/design.php:239
+msgid "Y"
+msgstr ""
+
+#: fields/design.php:240
+msgid "Blur"
+msgstr ""
+
+#: fields/design.php:241
+msgid "Spread"
+msgstr ""
+
+#: fields/design.php:247 fields/design.php:372
+msgid "Inset"
+msgstr ""
+
+#: fields/design.php:278
+msgid "Top"
+msgstr ""
+
+#: fields/design.php:279 fields/design.php:551
+msgid "Right"
+msgstr ""
+
+#: fields/design.php:280
+msgid "Bottom"
+msgstr ""
+
+#: fields/design.php:281 fields/design.php:549
+msgid "Left"
+msgstr ""
+
+#: fields/design.php:284
+msgid "All"
+msgstr ""
+
+#: fields/design.php:302
+msgid "Link values"
+msgstr ""
+
+#: fields/design.php:305 fields/design.php:437
+msgid "Unit"
+msgstr ""
+
+#: fields/design.php:366
+msgid "Solid"
+msgstr ""
+
+#: fields/design.php:367
+msgid "Dashed"
+msgstr ""
+
+#: fields/design.php:368
+msgid "Dotted"
+msgstr ""
+
+#: fields/design.php:369
+msgid "Double"
+msgstr ""
+
+#: fields/design.php:370
+msgid "Groove"
+msgstr ""
+
+#: fields/design.php:371
+msgid "Ridge"
+msgstr ""
+
+#: fields/design.php:373
+msgid "Outset"
+msgstr ""
+
+#: fields/design.php:374 fields/design.php:562 fields/design.php:575
+msgid "None"
+msgstr ""
+
+#: fields/design.php:376 fields/design.php:522
+msgid "Style"
+msgstr ""
+
+#: fields/design.php:379 fields/design.php:583 fields/design.php:704
+msgid "Color"
+msgstr ""
+
+#: fields/design.php:382
+msgid "Radius"
+msgstr ""
+
+#: fields/design.php:429
+msgid "Width"
+msgstr ""
+
+#: fields/design.php:430
+msgid "Height"
+msgstr ""
+
+#: fields/design.php:506 fields/design.php:525 fields/design.php:548 fields/design.php:561 fields/design.php:574 fields/design.php:711 fields/design.php:726 fields/design.php:736 fields/design.php:745
+msgid "Default"
+msgstr ""
+
+#: fields/design.php:515
+msgid "Font family"
+msgstr ""
+
+#: fields/design.php:516
+msgid "Search fonts…"
+msgstr ""
+
+#: fields/design.php:519
+msgid "Weight"
+msgstr ""
+
+#: fields/design.php:527
+msgid "Italic"
+msgstr ""
+
+#: fields/design.php:533 fields/design.php:734
+msgid "Size"
+msgstr ""
+
+#: fields/design.php:537
+msgid "Line height"
+msgstr ""
+
+#: fields/design.php:541
+msgid "Letter spacing"
+msgstr ""
+
+#: fields/design.php:545
+msgid "Align"
+msgstr ""
+
+#: fields/design.php:550 fields/design.php:716
+msgid "Center"
+msgstr ""
+
+#: fields/design.php:552
+msgid "Justify"
+msgstr ""
+
+#: fields/design.php:558
+msgid "Transform"
+msgstr ""
+
+#: fields/design.php:563
+msgid "Uppercase"
+msgstr ""
+
+#: fields/design.php:564
+msgid "Lowercase"
+msgstr ""
+
+#: fields/design.php:565
+msgid "Capitalize"
+msgstr ""
+
+#: fields/design.php:571
+msgid "Decoration"
+msgstr ""
+
+#: fields/design.php:576
+msgid "Underline"
+msgstr ""
+
+#: fields/design.php:577
+msgid "Line through"
+msgstr ""
+
+#: fields/design.php:589
+msgid "The quick brown fox jumps over the lazy dog. 0123456789"
+msgstr ""
+
+#: fields/design.php:709
+msgid "Position"
+msgstr ""
+
+#: fields/design.php:712
+msgid "Left Top"
+msgstr ""
+
+#: fields/design.php:713
+msgid "Center Top"
+msgstr ""
+
+#: fields/design.php:714
+msgid "Right Top"
+msgstr ""
+
+#: fields/design.php:715
+msgid "Left Center"
+msgstr ""
+
+#: fields/design.php:717
+msgid "Right Center"
+msgstr ""
+
+#: fields/design.php:718
+msgid "Left Bottom"
+msgstr ""
+
+#: fields/design.php:719
+msgid "Center Bottom"
+msgstr ""
+
+#: fields/design.php:720
+msgid "Right Bottom"
+msgstr ""
+
+#: fields/design.php:724 fields/design.php:728
+msgid "Repeat"
+msgstr ""
+
+#: fields/design.php:727
+msgid "No repeat"
+msgstr ""
+
+#: fields/design.php:729
+msgid "Repeat X"
+msgstr ""
+
+#: fields/design.php:730
+msgid "Repeat Y"
+msgstr ""
+
+#: fields/design.php:737
+msgid "Cover"
+msgstr ""
+
+#: fields/design.php:738
+msgid "Contain"
+msgstr ""
+
+#: fields/design.php:739
+msgid "Auto"
+msgstr ""
+
+#: fields/design.php:743
+msgid "Attachment"
+msgstr ""
+
+#: fields/design.php:746
+msgid "Scroll"
+msgstr ""
+
+#: fields/design.php:747
+msgid "Fixed"
+msgstr ""
+
+#: fields/design.php:821
+msgid "Decrease"
+msgstr ""
+
+#: fields/design.php:823
+msgid "Increase"
+msgstr ""
+
+#: fields/layout.php:65
+msgid "Dismiss"
+msgstr ""
+
+#: fields/layout.php:134
+msgid "Open"
+msgstr ""
+
+#: fields/media.php:50 includes/class-appglut.php:769
+msgid "Select image"
+msgstr ""
+
+#: fields/media.php:50 includes/class-appglut.php:770
+msgid "Select file"
+msgstr ""
+
+#: fields/media.php:125
+msgid "Add images"
+msgstr ""
+
+#: fields/media.php:126
+msgid "Clear"
+msgstr ""
+
+#: fields/media.php:148
+msgid "Upload"
+msgstr ""
+
+#: fields/media.php:174
+msgid "Choose icon"
+msgstr ""
+
+#: fields/media.php:207
+msgid "Label / address"
+msgstr ""
+
+#: fields/media.php:209
+msgid "Latitude"
+msgstr ""
+
+#: fields/media.php:210
+msgid "Longitude"
+msgstr ""
+
+#: fields/media.php:211
+msgid "Zoom"
+msgstr ""
+
+#: fields/media.php:216
+msgid "Enter coordinates to preview the location"
+msgstr ""
+
+#: fields/media.php:259
+msgid "Link text"
+msgstr ""
+
+#: fields/media.php:262
+msgid "Open in new tab"
+msgstr ""
+
+#: fields/media.php:263
+msgid "Add rel=\"nofollow\""
+msgstr ""
+
+#: fields/media.php:312
+msgid "From"
+msgstr ""
+
+#: fields/media.php:314
+msgid "To"
+msgstr ""
+
+#: fields/text.php:50
+msgid "Show password"
+msgstr ""
+
+#: includes/class-ajax.php:29
+msgid "Unknown options panel."
+msgstr ""
+
+#: includes/class-ajax.php:32
+msgid "Your session has expired. Please reload the page."
+msgstr ""
+
+#: includes/class-ajax.php:35 includes/class-ajax.php:113
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: includes/class-ajax.php:53
+msgid "Invalid data received."
+msgstr ""
+
+#: includes/class-ajax.php:61
+msgid "Saved, but some fields were invalid and kept their previous value."
+msgstr ""
+
+#: includes/class-ajax.php:61 includes/class-appglut.php:755
+msgid "Settings saved"
+msgstr ""
+
+#: includes/class-ajax.php:72
+msgid "Defaults restored"
+msgstr ""
+
+#: includes/class-ajax.php:80 includes/class-appglut.php:776
+msgid "The import data is not valid JSON."
+msgstr ""
+
+#: includes/class-ajax.php:84
+msgid "Settings imported"
+msgstr ""
+
+#: includes/class-ajax.php:107
+msgid "Invalid query."
+msgstr ""
+
+#. translators: %s: field type
+#: includes/class-appglut.php:377
+msgid "Field type \"%s\" does not exist."
+msgstr ""
+
+#. translators: %d: post ID
+#: includes/class-appglut.php:589
+msgid "(no title) #%d"
+msgstr ""
+
+#: includes/class-appglut.php:686
+msgid "Full"
+msgstr ""
+
+#: includes/class-appglut.php:756
+msgid "Saving…"
+msgstr ""
+
+#: includes/class-appglut.php:757
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: includes/class-appglut.php:758
+msgid "Some fields have errors. Please review them."
+msgstr ""
+
+#: includes/class-appglut.php:759
+msgid "You have unsaved changes. Leave anyway?"
+msgstr ""
+
+#: includes/class-appglut.php:760
+msgid "Reset ALL options to their defaults? This cannot be undone."
+msgstr ""
+
+#: includes/class-appglut.php:761
+msgid "Reset this section to its defaults?"
+msgstr ""
+
+#: includes/class-appglut.php:762
+msgid "Import will overwrite your current settings. Continue?"
+msgstr ""
+
+#: includes/class-appglut.php:763
+msgid "Remove this item?"
+msgstr ""
+
+#: includes/class-appglut.php:764
+msgid "Maximum number of items reached."
+msgstr ""
+
+#: includes/class-appglut.php:765
+msgid "Minimum number of items reached."
+msgstr ""
+
+#: includes/class-appglut.php:766
+msgid "No results found"
+msgstr ""
+
+#: includes/class-appglut.php:767
+msgid "Searching…"
+msgstr ""
+
+#: includes/class-appglut.php:768
+msgid "Type to search…"
+msgstr ""
+
+#: includes/class-appglut.php:771
+msgid "Use this"
+msgstr ""
+
+#: includes/class-appglut.php:772
+msgid "Add to gallery"
+msgstr ""
+
+#: includes/class-appglut.php:773
+msgid "Copied to clipboard"
+msgstr ""
+
+#: includes/class-appglut.php:774
+msgid "characters"
+msgstr ""
+
+#: includes/class-appglut.php:775 includes/class-options.php:267
+msgid "No fields match your search."
+msgstr ""
+
+#: includes/class-comment.php:18 includes/class-metabox.php:16
+msgid "Options"
+msgstr ""
+
+#: includes/class-options.php:233
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/class-options.php:293
+msgid "Toggle navigation"
+msgstr ""
+
+#: includes/class-options.php:313
+msgid "Search settings…"
+msgstr ""
+
+#: includes/class-options.php:313
+msgid "Search settings"
+msgstr ""
+
+#: includes/class-options.php:325
+msgid "Toggle dark mode"
+msgstr ""
+
+#: includes/class-options.php:327
+msgid "Unsaved changes"
+msgstr ""
+
+#: includes/class-options.php:328 includes/class-options.php:351
+msgid "Save Changes"
+msgstr ""
+
+#. translators: %s: framework version
+#: includes/class-options.php:341
+msgid "Powered by AppGlut Framework %s"
+msgstr ""
+
+#: includes/class-options.php:343
+msgid "Press Ctrl/⌘ + S to save"
+msgstr ""
+
+#: includes/class-options.php:346
+msgid "Reset Section"
+msgstr ""
+
+#: includes/class-options.php:349
+msgid "Reset All"
+msgstr ""
+
+#: includes/class-shortcoder.php:33
+msgid "Add Shortcode"
+msgstr ""
+
+#: includes/class-shortcoder.php:34
+msgid "Choose a shortcode"
+msgstr ""
+
+#: includes/class-shortcoder.php:35
+msgid "Insert Shortcode"
+msgstr ""
+
+#: includes/class-shortcoder.php:179
+msgid "Back"
+msgstr ""
+
+#: includes/class-shortcoder.php:181
+msgid "Close"
+msgstr ""
+
+#: includes/class-shortcoder.php:189
+msgid "Search shortcodes…"
+msgstr ""
+
+#: includes/class-shortcoder.php:203
+msgid "No shortcodes match your search."
+msgstr ""
+
+#: includes/class-shortcoder.php:215
+msgid "Generated shortcode"
+msgstr ""
+
+#: includes/class-shortcoder.php:257
+msgid "Items"
+msgstr ""
+

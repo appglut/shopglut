@@ -1,0 +1,10 @@
+# Files that stay in git but are not part of the release zip. The admin source (assets/src,
+# package.json, vite.config.js) ships on purpose: WordPress.org wants the readable source of resources/.
+.git
+.gitignore
+.github
+.claude
+.distignore
+node_modules
+*.log
+docs

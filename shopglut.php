@@ -1,57 +1,94 @@
 <?php
-/*
- * Plugin Name: ShopGlut - Builder for WooCommerce
- * Description: Lightweight integration plugin. Product Page Builder available in ProductPage Glut plugin. Cart Page Builder available in CartPage Glut plugin.
- * Version: 1.7.8
- * Author: AppGlut
- * Author URI: https://www.appglut.com
- * Plugin URI: https://wordpress.org/plugins/shopglut/
- * License: GPLv2 or later
+/**
+ * Plugin Name: ShopGlut – Product, Shop, Filter, Swatches, Wishlist & More Builder for WooCommerce
+ * Plugin URI:  https://wordpress.org/plugins/shopglut/
+ * Description: All-in-one WooCommerce builder: product page, shop & archive, cart, checkout fields, thank you page, swatches, badges, filters, wishlist and side cart, managed from one modern admin.
+ * Version:     2.0.0
+ * Author:      AppGlut
+ * Author URI:  https://www.appglut.com
+ * License:     GPLv2 or later
  * Text Domain: shopglut
  * Domain Path: /languages
+ * Requires at least: 6.1
+ * Requires PHP: 7.4
  * Requires Plugins: woocommerce
+ *
+ * @package ShopGlut
  */
 
-defined( 'ABSPATH' ) or die;
+defined( 'ABSPATH' ) || exit;
 
-define( 'SHOPGLUT_NAME', 'ShopGlut' );
-define( 'SHOPGLUT_VERSION', '1.7.8' );
+define( 'SHOPGLUT_VERSION', '2.0.0' );
+define( 'SHOPGLUT_FILE', __FILE__ );
 define( 'SHOPGLUT_BASENAME', plugin_basename( __FILE__ ) );
 define( 'SHOPGLUT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SHOPGLUT_URL', plugin_dir_url( __FILE__ ) );
-define( 'SHOPGLUT_ADMIN_IMAGES', plugin_dir_url( __FILE__ ) . 'src/library/model/assets/images/' );
-define( 'SHOPGLUT_DIRNAME', dirname( plugin_basename( __FILE__ ) ) );
-define( 'SHOPGLUT_SLUG', dirname( plugin_basename( __FILE__ ) ) );
-define( 'SHOPGLUT_FILE', __FILE__ );
+define( 'SHOPGLUT_DB_VERSION', '1' );
 
-// Pro upgrade URLs
-define( 'SHOPGLUT_PRICING_URL', 'https://www.appglut.com' );
-define( 'SHOPGLUT_PRO_URL', 'https://www.appglut.com' );
-define( 'SHOPGLUT_UPGRADE_URL', 'https://www.appglut.com' );
+/** Version of the admin extension API (window.shopglut) that ShopGlut Pro and other add-ons build on. */
+define( 'SHOPGLUT_EXTEND_API', 1 );
 
-// Autoloader for class loading
-require __DIR__ . '/autoloader.php';
+define( 'SHOPGLUT_UPGRADE_URL', 'https://www.appglut.com/shopglut-pro/' );
 
-// Plugin Update Widget for related plugins notifications
-require __DIR__ . '/src/PluginUpdateWidget.php';
+// Options framework: the first loaded copy of AppGlut wins, so a newer copy in another plugin is fine too.
+require_once SHOPGLUT_PATH . 'libraries/appglut-framework/appglut-framework.php';
 
-// Plugin Update Checker for related plugins
-require __DIR__ . '/src/PluginUpdateChecker.php';
+require_once SHOPGLUT_PATH . 'includes/functions.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-db.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-module.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-modules.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-layouts.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-schema.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-panels.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-settings.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-frontend.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-admin.php';
+require_once SHOPGLUT_PATH . 'includes/class-shopglut-ajax.php';
 
+register_activation_hook( __FILE__, array( 'ShopGlut_DB', 'install' ) );
 
-// Hook into WooCommerce initialization
-add_action( 'woocommerce_init', 'shopglut_plugin_initialize' );
+// On init: modules use translated strings, which WordPress loads from init on.
+add_action( 'init', 'shopglut_init', 1 );
 
+/**
+ * Start ShopGlut. Modules register on 'shopglut_register_modules' (ShopGlut Pro adds its own there).
+ *
+ * @return void
+ */
+function shopglut_init() {
+	ShopGlut_DB::maybe_upgrade();
 
-function shopglut_plugin_initialize() {
-	// Ensure that WooCommerce is loaded before proceeding
-	if ( class_exists( 'WooCommerce' ) ) {
-		// Run ShopGlut initialization
-		Shopglut\ShopGlutBase::get_instance();
-		// Initialize Module Manager
-		Shopglut\ModuleManager::get_instance();
-
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		add_action( 'admin_notices', 'shopglut_woocommerce_missing_notice' );
+		return;
 	}
+
+	ShopGlut_Modules::instance()->load();
+	ShopGlut_Settings::instance();
+	ShopGlut_Panels::instance();
+	ShopGlut_Frontend::instance();
+
+	if ( is_admin() ) {
+		ShopGlut_Admin::instance();
+		ShopGlut_Ajax::instance();
+	}
+
+	/**
+	 * ShopGlut and its enabled modules are loaded.
+	 *
+	 * @param ShopGlut_Modules $modules Module registry.
+	 */
+	do_action( 'shopglut_loaded', ShopGlut_Modules::instance() );
 }
 
-
+/**
+ * Admin notice when WooCommerce is not active.
+ *
+ * @return void
+ */
+function shopglut_woocommerce_missing_notice() {
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		return;
+	}
+	echo '<div class="notice notice-error"><p>' . esc_html__( 'ShopGlut needs WooCommerce. Install and activate WooCommerce to use it.', 'shopglut' ) . '</p></div>';
+}
