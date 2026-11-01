@@ -60,6 +60,13 @@ Yes. Enable only the modules you need; unused modules load nothing on the front 
 
 Yes, it works with classic and block themes.
 
+== Screenshots ==
+
+1. Dashboard with module overview, layout counts and quick links to every builder.
+2. Modules screen: switch each module on or off and see what is included.
+3. Product Page Builder layout list with status, priority and search.
+4. Template picker when creating a new layout.
+
 == Changelog ==
 
 = 2.0.0 =
