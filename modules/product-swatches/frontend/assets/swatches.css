@@ -1,0 +1,49 @@
+/* ShopGlut Variation Swatches */
+.sgs { --sgs-size: 32px; --sgs-gap: 8px; --sgs-radius: 50%; --sgs-bg: #fff; --sgs-text: #1f2937; --sgs-border: #d1d5db; --sgs-active: var(--shopglut-accent, #7c3aed); --sgs-bw: 1px; --sgs-px: 12px; --sgs-py: 6px; --sgs-fs: 14px; --sgs-min: 40px; --sgs-hover-bg: var(--sgs-bg); --sgs-hover-border: var(--sgs-active); --sgs-active-bg: var(--sgs-bg); --sgs-active-text: var(--sgs-text); }
+.sgs .sgs-select { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.sgs.sgs-t1 .sgs-select, .sgs.sgs-t1 select { position: static !important; width: auto; height: auto; clip: auto; }
+.sgs-chosen { margin: 0 0 8px; font-size: 14px; }
+.sgs-chosen-label { font-weight: 600; }
+.sgs-items { display: flex; flex-wrap: wrap; gap: var(--sgs-gap); }
+.sgs-item { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0; padding: 0; font: inherit; font-size: var(--sgs-fs); line-height: 1.2; color: var(--sgs-term-text, var(--sgs-text)); background: var(--sgs-term-bg, var(--sgs-bg)); border: var(--sgs-bw) solid var(--sgs-term-border, var(--sgs-border)); border-radius: var(--sgs-radius); cursor: pointer; transition: border-color .15s, box-shadow .15s, opacity .15s, background .15s; }
+.sgs-item:focus-visible { outline: 2px solid var(--sgs-active); outline-offset: 2px; }
+.sgs-item.is-on { border-color: var(--sgs-active); box-shadow: 0 0 0 1px var(--sgs-active); }
+
+/* Buttons / pills / text fallbacks */
+.sgs-button .sgs-item, .sgs-item.is-text { min-width: var(--sgs-min, var(--sgs-size)); min-height: var(--sgs-size); padding: var(--sgs-py) var(--sgs-px); }
+.sgs-t2 .sgs-item:hover { background: var(--sgs-hover-bg); border-color: var(--sgs-hover-border); }
+.sgs-t2 .sgs-item.is-on { background: var(--sgs-active-bg); color: var(--sgs-active-text); border-color: var(--sgs-active); box-shadow: none; }
+.sgs-t6 .sgs-item.is-on { background: var(--sgs-active); color: #fff; }
+
+/* Colors and images */
+.sgs-color .sgs-item:not(.is-text), .sgs-image .sgs-item:not(.is-text) { width: var(--sgs-size); height: var(--sgs-size); padding: 3px; }
+.sgs-swatch { display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.sgs-color-label .sgs-item, .sgs-image-label .sgs-item { padding: 4px 12px 4px 4px; border-radius: 999px; }
+.sgs-color-label .sgs-swatch, .sgs-image-label .sgs-swatch { width: var(--sgs-size); height: var(--sgs-size); flex: none; border-radius: 50%; }
+.sgs-image-label .sgs-item { border-radius: 10px; }
+.sgs-image-label .sgs-swatch { border-radius: 6px; }
+
+/* Radio list */
+.sgs-radio .sgs-items { flex-direction: column; align-items: flex-start; gap: 6px; }
+.sgs-radio .sgs-item { border: 0; background: none; box-shadow: none !important; padding: 2px 0; }
+.sgs-dot { width: var(--sgs-size); height: var(--sgs-size); border-radius: 50%; border: 2px solid var(--sgs-border); box-sizing: border-box; display: inline-block; }
+.sgs-radio .sgs-item.is-on .sgs-dot { border-color: var(--sgs-active); box-shadow: inset 0 0 0 4px #fff; background: var(--sgs-active); }
+
+/* Underline */
+.sgs-underline .sgs-item { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 6px 4px; box-shadow: none !important; }
+.sgs-underline .sgs-item.is-on { border-bottom-color: var(--sgs-active); color: var(--sgs-active); font-weight: 700; }
+
+/* Unavailable combinations */
+.sgs-un-blur .sgs-item.is-unavailable { opacity: .35; }
+.sgs-un-hide .sgs-item.is-unavailable { display: none; }
+.sgs-un-cross .sgs-item.is-unavailable { opacity: .45; }
+.sgs-un-cross .sgs-item.is-unavailable::after { content: ""; position: absolute; left: 10%; right: 10%; top: 50%; border-top: 2px solid #ef4444; transform: rotate(-35deg); pointer-events: none; }
+
+/* Tooltip */
+.sgs-item[data-tip]:hover::before { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 8px; border-radius: 6px; background: #111827; color: #fff; font-size: 12px; white-space: nowrap; z-index: 5; pointer-events: none; }
+.sgs-button .sgs-item[data-tip]:hover::before, .sgs-radio .sgs-item[data-tip]:hover::before, .sgs-underline .sgs-item[data-tip]:hover::before, .sgs-color-label .sgs-item[data-tip]:hover::before, .sgs-image-label .sgs-item[data-tip]:hover::before { display: none; }
+
+/* The theme's variations table */
+.variations .sgs { position: relative; }
+.variations td.value .reset_variations { margin-top: 8px; display: inline-block; }
+.sgs-label-value { font-weight: 400; }

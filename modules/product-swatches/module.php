@@ -70,6 +70,19 @@ class ShopGlut_Module_Product_Swatches extends ShopGlut_Module {
 	}
 
 	/**
+	 * Front end: swatches instead of variation dropdowns; swatch fields on attribute terms.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-swatches.php';
+		new ShopGlut_Swatches( $this->url );
+	}
+
+	/**
 	 * Which attributes use the style.
 	 *
 	 * @return array
