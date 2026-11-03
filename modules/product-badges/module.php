@@ -85,7 +85,7 @@ class ShopGlut_Module_Product_Badges extends ShopGlut_Module {
 			return;
 		}
 		require_once $this->dir . 'frontend/class-shopglut-product-badges.php';
-		new ShopGlut_Product_Badges();
+		$GLOBALS['shopglut_product_badges'] = new ShopGlut_Product_Badges();
 	}
 }
 

@@ -178,7 +178,7 @@ class ShopGlut_Shop_Filters {
 	 */
 	public function classic_panel() {
 		$layout = self::layout();
-		if ( ! $this->printed && $layout && self::shows_here( $layout ) ) {
+		if ( ! $this->printed && shopglut_classic_hooks() && $layout && self::shows_here( $layout ) ) {
 			echo $this->panel( $layout ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in panel().
 		}
 	}

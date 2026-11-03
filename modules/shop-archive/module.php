@@ -68,6 +68,19 @@ class ShopGlut_Module_Shop_Archive extends ShopGlut_Module {
 	}
 
 	/**
+	 * Front end: product cards of the shop, category, tag and search pages.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-shop-archive.php';
+		$GLOBALS['shopglut_shop_archive'] = new ShopGlut_Shop_Archive( $this->url );
+	}
+
+	/**
 	 * Where the layout applies.
 	 *
 	 * @return array

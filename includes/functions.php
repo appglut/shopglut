@@ -138,3 +138,54 @@ function shopglut_fa_icon( $classes, $class = '' ) {
 	$name = preg_match( '/\bfa-(?!solid\b|regular\b|brands\b)([a-z0-9-]+)/', (string) $classes, $m ) ? $m[1] : 'check';
 	return shopglut_icon( $name, $class );
 }
+
+/**
+ * Whether front-end output hooked to classic WooCommerce template hooks should print now.
+ *
+ * In block themes WooCommerce fires those hooks for compatibility while blocks render, and modules add
+ * their output through block filters instead; only legacy (classic PHP) templates rendered inside a
+ * block theme still need the classic hooks.
+ *
+ * @return bool
+ */
+function shopglut_classic_hooks() {
+	return ! wp_is_block_theme() || ShopGlut_Legacy_Template::$depth > 0;
+}
+
+/**
+ * Tracks WooCommerce legacy-template blocks being rendered (see shopglut_classic_hooks()).
+ */
+class ShopGlut_Legacy_Template {
+
+	/**
+	 * Legacy templates rendering now.
+	 *
+	 * @var int
+	 */
+	public static $depth = 0;
+
+	/**
+	 * Register the block filters.
+	 *
+	 * @return void
+	 */
+	public static function init() {
+		add_filter(
+			'render_block_data',
+			static function ( $block ) {
+				if ( isset( $block['blockName'] ) && 'woocommerce/legacy-template' === $block['blockName'] ) {
+					++self::$depth;
+				}
+				return $block;
+			}
+		);
+		add_filter(
+			'render_block_woocommerce/legacy-template',
+			static function ( $html ) {
+				self::$depth = max( 0, self::$depth - 1 );
+				return $html;
+			}
+		);
+	}
+}
+ShopGlut_Legacy_Template::init();
