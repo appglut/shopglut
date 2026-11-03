@@ -118,6 +118,15 @@ No. Wishlist QR codes are made in the visitor's browser, and popup subscribers a
 2. Modules screen: switch each module on or off and see what is included.
 3. Product Page Builder layout list with status, priority and search.
 4. Template picker when creating a new layout.
+5. Product Page Builder layout with color and button swatches and a wishlist button.
+6. Shop page with the filter panel and product cards from the Shop & Archive Builder.
+7. Variation Swatches: chosen color and size shown next to the attribute name.
+8. Cart Page Builder: quantities, coupon and order summary.
+9. Side Cart opened after adding a product.
+10. Wishlist page with sharing, QR code and print.
+11. Subscribe popup from Popups & Banners.
+12. Checkout Field Editor: change, hide or add billing, shipping and order fields.
+13. Shop Filters editor: choose the filters and their designs.
 
 == Changelog ==
 
