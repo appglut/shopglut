@@ -104,25 +104,27 @@ Not merged:
 | Module registry, on/off, capabilities, layouts table, display rules, priority | **Done** |
 | Option schemas of every module, ported from the old plugins | **Done**: about 45 settings files run through `ShopGlut_Schema` |
 | Saved values keep the old shape (`settings[metabox_id][field]`, flat options for wishlist / side cart) | **Done**, so old template markup can read them unchanged |
-| **Front-end rendering** (templates, hooks, AJAX, CSS / JS of each module) | **Not ported yet**. The old plugins still hold this code. |
+| **Front-end rendering** (templates, hooks, AJAX, CSS / JS of each module) | **Done** (2026-11-03): every module has `modules/<id>/frontend/`. Classic and block themes tested on shopglut.local. |
 | Migration of data from the old plugins' tables and options | Not started |
 
-### Next: port each module's front end
-For each module, move the old `templateN/templateNMarkup.php`, `templateNStyle.php`, `*-frontend.js`,
-`ModuleIntegration.php` and hooks into `modules/<id>/` and start them from the module's `boot()`:
+### Front ends (where the code is)
 
-1. Rename the namespace to `ShopGlut\Modules\<Name>`, and replace the old constants with `$this->dir` / `$this->url`.
-2. Read the layout with `shopglut_get_active_layout( 'product-page', array( 'product_id' => $id ) )` instead of querying the old table. `$layout['settings']` has the same keys as before.
-3. Read module options with `shopglut_get_module_setting( 'wishlist', 'wishlist-require-login' )`.
-4. Load assets only when `ShopGlut_Frontend::should_load()` is true.
-5. Add a `shopglut_layout_preview_url` filter to enable the editor's Preview button.
+| Module | Front end | Notes |
+|--------|-----------|-------|
+| Side Cart | `side-cart/frontend/` | Ported from SiderCart Glut; old shortcodes kept as aliases. |
+| Product Badges | `product-badges/frontend/` | Rewritten; classic hooks + Product Image/gallery/title blocks. |
+| Thank You | `order-complete/frontend/` | Template 1 ported; classic thankyou.php or Order Confirmation blocks. |
+| Cart Page | `cart-page/frontend/` | Templates 1–3; 2 and 3 now render the real cart. AJAX returns re-rendered markup. |
+| Checkout Fields | `checkout-fields/frontend/` | Classic fields + block checkout additional fields. |
+| Wishlist | `wishlist/frontend/` | Rewritten: user meta / guest cookie; QR made in the browser (bundled qrcode-generator, MIT). |
+| Popups | `popups/frontend/` | New; subscribers table `{prefix}shopglut_subscribers`, ShopGlut › Subscribers page. |
+| Shop Filters | `shop-filters/frontend/` | Uses WooCommerce URL parameters where they exist; settings rewritten. |
+| Variation Swatches | `product-swatches/frontend/` | Templates 3–10 share `settings/swatch-style.php`; term meta `shopglut_swatch_*`. |
+| Shop & Archive | `shop-archive/frontend/` | One card renderer, 10 designs (CSS); renders the main product query. |
+| Product Page | `product-page/frontend/` | Arranges WooCommerce's own parts; block themes use `frontend/block-template.php`. |
 
-Suggested order (smallest first): Side Cart → Badges → Thank You → Cart → Checkout Fields → Wishlist →
-Filters → Shop & Archive → Swatches → Product Page.
-
-Known items to settle while porting:
-- The product page template settings still contain the old "Overwrite all / specific products" fields. They duplicate the new Display Rules section. Remove them once the front end reads Display Rules.
-- The per-term colors and images of Shop Filters are now stored as `value[term_id]`. The old shape was `value[tax_color][repeatable_id][term_id]`. Adapt the filter markup to the new shape.
+Shared helpers in `includes/functions.php`: `shopglut_icon()` / `shopglut_fa_icon()` (inline SVG instead of Font Awesome)
+and `shopglut_classic_hooks()` (classic WooCommerce hooks print only outside block templates).
 
 ---
 
