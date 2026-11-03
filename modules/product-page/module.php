@@ -133,6 +133,19 @@ class ShopGlut_Module_Product_Page extends ShopGlut_Module {
 	 * @param array $context product_id.
 	 * @return bool
 	 */
+	/**
+	 * Front end: the single product page uses the matching layout.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-product-page.php';
+		$GLOBALS['shopglut_product_page'] = new ShopGlut_Product_Page( $this->url );
+	}
+
 	public function layout_matches( $layout, $context ) {
 		$rules      = isset( $layout['settings']['display'] ) ? (array) $layout['settings']['display'] : array();
 		$product_id = isset( $context['product_id'] ) ? absint( $context['product_id'] ) : 0;
