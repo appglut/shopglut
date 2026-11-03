@@ -494,7 +494,7 @@ class ShopGlut_Popups {
 		if ( $this->opt( 'store_subscribers', true ) ) {
 			global $wpdb;
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- custom table.
-			$exists = $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . self::table() . ' WHERE email = %s', $email ) );
+			$exists = $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM %i WHERE email = %s', self::table(), $email ) );
 			if ( $exists ) {
 				wp_send_json_success( array( 'message' => __( 'You are already subscribed. Thank you!', 'shopglut' ) ) );
 			}
@@ -571,7 +571,7 @@ class ShopGlut_Popups {
 	public static function export_personal_data( $email ) {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- custom table.
-		$row  = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE email = %s', $email ), ARRAY_A );
+		$row  = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE email = %s', self::table(), $email ), ARRAY_A );
 		$data = array();
 		if ( $row ) {
 			$data[] = array(

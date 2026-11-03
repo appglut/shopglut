@@ -541,7 +541,7 @@ class ShopGlut_Cart_Template1_Markup {
 					<div class="footer-section">
 						<div class="cart-summary" style="background: <?php echo esc_attr($settings['summary_background_color'] ?? '#f9fafb'); ?>; border: 2px solid <?php echo esc_attr($settings['summary_border_color'] ?? '#e5e7eb'); ?>; border-radius: <?php echo esc_attr($settings['summary_border_radius'] ?? 8); ?>px;">
 							<?php if ($settings['show_summary_header'] ?? true): ?>
-							<div class="summary-header" style="padding: <?php echo esc_attr($settings['summary_padding']['top'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['right'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px'); ?>; border-bottom: 1px solid <?php echo esc_attr($settings['summary_border_color'] ?? '#e5e7eb'); ?>;">
+							<div class="summary-header" style="padding: <?php echo esc_attr(($settings['summary_padding']['top'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['summary_padding']['right'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px')); ?>; border-bottom: 1px solid <?php echo esc_attr($settings['summary_border_color'] ?? '#e5e7eb'); ?>;">
 								<h3 class="summary-title" style="font-size: <?php echo esc_attr($settings['summary_title_font_size'] ?? 20); ?>px; color: <?php echo esc_attr($settings['summary_title_color'] ?? '#111827'); ?>;">
 									<?php if ($settings['show_summary_icon'] ?? true): ?>
 									<span style="color: <?php echo esc_attr($settings['summary_icon_color'] ?? '#3b82f6'); ?>;"><?php echo shopglut_icon('receipt'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
@@ -550,7 +550,7 @@ class ShopGlut_Cart_Template1_Markup {
 								</h3>
 							</div>
 							<?php endif; ?>
-							<div class="summary-content" style="padding: <?php echo esc_attr($settings['summary_padding']['top'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['right'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['bottom'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px'); ?> <?php echo esc_attr($settings['summary_padding']['left'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px'); ?>;">
+							<div class="summary-content" style="padding: <?php echo esc_attr(($settings['summary_padding']['top'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['summary_padding']['right'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['summary_padding']['bottom'] ?? 24) . ($settings['summary_padding']['unit'] ?? 'px')); ?> <?php echo esc_attr(($settings['summary_padding']['left'] ?? 20) . ($settings['summary_padding']['unit'] ?? 'px')); ?>;">
 								<?php if ($settings['show_subtotal'] ?? true): ?>
 								<div class="summary-row" style="padding: <?php echo esc_attr($settings['row_spacing'] ?? 12); ?>px 0; color: <?php echo esc_attr($settings['row_label_color'] ?? '#6b7280'); ?>; font-size: <?php echo esc_attr($settings['row_font_size'] ?? 14); ?>px;">
 									<span class="label"><?php echo esc_html__('Subtotal:', 'shopglut'); ?></span>
@@ -904,7 +904,7 @@ class ShopGlut_Cart_Template1_Markup {
 			case 'home':
 				return home_url();
 			case 'previous':
-				return isset($_SERVER['HTTP_REFERER']) ? esc_url($_SERVER['HTTP_REFERER']) : wc_get_page_permalink('shop');
+				return isset($_SERVER['HTTP_REFERER']) ? esc_url(sanitize_url(wp_unslash($_SERVER['HTTP_REFERER']))) : wc_get_page_permalink('shop');
 			case 'custom':
 				return !empty($settings['custom_continue_url']) ? esc_url($settings['custom_continue_url']) : wc_get_page_permalink('shop');
 			default:

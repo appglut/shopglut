@@ -79,7 +79,7 @@ class ShopGlut_Order_Complete {
 			return null;
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- the order key in the URL is the access check, as in WooCommerce.
-		$key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : '';
+		$key = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
 		if ( ! hash_equals( $order->get_order_key(), (string) $key ) ) {
 			return null;
 		}

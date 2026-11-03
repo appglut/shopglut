@@ -58,10 +58,15 @@ class ShopGlut_Subscribers_Admin {
 		$paged  = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1;
 		// phpcs:enable
 		$per   = 50;
-		$where = $search ? $wpdb->prepare( 'WHERE email LIKE %s OR name LIKE %s', '%' . $wpdb->esc_like( $search ) . '%', '%' . $wpdb->esc_like( $search ) . '%' ) : '';
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- custom table; $where is prepared above.
-		$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} {$where}" );
-		$rows  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} {$where} ORDER BY id DESC LIMIT %d OFFSET %d", $per, ( $paged - 1 ) * $per ), ARRAY_A );
+		$like = '%' . $wpdb->esc_like( $search ) . '%';
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery -- custom table.
+		if ( '' !== $search ) {
+			$total = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE email LIKE %s OR name LIKE %s', $table, $like, $like ) );
+			$rows  = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE email LIKE %s OR name LIKE %s ORDER BY id DESC LIMIT %d OFFSET %d', $table, $like, $like, $per, ( $paged - 1 ) * $per ), ARRAY_A );
+		} else {
+			$total = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $table ) );
+			$rows  = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY id DESC LIMIT %d OFFSET %d', $table, $per, ( $paged - 1 ) * $per ), ARRAY_A );
+		}
 		// phpcs:enable
 		$base = admin_url( 'admin.php?page=' . self::SLUG );
 		?>
@@ -125,8 +130,8 @@ class ShopGlut_Subscribers_Admin {
 			wp_die( esc_html__( 'Sorry, you are not allowed to do that.', 'shopglut' ) );
 		}
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- custom table, no input.
-		$rows = $wpdb->get_results( 'SELECT email, name, popup_id, consent, page_url, created_at FROM ' . ShopGlut_Popups::table() . ' ORDER BY id ASC', ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- custom table.
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT email, name, popup_id, consent, page_url, created_at FROM %i ORDER BY id ASC', ShopGlut_Popups::table() ), ARRAY_A );
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=shopglut-subscribers-' . gmdate( 'Y-m-d' ) . '.csv' );

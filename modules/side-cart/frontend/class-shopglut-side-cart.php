@@ -496,7 +496,7 @@ class ShopGlut_Side_Cart {
 
             echo '<div class="shopglut-mini-cart-trigger">';
             echo '<a href="#" class="shopglut-menu-cart">';
-            echo $cart_icon;
+            echo $cart_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup.
             if ($show_count) {
                 echo '<span class="shopglut-menu-cart-count">' . esc_html($cart_count_display) . '</span>';
             }
@@ -562,7 +562,7 @@ class ShopGlut_Side_Cart {
             echo '<span class="shopglut-basket-text">' . esc_html($atts['link_text']) . '</span>';
         }
 
-        echo '<span class="shopglut-basket-icon">' . $cart_icon . '</span>';
+        echo '<span class="shopglut-basket-icon">' . $cart_icon . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup.
 
         if ($show_count) {
             echo '<span class="shopglut-menu-cart-count">' . esc_html($cart_count_display) . '</span>';
@@ -1043,6 +1043,7 @@ class ShopGlut_Side_Cart {
             if ($quantity > $stock_quantity) {
                 $settings = $this->getSettings();
                 wp_send_json_error(array(
+                    /* translators: %d: number of items in stock */
                     'message' => sprintf(__('Only %d items available in stock.', 'shopglut'), $stock_quantity),
                     'max_quantity_message' => true,
                     'max_quantity' => $stock_quantity
@@ -1192,7 +1193,7 @@ class ShopGlut_Side_Cart {
             ?>
             <div class="shopglut-cart-discount">
                 <span class="shopglut-cart-discount-label"><?php echo esc_html__('Discount:', 'shopglut'); ?></span>
-                <span class="shopglut-cart-discount-amount">-<?php echo wc_price($discount_total); ?></span>
+                <span class="shopglut-cart-discount-amount">-<?php echo wp_kses_post(wc_price($discount_total)); ?></span>
             </div>
             <?php endif; ?>
 
@@ -1202,7 +1203,7 @@ class ShopGlut_Side_Cart {
             ?>
             <div class="shopglut-cart-savings">
                 <span class="shopglut-cart-savings-label"><?php echo esc_html($savings_label_text); ?></span>
-                <span class="shopglut-cart-savings-amount"><?php echo wc_price($savings_amount); ?></span>
+                <span class="shopglut-cart-savings-amount"><?php echo wp_kses_post(wc_price($savings_amount)); ?></span>
             </div>
             <?php endif; ?>
 
@@ -1226,7 +1227,7 @@ class ShopGlut_Side_Cart {
                                     <span class="shopglut-summary-item-qty">x<?php echo esc_html($cart_item['quantity']); ?></span>
                                 <?php endif; ?>
                             </span>
-                            <span class="shopglut-summary-item-price"><?php echo wc_price($cart_item['line_total']); ?></span>
+                            <span class="shopglut-summary-item-price"><?php echo wp_kses_post(wc_price($cart_item['line_total'])); ?></span>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -1332,8 +1333,10 @@ class ShopGlut_Side_Cart {
 
         // Also generate a custom session token for the specific cart item if provided
         $session_token = null;
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- see the comment above: only returns a nonce for the visitor's own session.
         if (isset($_POST['cart_key'])) {
             $cart_key = sanitize_text_field(wp_unslash($_POST['cart_key']));
+            // phpcs:enable
             $session_token = $this->generate_session_token($cart_key);
         }
 

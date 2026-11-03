@@ -666,7 +666,7 @@ class ShopGlut_Cart_Template2_Markup {
 			case 'home':
 				return home_url();
 			case 'previous':
-				return isset($_SERVER['HTTP_REFERER']) ? esc_url($_SERVER['HTTP_REFERER']) : wc_get_page_permalink('shop');
+				return isset($_SERVER['HTTP_REFERER']) ? esc_url(sanitize_url(wp_unslash($_SERVER['HTTP_REFERER']))) : wc_get_page_permalink('shop');
 			case 'custom':
 				return !empty($settings['custom_continue_url']) ? esc_url($settings['custom_continue_url']) : wc_get_page_permalink('shop');
 			default:

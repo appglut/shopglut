@@ -3,13 +3,13 @@
  * Plugin Name: ShopGlut – Product, Shop, Filter, Swatches, Wishlist & More Builder for WooCommerce
  * Plugin URI:  https://wordpress.org/plugins/shopglut/
  * Description: All-in-one WooCommerce builder: product page, shop & archive, cart, checkout fields, thank you page, swatches, badges, filters, wishlist and side cart, managed from one modern admin.
- * Version:     2.0.0
+ * Version:     2.1.0
  * Author:      AppGlut
  * Author URI:  https://www.appglut.com
  * License:     GPLv2 or later
  * Text Domain: shopglut
  * Domain Path: /languages
- * Requires at least: 6.1
+ * Requires at least: 6.2
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  *
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SHOPGLUT_VERSION', '2.0.0' );
+define( 'SHOPGLUT_VERSION', '2.1.0' );
 define( 'SHOPGLUT_FILE', __FILE__ );
 define( 'SHOPGLUT_BASENAME', plugin_basename( __FILE__ ) );
 define( 'SHOPGLUT_PATH', plugin_dir_path( __FILE__ ) );
