@@ -1731,7 +1731,7 @@ ShopGlut_Schema::createSection( $AGWISHGLUT_WISHLIST_OPTIONS, array(
 			'type' => 'switcher',
 			'title' => __( 'Show Menu Button Text', 'shopglut' ),
 			'desc' => __( 'Display text alongside the wishlist icon', 'shopglut' ),
-			'default' => true,
+			'default' => false,
 		),
 
 		array(

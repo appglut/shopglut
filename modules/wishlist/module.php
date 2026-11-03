@@ -56,6 +56,19 @@ class ShopGlut_Module_Wishlist extends ShopGlut_Module {
 	public function settings_sections() {
 		return $this->schema( $this->dir . 'settings/options.php', 'options' );
 	}
+
+	/**
+	 * Front end: buttons, wishlist page, counter, sharing.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-wishlist.php';
+		$GLOBALS['shopglut_wishlist'] = new ShopGlut_Wishlist( $this->url );
+	}
 }
 
 return 'ShopGlut_Module_Wishlist';
