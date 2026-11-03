@@ -74,6 +74,19 @@ class ShopGlut_Module_Product_Badges extends ShopGlut_Module {
 	public function layout_sections( $template, $layout ) {
 		return $this->schema( $this->dir . 'settings/badge.php' );
 	}
+
+	/**
+	 * Front end: badges on product images and before titles.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-product-badges.php';
+		new ShopGlut_Product_Badges();
+	}
 }
 
 return 'ShopGlut_Module_Product_Badges';
