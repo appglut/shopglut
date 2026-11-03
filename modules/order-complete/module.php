@@ -66,6 +66,19 @@ class ShopGlut_Module_Order_Complete extends ShopGlut_Module {
 	public function layout_sections( $template, $layout ) {
 		return $this->template_sections( $template, $layout );
 	}
+
+	/**
+	 * Front end: the order received page uses the active layout.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-order-complete.php';
+		$GLOBALS['shopglut_order_complete'] = new ShopGlut_Order_Complete( $this->dir );
+	}
 }
 
 return 'ShopGlut_Module_Order_Complete';
