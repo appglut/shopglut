@@ -35,24 +35,7 @@ class ShopGlut_Side_Cart {
      * @return string
      */
     public static function icon($name, $class = '') {
-        $paths = array(
-            'minus'         => '<path d="M5 12h14"/>',
-            'plus'          => '<path d="M12 5v14M5 12h14"/>',
-            'trash'         => '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
-            'times'         => '<path d="M6 6l12 12M18 6L6 18"/>',
-            'xmark'         => '<path d="M6 6l12 12M18 6L6 18"/>',
-            'shopping-cart' => '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6"/>',
-            'shopping-bag'  => '<path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
-            'shopping-basket' => '<path d="M3 10h18l-2 10H5z"/><path d="M8 10l4-6 4 6"/>',
-            'share-nodes'   => '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/>',
-            'chevron-down'  => '<path d="M6 9l6 6 6-6"/>',
-            'chevron-up'    => '<path d="M6 15l6-6 6 6"/>',
-            'tag'           => '<path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
-            'envelope'      => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
-            'check'         => '<path d="M5 12l5 5 9-10"/>',
-        );
-        $path = isset($paths[$name]) ? $paths[$name] : $paths['shopping-cart'];
-        return '<span class="shopglut-ic shopglut-ic-' . esc_attr($name) . ($class ? ' ' . esc_attr($class) : '') . '" aria-hidden="true"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg></span>';
+        return shopglut_icon($name, $class);
     }
 
     private $option_group = 'shopglut_sc_settings';

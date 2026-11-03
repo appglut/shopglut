@@ -66,6 +66,19 @@ class ShopGlut_Module_Cart_Page extends ShopGlut_Module {
 	public function layout_sections( $template, $layout ) {
 		return $this->template_sections( $template, $layout );
 	}
+
+	/**
+	 * Front end: the active layout replaces the cart; [shopglut_cart] shortcode; AJAX cart actions.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-cart-page.php';
+		$GLOBALS['shopglut_cart_page'] = new ShopGlut_Cart_Page( $this->dir, $this->url );
+	}
 }
 
 return 'ShopGlut_Module_Cart_Page';
