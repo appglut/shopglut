@@ -54,7 +54,7 @@ class ShopGlut_Module_Product_Page extends ShopGlut_Module {
 	 * @return array
 	 */
 	public function templates() {
-		$templates = $this->numbered_templates( 7, 7, $this->url . 'images/%s.jpg' );
+		$templates = $this->numbered_templates( 7, 7, $this->url . 'images/product-page-%s.jpg' );
 		for ( $i = 1; $i <= 10; $i++ ) {
 			$templates[ 'templatePro' . $i ] = array(
 				/* translators: %d: template number */

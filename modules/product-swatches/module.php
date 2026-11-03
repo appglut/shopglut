@@ -55,7 +55,7 @@ class ShopGlut_Module_Product_Swatches extends ShopGlut_Module {
 	 * @return array
 	 */
 	public function templates() {
-		return $this->numbered_templates( 30, 10 );
+		return $this->numbered_templates( 30, 10, $this->url . 'images/product-swatches-%s.jpg' );
 	}
 
 	/**

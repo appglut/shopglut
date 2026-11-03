@@ -53,7 +53,7 @@ class ShopGlut_Module_Shop_Archive extends ShopGlut_Module {
 	 * @return array
 	 */
 	public function templates() {
-		return $this->numbered_templates( 19, 10 );
+		return $this->numbered_templates( 19, 10, $this->url . 'images/shop-archive-%s.jpg' );
 	}
 
 	/**

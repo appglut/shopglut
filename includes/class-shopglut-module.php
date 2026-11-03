@@ -183,7 +183,7 @@ abstract class ShopGlut_Module {
 			$out[ $id ] = array(
 				/* translators: %d: template number */
 				'title' => sprintf( __( 'Template %d', 'shopglut' ), $i ),
-				'image' => $image ? sprintf( $image, $id ) : '',
+				'image' => ( $image && $i <= $free ) ? sprintf( $image, $id ) : '',
 				'pro'   => $i > $free,
 			);
 		}

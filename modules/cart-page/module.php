@@ -53,7 +53,7 @@ class ShopGlut_Module_Cart_Page extends ShopGlut_Module {
 	 * @return array
 	 */
 	public function templates() {
-		return $this->numbered_templates( 5, 3 );
+		return $this->numbered_templates( 5, 3, $this->url . 'images/cart-page-%s.jpg' );
 	}
 
 	/**

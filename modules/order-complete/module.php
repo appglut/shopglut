@@ -53,7 +53,7 @@ class ShopGlut_Module_Order_Complete extends ShopGlut_Module {
 	 * @return array
 	 */
 	public function templates() {
-		return $this->numbered_templates( 1, 1 );
+		return $this->numbered_templates( 1, 1, $this->url . 'images/order-complete-%s.jpg' );
 	}
 
 	/**
