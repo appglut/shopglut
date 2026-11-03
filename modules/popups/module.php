@@ -322,6 +322,20 @@ class ShopGlut_Module_Popups extends ShopGlut_Module {
 			),
 		);
 	}
+
+	/**
+	 * Front end: popups in the footer, subscribe form, Subscribers admin page.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		require_once $this->dir . 'frontend/class-shopglut-popups.php';
+		new ShopGlut_Popups( $this );
+		if ( is_admin() ) {
+			require_once $this->dir . 'frontend/class-shopglut-subscribers-admin.php';
+			new ShopGlut_Subscribers_Admin();
+		}
+	}
 }
 
 return 'ShopGlut_Module_Popups';
