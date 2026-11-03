@@ -72,6 +72,181 @@ $shopglut_shopg_attribute_taxonomies = wc_get_attribute_taxonomies();
 
 
 
+
+// One filter of the panel. The front end reads these fields (modules/shop-filters/frontend).
+$shopglut_filter_types = array(
+	'product-categories' => __( 'Product categories', 'shopglut' ),
+	'product-tags'       => __( 'Product tags', 'shopglut' ),
+	'product-price'      => __( 'Price', 'shopglut' ),
+	'product-rating'     => __( 'Rating', 'shopglut' ),
+	'product-stock'      => __( 'Stock status', 'shopglut' ),
+	'product-onsale'     => __( 'On sale', 'shopglut' ),
+);
+foreach ( (array) wc_get_attribute_taxonomies() as $shopglut_filter_attr ) {
+	/* translators: %s: attribute name, e.g. Color */
+	$shopglut_filter_types[ wc_attribute_taxonomy_name( $shopglut_filter_attr->attribute_name ) ] = sprintf( __( 'Attribute: %s', 'shopglut' ), $shopglut_filter_attr->attribute_label );
+}
+$shopglut_filter_term_types = array_values( array_diff( array_keys( $shopglut_filter_types ), array( 'product-price', 'product-rating', 'product-stock', 'product-onsale' ) ) );
+$shopglut_filter_designs    = SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/';
+
+$shopglut_filter_item_fields = array(
+	array(
+		'id'    => 'accordion-title',
+		'type'  => 'text',
+		'title' => __( 'Filter title', 'shopglut' ),
+	),
+	array(
+		'id'      => 'filter-type',
+		'type'    => 'select',
+		'title'   => __( 'Filter type', 'shopglut' ),
+		'options' => $shopglut_filter_types,
+		'default' => 'product-categories',
+	),
+	array(
+		'id'         => 'filter-term-appearance',
+		'type'       => 'image_select',
+		'title'      => __( 'Design', 'shopglut' ),
+		'options'    => array(
+			'check-list' => $shopglut_filter_designs . 'checkbox.png',
+			'radio'      => $shopglut_filter_designs . 'radio.png',
+			'dropdown'   => $shopglut_filter_designs . 'dropdown.png',
+			'button'     => $shopglut_filter_designs . 'button.png',
+		),
+		'default'    => 'check-list',
+		'dependency' => array( 'filter-type', 'any', 'product-categories,product-tags' ),
+	),
+	array(
+		'id'         => 'filter-query-type',
+		'type'       => 'button_set',
+		'title'      => __( 'Several choices match', 'shopglut' ),
+		'options'    => array(
+			'or'  => __( 'Any of them', 'shopglut' ),
+			'and' => __( 'All of them', 'shopglut' ),
+		),
+		'default'    => 'or',
+		'dependency' => array( 'filter-type', 'any', implode( ',', $shopglut_filter_term_types ) ),
+	),
+	array(
+		'id'         => 'filter-category-exclude-include-button',
+		'type'       => 'button_set',
+		'title'      => __( 'Categories', 'shopglut' ),
+		'options'    => array(
+			'all'     => __( 'All', 'shopglut' ),
+			'include' => __( 'Only these', 'shopglut' ),
+			'exclude' => __( 'All except', 'shopglut' ),
+		),
+		'default'    => 'all',
+		'dependency' => array( 'filter-type', '==', 'product-categories' ),
+	),
+	array(
+		'id'         => 'shopg-filter-include-category',
+		'type'       => 'select',
+		'title'      => __( 'Show only', 'shopglut' ),
+		'options'    => 'categories',
+		'query_args' => array( 'taxonomy' => 'product_cat' ),
+		'multiple'   => true,
+		'chosen'     => true,
+		'dependency' => array( 'filter-type|filter-category-exclude-include-button', '==|==', 'product-categories|include' ),
+	),
+	array(
+		'id'         => 'shopg-filter-exclude-category',
+		'type'       => 'select',
+		'title'      => __( 'Hide', 'shopglut' ),
+		'options'    => 'categories',
+		'query_args' => array( 'taxonomy' => 'product_cat' ),
+		'multiple'   => true,
+		'chosen'     => true,
+		'dependency' => array( 'filter-type|filter-category-exclude-include-button', '==|==', 'product-categories|exclude' ),
+	),
+	array(
+		'id'         => 'filter-tag-exclude-include-button',
+		'type'       => 'button_set',
+		'title'      => __( 'Tags', 'shopglut' ),
+		'options'    => array(
+			'all'     => __( 'All', 'shopglut' ),
+			'include' => __( 'Only these', 'shopglut' ),
+			'exclude' => __( 'All except', 'shopglut' ),
+		),
+		'default'    => 'all',
+		'dependency' => array( 'filter-type', '==', 'product-tags' ),
+	),
+	array(
+		'id'         => 'shopg-filter-include-tag',
+		'type'       => 'select',
+		'title'      => __( 'Show only', 'shopglut' ),
+		'options'    => 'tags',
+		'query_args' => array( 'taxonomy' => 'product_tag' ),
+		'multiple'   => true,
+		'chosen'     => true,
+		'dependency' => array( 'filter-type|filter-tag-exclude-include-button', '==|==', 'product-tags|include' ),
+	),
+	array(
+		'id'         => 'shopg-filter-exclude-tag',
+		'type'       => 'select',
+		'title'      => __( 'Hide', 'shopglut' ),
+		'options'    => 'tags',
+		'query_args' => array( 'taxonomy' => 'product_tag' ),
+		'multiple'   => true,
+		'chosen'     => true,
+		'dependency' => array( 'filter-type|filter-tag-exclude-include-button', '==|==', 'product-tags|exclude' ),
+	),
+	array(
+		'id'         => 'filter-product-price-appearance',
+		'type'       => 'image_select',
+		'title'      => __( 'Design', 'shopglut' ),
+		'options'    => array(
+			'price-range-slider' => $shopglut_filter_designs . 'normal-slider.png',
+			'price-range-radio'  => $shopglut_filter_designs . 'radio-slider.png',
+		),
+		'default'    => 'price-range-slider',
+		'dependency' => array( 'filter-type', '==', 'product-price' ),
+	),
+	array(
+		'id'         => 'filter-product-price-step',
+		'type'       => 'number',
+		'title'      => __( 'Slider step', 'shopglut' ),
+		'default'    => 1,
+		'dependency' => array( 'filter-type|filter-product-price-appearance', '==|==', 'product-price|price-range-slider' ),
+	),
+	array(
+		'id'         => 'filter-price-ranges',
+		'type'       => 'textarea',
+		'title'      => __( 'Price ranges', 'shopglut' ),
+		'desc'       => __( 'One per line: min-max, e.g. 0-25. Leave the max empty for "and above": 100-', 'shopglut' ),
+		'default'    => "0-25\n25-50\n50-100\n100-",
+		'dependency' => array( 'filter-type|filter-product-price-appearance', '==|==', 'product-price|price-range-radio' ),
+	),
+	array(
+		'id'         => 'filter-product-rating-appearance',
+		'type'       => 'image_select',
+		'title'      => __( 'Design', 'shopglut' ),
+		'options'    => array(
+			'star-rating'     => $shopglut_filter_designs . 'star-rating.png',
+			'checkbox-rating' => $shopglut_filter_designs . 'checkbox-rating.png',
+		),
+		'default'    => 'star-rating',
+		'dependency' => array( 'filter-type', '==', 'product-rating' ),
+	),
+	array(
+		'id'         => 'filter-stock-options',
+		'type'       => 'checkbox',
+		'title'      => __( 'Choices', 'shopglut' ),
+		'options'    => array(
+			'instock'     => __( 'In stock', 'shopglut' ),
+			'onbackorder' => __( 'On backorder', 'shopglut' ),
+			'outofstock'  => __( 'Out of stock', 'shopglut' ),
+		),
+		'default'    => array( 'instock', 'onbackorder', 'outofstock' ),
+		'dependency' => array( 'filter-type', '==', 'product-stock' ),
+	),
+	array(
+		'id'      => 'filter-collapsed',
+		'type'    => 'switcher',
+		'title'   => __( 'Start collapsed', 'shopglut' ),
+		'default' => false,
+	),
+);
+
 // Main fields array
 $shopglut_shopg_fields = array(
 	array(
@@ -105,734 +280,7 @@ $shopglut_shopg_fields = array(
 														'class' => 'general-tab',
 														'title' => __( 'General', 'shopglut' ),
 														'icon' => 'fa-solid fa-gears',
-														'fields' => array(
-															array(
-																'id' => 'accordion-title',
-																'type' => 'text',
-																'title' => __( 'Filter Title', 'shopglut' ),
-															),
-															array(
-																'id' => 'filter-type',
-																'type' => 'select',
-																'title' => __( 'Filter Type', 'shopglut' ),
-																'options' => $shopglut_shopg_filter_options,
-																'default' => 'product-categories',
-															),
-
-															array(
-																'id' => 'filter-product-price-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Price Appearance', 'shopglut' ),
-																'options' => array(
-																	'price-range-slider' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/normal-slider.png',
-																	'price-range-radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio-slider.png',
-																	'price-range-checkbox' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox-slider.png',
-																),
-																'default' => 'price-range-slider',
-																'dependency' => array( 'filter-type', '==', "product-price" ),
-															),
-
-															array(
-																'id' => 'filter-product-price-range',
-																'type' => 'min_max',
-																'title' => __( 'Price Range', 'shopglut' ),
-																'min_value' => '0',
-																'max_value' => '1000',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-price-range-show',
-																'type' => 'switcher',
-																'title' => __( 'Show Price Range on Filter', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-price-range-ruler',
-																'type' => 'switcher',
-																'title' => __( 'Show Price Range Grid on Filter', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Skin selection
-															array(
-																'id' => 'filter-product-price-skin',
-																'type' => 'select',
-																'title' => __( 'Slider Skin', 'shopglut' ),
-																'options' => array(
-																	'flat' => __( 'Flat', 'shopglut' ),
-																	'big' => __( 'Big', 'shopglut' ),
-																	'modern' => __( 'Modern', 'shopglut' ),
-																	'sharp' => __( 'Sharp', 'shopglut' ),
-																	'round' => __( 'Round', 'shopglut' ),
-																	'square' => __( 'Square', 'shopglut' ),
-																),
-																'default' => 'flat',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Step size
-															array(
-																'id' => 'filter-product-price-step',
-																'type' => 'number',
-																'title' => __( 'Price Step', 'shopglut' ),
-																'desc' => __( 'Set step size for the slider (e.g. 5 for $5 increments)', 'shopglut' ),
-																'default' => 1,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Number formatting
-															array(
-																'id' => 'filter-product-price-prettify',
-																'type' => 'switcher',
-																'title' => __( 'Prettify Numbers', 'shopglut' ),
-																'desc' => __( 'Improve readability of long numbers (e.g. 10000 → 10 000)', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'default' => true,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Separator character
-															array(
-																'id' => 'filter-product-price-separator',
-																'type' => 'text',
-																'title' => __( 'Thousand Separator', 'shopglut' ),
-																'desc' => __( 'Character to use as thousand separator (e.g. " ", ",", ".")', 'shopglut' ),
-																'default' => ' ',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																	array( 'filter-product-price-prettify', '==', true ),
-																),
-															),
-
-															// Prefix/Currency symbol position
-															array(
-																'id' => 'filter-product-price-prefix',
-																'type' => 'text',
-																'title' => __( 'Price Prefix', 'shopglut' ),
-																'desc' => __( 'Text to display before the price (e.g. "$")', 'shopglut' ),
-																'default' => '$',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Postfix
-															array(
-																'id' => 'filter-product-price-postfix',
-																'type' => 'text',
-																'title' => __( 'Price Postfix', 'shopglut' ),
-																'desc' => __( 'Text to display after the price (e.g. " USD")', 'shopglut' ),
-																'default' => '',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Grid number
-															array(
-																'id' => 'filter-product-price-grid-num',
-																'type' => 'number',
-																'title' => __( 'Grid Number', 'shopglut' ),
-																'desc' => __( 'Number of grid units to display', 'shopglut' ),
-																'default' => 4,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																	array( 'filter-product-price-range-ruler', '==', true ),
-																),
-															),
-
-															// Keyboard control
-															array(
-																'id' => 'filter-product-price-keyboard',
-																'type' => 'switcher',
-																'title' => __( 'Keyboard Controls', 'shopglut' ),
-																'desc' => __( 'Allow arrow keys to control slider', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'default' => true,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Force edges
-															array(
-																'id' => 'filter-product-price-force-edges',
-																'type' => 'switcher',
-																'title' => __( 'Force Edges', 'shopglut' ),
-																'desc' => __( 'Keep slider handles inside the container', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'default' => false,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															// Drag interval (for double slider)
-															array(
-																'id' => 'filter-product-price-drag-interval',
-																'type' => 'switcher',
-																'title' => __( 'Drag Interval', 'shopglut' ),
-																'desc' => __( 'Allow users to drag the entire selected range', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'default' => false,
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-slider,tooltip-range-slider' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-price-range-repeater',
-																'class' => 'filter-price-range-repeater',
-																'type' => 'repeater',
-																'title' => __( 'Choose Ranges', 'shopglut' ),
-																'button_title' => __( 'Add Range +', 'shopglut' ),
-																'fields' => array(
-
-																	array(
-																		'id' => 'filter-group-price-range',
-																		'type' => 'min_max',
-																		'title' => __( 'Price Range', 'shopglut' ),
-																		'min_value' => '0',
-																		'max_value' => '20',
-																	)
-
-																),
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-price' ),
-																	array( 'filter-product-price-appearance', 'any', 'price-range-radio,price-range-checkbox' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-categories-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Categories Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	// 'color-button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color-button.png',
-																	// 'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	// 'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	// 'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	// 'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	//'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	//'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png',
-																	//'tree-view' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/tree-view.png',
-																	//'icon' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/icon-view.png',
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-categories" ),
-															),
-
-															array(
-																'id' => 'filter-product-tags-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Tags Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	// 'color-button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color-button.png',
-																	// 'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	// 'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	// 'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	// 'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	//'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	//'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png',
-																	//'tree-view' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/tree-view.png',
-																	//'icon' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/icon-view.png',
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-tags" ),
-															),
-
-															array(
-																'id' => 'filter-product-shipping-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Product Shipping Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-shipping-class" ),
-															),
-
-															array(
-																'id' => 'filter-product-sortby-appearance',
-																'type' => 'image_select',
-																'title' => __( 'SortBy Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-sortby" ),
-															),
-
-															array(
-																'id' => 'filter-product-sortby-options',
-																'type' => 'select',
-																'title' => esc_html__( 'Select SortBy Options', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Select an Option', 'shopglut' ),
-																'options' => array(
-																	'title' => esc_html__( 'Product Title', 'shopglut' ),
-																	'name' => esc_html__( 'Product Name (Slug)', 'shopglut' ),
-																	'ID' => esc_html__( 'Product ID', 'shopglut' ),
-																	'author' => esc_html__( 'Product Author', 'shopglut' ),
-																	'sku' => esc_html__( 'Product SKU', 'shopglut' ),
-																	'sales' => esc_html__( 'Product Sales', 'shopglut' ),
-																	'price_low_to_high' => esc_html__( 'Product Price (Low to High)', 'shopglut' ),
-																	'price_high_to_low' => esc_html__( 'Product Price (High to Low)', 'shopglut' ),
-																	'date' => esc_html__( 'Product Date', 'shopglut' ),
-																	'modified' => esc_html__( 'Product Last Modify', 'shopglut' ),
-																	'ratings' => esc_html__( 'Product Ratings', 'shopglut' ),
-																	'featured' => esc_html__( 'Featured Product', 'shopglut' ),
-																	'stock_quantity' => esc_html__( 'Product Stock Quantity', 'shopglut' ),
-																	'reviews_count' => esc_html__( 'Product Reviews Count', 'shopglut' ),
-
-																),
-																'dependency' => array( 'filter-type', '==', "product-sortby" ),
-
-															),
-
-
-															array(
-																'id' => 'filter-product-term-images',
-																'type' => 'tax_images',
-																'title' => __( 'Product Categories Images', 'shopglut' ),
-																'product_option' => 'product_cat',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-categories' ),
-																	array( 'filter-product-categories-appearance', '==', 'image' ),
-																),
-															),
-
-
-															array(
-																'id' => 'filter-product-cat-color',
-																'type' => 'tax_color',
-																'title' => __( 'Product Categories Color', 'shopglut' ),
-																'product_option' => 'product_cat',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-categories' ),
-																	array( 'filter-product-categories-appearance', 'any', 'color,color-button' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-tag-color',
-																'type' => 'tax_color',
-																'title' => __( 'Product Tags Color', 'shopglut' ),
-																'product_option' => 'product_tag',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-tags' ),
-																	array( 'filter-product-tags-appearance', 'any', 'color,color-button' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-tag-images',
-																'type' => 'tax_images',
-																'title' => __( 'Product Tags Images', 'shopglut' ),
-																'product_option' => 'product_tag',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-tags' ),
-																	array( 'filter-product-tags-appearance', '==', 'image' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-shipping-images',
-																'type' => 'tax_images',
-																'title' => __( 'Product Shipping Class Images', 'shopglut' ),
-																'product_option' => 'product_shipping_class',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-shipping-class' ),
-																	array( 'filter-product-shipping-appearance', '==', 'image' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-shipping-color',
-																'type' => 'tax_color',
-																'title' => __( 'Product Shipping Class Color', 'shopglut' ),
-																'product_option' => 'product_shipping_class',
-																'dependency' => array(
-																	array( 'filter-type', '==', 'product-shipping-class' ),
-																	array( 'filter-product-shipping-appearance', '==', 'color' ),
-																),
-															),
-
-															array(
-																'id' => 'filter-product-rating-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Rating Appearance', 'shopglut' ),
-																'options' => array(
-																	'star-rating' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/star-rating.png',
-																	'checkbox-rating' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox-rating.png',
-																	'radio-rating' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio-rating.png',
-																	'slider-rating' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/slider-rating.png',
-																	'dropdown-rating' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown-rating.png',
-																),
-																'default' => 'star-rating',
-																'dependency' => array( 'filter-type', '==', "product-rating" ),
-															),
-
-															array(
-																'id' => 'filter-product-rating-show-count',
-																'type' => 'switcher',
-																'title' => __( 'Show Product Count', 'shopglut' ),
-																'desc' => __( 'Display the number of products for each rating level', 'shopglut' ),
-																'text_on' => __( 'Yes', 'shopglut' ),
-																'text_off' => __( 'No', 'shopglut' ),
-																'default' => false,
-																'dependency' => array( 'filter-type', '==', "product-rating" ),
-															),
-															array(
-																'id' => 'filter-product-author-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Author Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-author" ),
-															),
-
-															array(
-																'id' => 'filter-product-stock-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Stock Appearance', 'shopglut' ),
-																'options' => array(
-																	'value-1' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-2' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-3' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																),
-																'default' => 'value-1',
-																'dependency' => array( 'filter-type', '==', "product-stock" ),
-															),
-
-															array(
-																'id' => 'filter-product-sell-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Sell Appearance', 'shopglut' ),
-																'options' => array(
-																	'value-1' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-2' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-3' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																),
-																'default' => 'value-1',
-																'dependency' => array( 'filter-type', '==', "product-sell" ),
-															),
-
-															array(
-																'id' => 'filter-product-type-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Product Type Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-type" ),
-															),
-
-															array(
-																'id' => 'filter-product-keyword-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Keyword Appearance', 'shopglut' ),
-																'options' => array(
-																	'value-1' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-2' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																	'value-3' => 'http://codestarframework.com/assets/images/placeholder/80x80-2c3e50.gif',
-																),
-																'default' => 'value-1',
-																'dependency' => array( 'filter-type', '==', "product-keyword" ),
-															),
-
-
-															array(
-																'id' => 'filter-order-direction-options',
-																'type' => 'select',
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Select an Option', 'shopglut' ),
-																'title' => __( 'Order Direction Options', 'shopglut' ),
-																'options' => array(
-																	'asc' => __( 'Ascending ', 'shopglut' ),
-																	'desc' => __( 'Descending ', 'shopglut' ),
-																),
-																'default' => 'asc',
-																'dependency' => array( 'filter-type', '==', "product-order-direction" ),
-															),
-
-															array(
-																'id' => 'filter-product-status-options',
-																'type' => 'select',
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Select an Option', 'shopglut' ),
-																'title' => __( 'Status Options', 'shopglut' ),
-																'options' => array(
-																	'in-stock' => __( 'In Stock', 'shopglut' ),
-																	'out-of-stock' => __( 'Out of Stock', 'shopglut' ),
-																	'on-sale' => __( 'On Sale', 'shopglut' ),
-																	'discounted-products' => __( 'Discounted Products', 'shopglut' ),
-																	'purchase-history' => __( 'Purchased History', 'shopglut' ),
-																),
-																'default' => 'in-stock',
-																'dependency' => array( 'filter-type', '==', "product-status" ),
-															),
-
-															array(
-																'id' => 'filter-product-status-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Status Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-status" ),
-															),
-
-
-															array(
-																'id' => 'filter-order-direction-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Order Direction Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																	'color' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/color.png',
-																	'image' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/image.png'
-																),
-																'default' => 'check-list',
-																'dependency' => array( 'filter-type', '==', "product-order-direction" ),
-															),
-
-															array(
-																'id' => 'filter-search-placeholder-text',
-																'type' => 'text',
-																'title' => __( 'Search Input Placeholder', 'shopglut' ),
-																'default' => __( 'Search...', 'shopglut' ),
-																'dependency' => array( 'filter-type', '==', "product-search" ),
-															),
-															array(
-																'id' => 'filter-search-options',
-																'type' => 'select',
-																'title' => __( 'Search Option', 'shopglut' ),
-																'options' => array(
-																	'title' => __( 'Search by Title', 'shopglut' ),
-																	'content' => __( 'Search by Content', 'shopglut' ),
-																	'excerpt' => __( 'Search by Excerpt', 'shopglut' ),
-																	'content_or_excerpt' => __( 'Search by Content OR Excerpt', 'shopglut' ),
-																	'title_or_content_or_excerpt' => __( 'Search by title OR content OR excerpt', 'shopglut' ),
-																	'title_or_content' => __( 'Search by title OR content', 'shopglut' ),
-																),
-																'default' => 'title',
-																'dependency' => array( 'filter-type', '==', "product-search" ),
-															),
-
-															array(
-																'id' => 'filter-search-by-word-option',
-																'type' => 'select',
-																'title' => __( 'Search By Word Option', 'shopglut' ),
-																'options' => array(
-																	'full-word' => __( 'Search by Full Word', 'shopglut' ),
-																	'partial-word' => __( 'Search by Partial Word', 'shopglut' ),
-																),
-																'default' => 'full-word',
-																'dependency' => array( 'filter-type', '==', "product-search" ),
-															),
-
-
-															array(
-																'id' => 'filter-category-exclude-include-button',
-																'type' => 'button_set',
-																'title' => __( 'Choose Option', 'shopglut' ),
-																'options' => array(
-																	'all-cat' => __( 'All Categories', 'shopglut' ),
-																	// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- This is a configuration option, not a query parameter
-																	'exclude' => __( 'Exclude', 'shopglut' ),
-																	'include' => __( 'Include', 'shopglut' ),
-																),
-																'default' => 'all-cat',
-																'dependency' => array( 'filter-type', '==', "product-categories" ),
-															),
-
-
-															array(
-																'id' => 'shopg-filter-include-category',
-																'type' => 'select',
-																'title' => esc_html__( 'Include Categories', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Choose Category', 'shopglut' ),
-																'options' => 'categories',
-																'query_args' => array(
-																	'taxonomy' => 'product_cat',
-																),
-																'dependency' => array( 'filter-category-exclude-include-button|filter-type', '==|==', "include|product-categories" ),
-															),
-
-
-															array(
-																'id' => 'shopg-filter-exclude-category',
-																'type' => 'select',
-																'title' => esc_html__( 'Exclude Categories', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Choose Category', 'shopglut' ),
-																'options' => 'categories',
-																'query_args' => array(
-																	'taxonomy' => 'product_cat',
-																),
-																'dependency' => array( 'filter-category-exclude-include-button|filter-type', '==|==', "exclude|product-categories" ),
-															),
-															array(
-																'id' => 'filter-tag-exclude-include-button',
-																'type' => 'button_set',
-																'title' => __( 'Choose Option', 'shopglut' ),
-																'options' => array(
-																	'all-tags' => __( 'All Tags', 'shopglut' ),
-																	// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- This is a configuration option, not a query parameter
-																	'exclude' => __( 'Exclude', 'shopglut' ),
-																	'include' => __( 'Include', 'shopglut' ),
-																),
-																'default' => 'all-tags',
-																'dependency' => array( 'filter-type', '==', "product-tags" ),
-															),
-															array(
-																'id' => 'shopg-filter-include-tag',
-																'type' => 'select',
-																'title' => esc_html__( 'Include Tags', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Choose Tags', 'shopglut' ),
-																'options' => 'categories',
-																'query_args' => array(
-																	'taxonomy' => 'product_tag',
-																),
-																'dependency' => array( 'filter-tag-exclude-include-button|filter-type', '==|==', "include|product-tags" ),
-															),
-															array(
-																'id' => 'shopg-filter-exclude-tag',
-																'type' => 'select',
-																'title' => esc_html__( 'Exclude Tags', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => esc_html__( 'Choose Tags', 'shopglut' ),
-																'options' => 'categories',
-																'query_args' => array(
-																	'taxonomy' => 'product_tag',
-																),
-																'dependency' => array( 'filter-tag-exclude-include-button|filter-type', '==|==', "exclude|product-tags" ),
-															),
-
-															array(
-																'id' => 'filter-product-view-appearance',
-																'type' => 'image_select',
-																'title' => __( 'Product View Appearance', 'shopglut' ),
-																'options' => array(
-																	'check-list' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/checkbox.png',
-																	'radio' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/radio.png',
-																	'dropdown' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/dropdown.png',
-																	'grid' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/grid.png',
-																	'button' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/button.png',
-																	'cloud' => SHOPGLUT_URL . 'modules/shop-filters/images/filterDesigns/cloud.png',
-																),
-																'default' => 'radio',
-																'dependency' => array( 'filter-type', '==', 'product-view' ),
-															),
-
-															array(
-																'id' => 'filter-product-view-options',
-																'type' => 'select',
-																'title' => __( 'Product View Filter Options', 'shopglut' ),
-																'chosen' => true,
-																'multiple' => true,
-																'placeholder' => __( 'Select View Options', 'shopglut' ),
-																'options' => array(
-																	'asc' => __( 'Ascending', 'shopglut' ),
-																	'desc' => __( 'Descending', 'shopglut' ),
-																),
-																'default' => array( 'asc', 'desc' ),
-																'dependency' => array( 'filter-type', '==', 'product-view' ),
-															),
-														),
+														'fields' => $shopglut_filter_item_fields,
 													),
 													array(
 														'class' => 'appearance-tab',

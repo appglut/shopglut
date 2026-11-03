@@ -73,6 +73,19 @@ class ShopGlut_Module_Shop_Filters extends ShopGlut_Module {
 	public function layout_sections( $template, $layout ) {
 		return $this->schema( $this->dir . 'settings/filter.php' );
 	}
+
+	/**
+	 * Front end: filter panel on the shop and archives, [shopglut_filter] shortcode, query filtering.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-shop-filters.php';
+		new ShopGlut_Shop_Filters( $this->url );
+	}
 }
 
 return 'ShopGlut_Module_Shop_Filters';
