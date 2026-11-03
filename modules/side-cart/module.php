@@ -56,6 +56,20 @@ class ShopGlut_Module_Side_Cart extends ShopGlut_Module {
 	public function settings_sections() {
 		return $this->schema( $this->dir . 'settings/options.php', 'options' );
 	}
+
+	/**
+	 * Front end: drawer, floating button, menu item, shortcodes and AJAX.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-side-cart.php';
+		ShopGlut_Side_Cart::$url = $this->url;
+		new ShopGlut_Side_Cart();
+	}
 }
 
 return 'ShopGlut_Module_Side_Cart';

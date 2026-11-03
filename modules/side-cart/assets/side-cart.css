@@ -1,0 +1,1789 @@
+/**
+ * SiderCart Glut - Side Cart Styles
+ * @package SiderCart Glut
+ */
+
+/* ===================================
+   Floating Cart Icon - Professional Design
+   =================================== */
+.shopglut-floating-cart {
+    position: fixed;
+    z-index: 999999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hidden state for floating cart */
+.shopglut-floating-cart.shopglut-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.5);
+}
+
+.shopglut-floating-cart.position-right {
+    right: var(--sg-floating-position-side, 30px);
+}
+
+.shopglut-floating-cart.position-left {
+    left: var(--sg-floating-position-side, 30px);
+}
+
+.shopglut-floating-cart {
+    bottom: var(--sg-floating-position-bottom, 30px);
+}
+
+.shopglut-floating-cart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: var(--sg-floating-bg-color, #2271b1);
+    color: var(--sg-floating-icon-color, #ffffff);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.shopglut-floating-cart:hover .shopglut-floating-cart-icon {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.shopglut-floating-cart-icon .shopglut-ic {
+    font-size: var(--sg-floating-icon-size, 24px);
+}
+
+.shopglut-floating-cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 26px;
+    height: 26px;
+    background: var(--sg-badge-bg-color, #ff4444);
+    color: var(--sg-badge-text-color, #ffffff);
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 6px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+    animation: pulse 2s infinite;
+    z-index: 2;
+}
+
+/* Pulse animation for badge */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 2px 12px rgba(255, 68, 68, 0.5);
+    }
+}
+
+/* Hide empty badge */
+.shopglut-floating-cart-badge:empty {
+    display: none;
+}
+
+/* ===================================
+   Loading States & Animations
+   =================================== */
+.shopglut-cart-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.shopglut-cart-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--sg-primary-color, #2271b1);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Cart item animation */
+.shopglut-cart-item {
+    animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Remove animation */
+.shopglut-cart-item.removing {
+    animation: slideOutToRight 0.3s ease-in forwards;
+}
+
+@keyframes slideOutToRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Notification styles */
+.shopglut-cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--sg-primary-color, #2271b1);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000000;
+    animation: slideDown 0.3s ease-out;
+    max-width: 300px;
+}
+
+.shopglut-cart-notification.error {
+    background: var(--sg-remove_button_color, #ff4444);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Cart share button styling */
+.shopglut-cart-share-button {
+    background: var(--sg-primary-color, #2271b1);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.shopglut-cart-share-button:hover {
+    background: var(--sg-button_hover_color, #135e96);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shopglut-cart-share-button:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   Navigation Menu Cart Integration
+   =================================== */
+.shopglut-menu-cart-item {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.shopglut-menu-cart {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.shopglut-menu-cart:hover {
+    color: var(--sg-primary-color, #2271b1);
+    text-decoration: none;
+}
+
+.shopglut-menu-cart svg,
+.shopglut-menu-cart .shopglut-ic {
+    font-size: 18px;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.shopglut-menu-cart-count {
+    background: var(--sg-badge-bg-color, #ff4444);
+    color: var(--sg-badge-text-color, #ffffff);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 8px;
+    min-width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 1;
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* ===================================
+   Cart Sidebar/Drawer - Professional Design
+   =================================== */
+.shopglut-mini-cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(2px);
+}
+
+.shopglut-mini-cart-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.shopglut-mini-cart-sidebar {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: var(--sg-cart-width, 420px);
+    max-width: 95vw;
+    background: var(--sg-bg-color, #ffffff);
+    z-index: 9999999;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0 0 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Position and Animations */
+.shopglut-mini-cart-sidebar.position-right {
+    right: 0;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shopglut-mini-cart-sidebar.position-left {
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shopglut-mini-cart-sidebar.active {
+    transform: translateX(0);
+}
+
+/* Fade Animation */
+.shopglut-mini-cart-sidebar.animation-fade {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shopglut-mini-cart-sidebar.animation-fade.active {
+    opacity: 1;
+}
+
+/* Scale Animation */
+.shopglut-mini-cart-sidebar.animation-scale {
+    transform: scale(0.9) translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.shopglut-mini-cart-sidebar.animation-scale.active {
+    transform: scale(1) translateX(0);
+}
+
+/* Enhanced Animation Combinations */
+.shopglut-mini-cart-sidebar.animation-slide.position-right {
+    transform: translateX(120%);
+}
+
+.shopglut-mini-cart-sidebar.animation-slide.position-left {
+    transform: translateX(-120%);
+}
+
+/* Smooth backdrop */
+.shopglut-mini-cart-sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    z-index: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .shopglut-mini-cart-sidebar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .shopglut-mini-cart-sidebar.position-right,
+    .shopglut-mini-cart-sidebar.position-left {
+        transform: translateX(100%);
+    }
+
+    .shopglut-mini-cart-sidebar.position-left {
+        transform: translateX(-100%);
+    }
+}
+
+/* ===================================
+   Cart Header - Professional Design
+   =================================== */
+.shopglut-cart-header {
+    background: var(--sg-sidebar-header-bg, #2271b1);
+    color: var(--sg-sidebar-header-text, #ffffff);
+    padding: 24px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header gradient overlay */
+.shopglut-cart-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.shopglut-cart-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.02em;
+}
+
+.shopglut-cart-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.shopglut-cart-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: inherit;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 2;
+}
+
+.shopglut-cart-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.shopglut-cart-close:active {
+    transform: scale(0.95);
+}
+
+/* Cart icon in header */
+.shopglut-cart-header h3::before {
+    content: '🛒';
+    font-size: 18px;
+    filter: grayscale(0) brightness(1.5);
+}
+
+/* ===================================
+   Cart Items - Professional Design
+   =================================== */
+.shopglut-cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--sg-bg-color, #ffffff);
+    min-height: 200px;
+    max-height: calc(100vh - 300px);
+}
+
+/* Custom scrollbar - Much wider and more visible */
+.shopglut-cart-items::-webkit-scrollbar {
+    width: 16px !important;
+}
+
+.shopglut-cart-items::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px;
+    margin: 4px;
+}
+
+.shopglut-cart-items::-webkit-scrollbar-thumb {
+    background: var(--sg-primary-color, #2271b1) !important;
+    border-radius: 8px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    transition: all 0.3s ease;
+    min-height: 40px;
+}
+
+.shopglut-cart-items::-webkit-scrollbar-thumb:hover {
+    background: var(--sg-button_hover_color, #135e96) !important;
+}
+
+/* Firefox scrollbar */
+.shopglut-cart-items {
+    scrollbar-width: thick;
+    scrollbar-color: var(--sg-primary-color, #2271b1) rgba(0, 0, 0, 0.1);
+}
+
+.shopglut-cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--sg-text-color, #333333);
+    background: var(--sg-bg-color, #ffffff);
+}
+
+.shopglut-cart-empty .shopglut-ic {
+    font-size: 64px;
+    color: #e0e0e0;
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.6;
+}
+
+.shopglut-cart-empty p {
+    font-size: 16px;
+    color: #666;
+    margin: 0 0 24px 0;
+    font-weight: 400;
+}
+
+/* Empty Cart Buttons */
+.shopglut-shop-now-button,
+.shopglut-return-to-shop-button {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin: 0 8px;
+}
+
+.shopglut-shop-now-button.shopglut-cart-button-primary {
+    background: var(--sg-primary-color, #2271b1);
+    color: #ffffff;
+    border: 2px solid var(--sg-primary-color, #2271b1);
+}
+
+.shopglut-shop-now-button.shopglut-cart-button-primary:hover {
+    background: var(--sg-button-hover-color, #135e96);
+    border-color: var(--sg-button-hover-color, #135e96);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.3);
+}
+
+.shopglut-return-to-shop-button {
+    background: transparent;
+    color: var(--sg-text-color, #333333);
+    border: 2px solid var(--sg-border-color, #e0e0e0);
+}
+
+.shopglut-return-to-shop-button:hover {
+    border-color: var(--sg-primary-color, #2271b1);
+    color: var(--sg-primary-color, #2271b1);
+    transform: translateY(-2px);
+}
+
+.shopglut-cart-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid var(--sg-cart-item-border, #e0e0e0);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    background: var(--sg-bg-color, #ffffff);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.shopglut-cart-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sg-primary-color, #2271b1), transparent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.shopglut-cart-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: var(--sg-primary-color, #2271b1);
+}
+
+.shopglut-cart-item:hover::before {
+    transform: scaleX(1);
+}
+
+.shopglut-cart-item-image {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.shopglut-cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.shopglut-cart-item:hover .shopglut-cart-item-image img {
+    transform: scale(1.05);
+}
+
+/* Product Thumbnail Shapes */
+.shopglut-cart-item[data-thumbnail-shape="square"] .shopglut-cart-item-image {
+    border-radius: 0;
+}
+
+.shopglut-cart-item[data-thumbnail-shape="rounded"] .shopglut-cart-item-image {
+    border-radius: 8px;
+}
+
+.shopglut-cart-item[data-thumbnail-shape="circle"] .shopglut-cart-item-image {
+    border-radius: 50%;
+}
+
+.shopglut-cart-item-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.shopglut-cart-item-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--sg-text-color, #333333);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-cart-item-name a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.shopglut-cart-item-name a:hover {
+    color: var(--sg-primary-color, #2271b1);
+}
+
+.shopglut-cart-item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sg-primary-color, #2271b1);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shopglut-quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--sg-bg-color, #ffffff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.shopglut-quantity-btn {
+    background: var(--sg-primary-color, #2271b1);
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.shopglut-quantity-btn:hover {
+    background: var(--sg-button-hover-color, #135e96);
+    transform: scale(1.05);
+}
+
+.shopglut-quantity-btn:active {
+    transform: scale(0.95);
+}
+
+.shopglut-quantity-btn .shopglut-ic {
+    transition: transform 0.2s;
+}
+
+.shopglut-quantity-btn:hover .shopglut-ic {
+    transform: scale(1.1);
+}
+
+.shopglut-quantity-input {
+    width: 45px;
+    height: 32px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sg-text-color, #333333);
+    background: transparent;
+}
+
+.shopglut-cart-item-remove {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 68, 68, 0.1);
+    border: none;
+    color: var(--sg-remove_button_color, #ff4444);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.shopglut-cart-item-remove:hover {
+    background: var(--sg-remove_button_color, #ff4444);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.shopglut-cart-item-remove:active {
+    transform: scale(0.95);
+}
+
+/* ===================================
+   Cart Footer - Professional Design
+   =================================== */
+.shopglut-cart-footer {
+    padding: 24px 20px;
+    border-top: 1px solid var(--sg-border-color, #e0e0e0);
+    flex-shrink: 0;
+    background: var(--sg-bg-color, #ffffff);
+    position: relative;
+}
+
+/* Footer gradient separator */
+.shopglut-cart-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sg-border-color, #e0e0e0), transparent);
+}
+
+.shopglut-cart-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.shopglut-cart-subtotal-label {
+    font-weight: 600;
+    color: var(--sg-text-color, #333333);
+    font-size: 16px;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-cart-subtotal-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sg-primary-color, #2271b1);
+    letter-spacing: -0.02em;
+}
+
+.shopglut-cart-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shopglut-cart-button-primary,
+.shopglut-checkout-button {
+    width: 100%;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background: var(--sg-checkout-button-bg, #2271b1);
+    color: var(--sg-checkout-button-text, #ffffff);
+    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.2);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: -0.01em;
+}
+
+/* Button shine effect */
+.shopglut-cart-button-primary::before,
+.shopglut-checkout-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.shopglut-cart-button-primary:hover::before,
+.shopglut-checkout-button:hover::before {
+    left: 100%;
+}
+
+.shopglut-cart-button-primary:hover,
+.shopglut-checkout-button:hover {
+    background: var(--sg-button_hover_color, #135e96);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 113, 177, 0.3);
+}
+
+.shopglut-cart-button-primary:active,
+.shopglut-checkout-button:active {
+    transform: translateY(0);
+}
+
+.shopglut-cart-button-secondary,
+.shopglut-view-cart-button,
+.shopglut-continue-shopping {
+    width: 100%;
+    padding: 14px 24px;
+    border: 2px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background: transparent;
+    color: var(--sg-text-color, #333333);
+    position: relative;
+    overflow: hidden;
+}
+
+.shopglut-cart-button-secondary:hover,
+.shopglut-view-cart-button:hover {
+    border-color: var(--sg-primary-color, #2271b1);
+    color: var(--sg-primary-color, #2271b1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shopglut-continue-shopping:hover {
+    background: var(--sg-primary-color, #2271b1);
+    color: #ffffff;
+    border-color: var(--sg-primary-color, #2271b1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shopglut-cart-button-secondary:active,
+.shopglut-view-cart-button:active,
+.shopglut-continue-shopping:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   Shipping Calculator
+   =================================== */
+.shopglut-shipping-calculator {
+    margin: 15px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.shopglut-shipping-calculator h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sg-text-color, #333333);
+}
+
+.shopglut-shipping-calculator input,
+.shopglut-shipping-calculator select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+/* ===================================
+   Cart Share
+   =================================== */
+.shopglut-cart-share {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--sg-border-color, #e0e0e0);
+}
+
+.shopglut-cart-share-button {
+    width: 100%;
+    padding: 12px;
+    background: #f0f0f0;
+    border: 1px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sg-text-color, #333333);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.shopglut-cart-share-button:hover {
+    background: var(--sg-primary-color, #2271b1);
+    color: #fff;
+    border-color: var(--sg-primary-color, #2271b1);
+}
+
+.shopglut-cart-share-form {
+    margin-top: 15px;
+    display: none;
+}
+
+.shopglut-cart-share-form.active {
+    display: block;
+}
+
+.shopglut-cart-share-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.shopglut-cart-share-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.shopglut-cart-share-send {
+    width: 100%;
+    padding: 12px;
+    background: var(--sg-primary-color, #2271b1);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.shopglut-cart-share-send:hover {
+    background: var(--sg-button-hover-color, #135e96);
+}
+
+/* ===================================
+   Menu Cart Icon
+   =================================== */
+.shopglut-menu-cart {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.shopglut-menu-cart-icon {
+    font-size: 20px;
+}
+
+.shopglut-menu-cart-count {
+    background: var(--sg-badge-bg-color, #ff4444);
+    color: var(--sg-badge-text-color, #ffffff);
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ===================================
+   Responsive
+   =================================== */
+@media (max-width: 768px) {
+    .shopglut-mini-cart-sidebar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .shopglut-floating-cart {
+        bottom: 20px;
+    }
+
+    .shopglut-floating-cart.position-right {
+        right: 20px;
+    }
+
+    .shopglut-floating-cart.position-left {
+        left: 20px;
+    }
+}
+
+/* ===================================
+   Loading State
+   =================================== */
+.shopglut-cart-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.shopglut-cart-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin: -12px 0 0 -12px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--sg-primary-color, #2271b1);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===================================
+   Notifications
+   =================================== */
+.shopglut-cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    color: #333;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 99999999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 300px;
+    animation: slideInRight 0.3s ease;
+}
+
+.shopglut-cart-notification.success {
+    border-left: 4px solid #4caf50;
+    background: #f8fff8;
+    color: #2e7d32;
+}
+
+.shopglut-cart-notification.error {
+    border-left: 4px solid #f44336;
+    background: #fff8f8;
+    color: #c62828;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ===================================
+   Undo Button Styles
+   =================================== */
+.shopglut-cart-notification.undo {
+    background: #fff;
+    color: #333;
+    border-left: 4px solid #ff9800;
+    box-shadow: 0 4px 16px rgba(255, 152, 0, 0.2);
+}
+
+.shopglut-cart-notification.undo span {
+    flex: 1;
+}
+
+.shopglut-undo-button {
+    background: #ff9800;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.shopglut-undo-button:hover {
+    background: #f57c00;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.shopglut-undo-button:active {
+    transform: translateY(0);
+}
+
+/* ===================================
+   Empty Cart Button Styles
+   =================================== */
+.shopglut-empty-cart-button {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px dashed var(--sg-remove_button_color, #ff4444);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    background: transparent;
+    color: var(--sg-remove_button_color, #ff4444);
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.shopglut-empty-cart-button:hover {
+    background: var(--sg-remove_button_color, #ff4444);
+    color: #fff;
+    border-style: solid;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.2);
+}
+
+.shopglut-empty-cart-button:active {
+    transform: translateY(0);
+}
+
+/* Empty cart button icon */
+.shopglut-empty-cart-button::before {
+    content: '🗑️';
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* ===================================
+   Quantity Input Max Quantity State
+   =================================== */
+.shopglut-quantity-input.max-quantity-reached {
+    border-color: #ff9800;
+    background: #fff8f0;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* ===================================
+   Coupon System Styles
+   =================================== */
+.shopglut-coupon-section {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+
+/* Coupon Toggle */
+.shopglut-coupon-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.shopglut-coupon-toggle:hover {
+    background: #f0f0f0;
+}
+
+.shopglut-coupon-toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sg-text-color, #333);
+}
+
+.shopglut-coupon-toggle-icon {
+    font-size: 12px;
+    color: var(--sg-text-color, #333);
+    transition: transform 0.3s;
+}
+
+.shopglut-coupon-section.collapsed .shopglut-coupon-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* Coupon Content */
+.shopglut-coupon-content {
+    padding: 16px 18px;
+    border-top: 1px solid var(--sg-border-color, #e0e0e0);
+}
+
+.shopglut-coupon-section.collapsed .shopglut-coupon-content {
+    display: none;
+}
+
+/* Applied Coupons */
+.shopglut-applied-coupons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.shopglut-applied-coupon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #e8f5e9;
+    border: 1px solid #4caf50;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.shopglut-coupon-code {
+    font-weight: 600;
+    color: #2e7d32;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.shopglut-remove-coupon {
+    background: none;
+    border: none;
+    color: #2e7d32;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.shopglut-remove-coupon:hover {
+    color: #c62828;
+    transform: scale(1.1);
+}
+
+.shopglut-remove-coupon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Coupon Form */
+.shopglut-coupon-form {
+    display: flex;
+    gap: 8px;
+}
+
+.shopglut-coupon-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.shopglut-coupon-input:focus {
+    outline: none;
+    border-color: var(--sg-primary-color, #2271b1);
+    box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
+}
+
+.shopglut-coupon-input::placeholder {
+    color: #999;
+}
+
+.shopglut-apply-coupon-btn {
+    padding: 12px 20px;
+    background: var(--sg-primary-color, #2271b1);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.shopglut-apply-coupon-btn:hover {
+    background: var(--sg-button-hover-color, #135e96);
+}
+
+.shopglut-apply-coupon-btn:active {
+    transform: scale(0.98);
+}
+
+.shopglut-apply-coupon-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Coupon Message */
+.shopglut-coupon-message {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+}
+
+.shopglut-coupon-message.success {
+    display: block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #4caf50;
+}
+
+.shopglut-coupon-message.error {
+    display: block;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef5350;
+}
+
+/* ===================================
+   Cart Totals & Order Summary Styles
+   =================================== */
+/* Cart Discount */
+.shopglut-cart-discount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #4caf50;
+}
+
+.shopglut-cart-discount-label {
+    font-weight: 500;
+}
+
+.shopglut-cart-discount-amount {
+    font-weight: 600;
+}
+
+/* Cart Savings */
+.shopglut-cart-savings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #ff5722;
+}
+
+.shopglut-cart-savings-label {
+    font-weight: 500;
+}
+
+.shopglut-cart-savings-amount {
+    font-weight: 600;
+}
+
+/* Order Summary */
+.shopglut-order-summary {
+    margin-bottom: 16px;
+    border: 1px solid var(--sg-border-color, #e0e0e0);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.shopglut-order-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #f9f9f9;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.shopglut-order-summary-header:hover {
+    background: #f0f0f0;
+}
+
+.shopglut-order-summary-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sg-text-color, #333);
+}
+
+.shopglut-order-summary-toggle {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--sg-text-color, #333);
+    transition: transform 0.3s;
+}
+
+.shopglut-order-summary-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.shopglut-order-summary.collapsed .shopglut-order-summary-toggle .shopglut-ic {
+    transform: rotate(-90deg);
+}
+
+.shopglut-order-summary-content {
+    padding: 16px 18px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.shopglut-order-summary.collapsed .shopglut-order-summary-content {
+    display: none;
+}
+
+.shopglut-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.shopglut-summary-item:last-child {
+    border-bottom: none;
+}
+
+.shopglut-summary-item-name {
+    flex: 1;
+    color: var(--sg-text-color, #333);
+}
+
+.shopglut-summary-item-qty {
+    color: #999;
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.shopglut-summary-item-price {
+    font-weight: 600;
+    color: var(--sg-text-color, #333);
+}
+
+/* ===================================
+   Toast Notifications
+   =================================== */
+.shopglut-toast-container {
+    position: fixed;
+    z-index: 9999999;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+/* Position variants */
+.shopglut-toast-container.position-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+.shopglut-toast-container.position-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.shopglut-toast-container.position-top-center {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.shopglut-toast-container.position-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.shopglut-toast-container.position-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.shopglut-toast-container.position-bottom-center {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.shopglut-toast {
+    pointer-events: auto;
+    background: var(--sg-toast-bg, #333333);
+    color: var(--sg-toast-text, #ffffff);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    animation: slideIn 0.3s ease forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Toast variants */
+.shopglut-toast.success {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+}
+
+.shopglut-toast.error {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
+.shopglut-toast.info {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+}
+
+.shopglut-toast.warning {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+/* Toast icon */
+.shopglut-toast-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.shopglut-toast.success .shopglut-toast-icon::before {
+    content: '\2713';
+    font-weight: 700;
+}
+
+.shopglut-toast.error .shopglut-toast-icon::before {
+    content: '\2715';
+    font-weight: 700;
+}
+
+.shopglut-toast.info .shopglut-toast-icon::before {
+    content: 'i';
+    font-weight: 700;
+}
+
+.shopglut-toast.warning .shopglut-toast-icon::before {
+    content: '!';
+    font-weight: 700;
+}
+
+/* Toast content */
+.shopglut-toast-content {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Toast close button */
+.shopglut-toast-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.shopglut-toast-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Toast progress bar */
+.shopglut-toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    animation: toastProgress linear forwards;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes toastProgress {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.shopglut-toast.removing {
+    animation: slideOut 0.3s ease forwards;
+}
+
+/* ===================================
+   Responsive Adjustments for New Elements
+   =================================== */
+@media (max-width: 768px) {
+    .shopglut-cart-notification.undo {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+    }
+
+    .shopglut-empty-cart-button {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    /* Empty cart buttons responsive */
+    .shopglut-shop-now-button,
+    .shopglut-return-to-shop-button {
+        display: block;
+        margin: 8px 0;
+        width: 100%;
+    }
+
+    /* Toast notification responsive */
+    .shopglut-toast-container {
+        left: 10px !important;
+        right: 10px !important;
+        max-width: none !important;
+        transform: none !important;
+    }
+
+    .shopglut-toast {
+        min-width: auto;
+    }
+
+    /* Coupon Responsive */
+    .shopglut-coupon-form {
+        flex-direction: column;
+    }
+
+    .shopglut-apply-coupon-btn {
+        width: 100%;
+    }
+
+    .shopglut-applied-coupon {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
+
+/* Inline SVG icons (ShopGlut 2) */
+.shopglut-ic{display:inline-flex;align-items:center;justify-content:center;line-height:1;vertical-align:middle}
+.shopglut-ic svg{width:1em;height:1em;display:block}
+.shopglut-ic.is-open svg,.shopglut-coupon-toggle .shopglut-ic.is-open svg{transform:rotate(180deg)}
+.shopglut-ic svg{transition:transform .2s}
+
+/* Open state must win over the closed-state transforms above (they have more classes). */
+.shopglut-mini-cart-sidebar.animation-fade.position-right,
+.shopglut-mini-cart-sidebar.animation-fade.position-left {
+    transform: none;
+    visibility: hidden;
+}
+.shopglut-mini-cart-sidebar.animation-fade.active {
+    visibility: visible;
+}
+.shopglut-mini-cart-sidebar.position-right.active,
+.shopglut-mini-cart-sidebar.position-left.active,
+.shopglut-mini-cart-sidebar.animation-slide.position-right.active,
+.shopglut-mini-cart-sidebar.animation-slide.position-left.active {
+    transform: translateX(0);
+}
+.shopglut-mini-cart-sidebar.animation-scale.position-right.active,
+.shopglut-mini-cart-sidebar.animation-scale.position-left.active {
+    transform: scale(1) translateX(0);
+}
+.shopglut-mini-cart-sidebar.animation-fade.position-right.active,
+.shopglut-mini-cart-sidebar.animation-fade.position-left.active {
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .shopglut-mini-cart-sidebar { transition: none !important; }
+}
+.shopglut-mini-cart-sidebar *, .shopglut-mini-cart-sidebar *::before, .shopglut-mini-cart-sidebar *::after { box-sizing: border-box; }
+.shopglut-mini-cart-sidebar .shopglut-checkout-button { display: block; text-align: center; }
+/* Keep toasts clear of the open drawer header */
+body:has(.shopglut-mini-cart-sidebar.active) .shopglut-toast-container.top-right { top: 96px; }
