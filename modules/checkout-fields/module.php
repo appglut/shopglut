@@ -241,6 +241,19 @@ class ShopGlut_Module_Checkout_Fields extends ShopGlut_Module {
 			),
 		);
 	}
+
+	/**
+	 * Front end: classic checkout fields, block checkout fields, order display.
+	 *
+	 * @return void
+	 */
+	public function boot() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		require_once $this->dir . 'frontend/class-shopglut-checkout-fields.php';
+		new ShopGlut_Checkout_Fields();
+	}
 }
 
 return 'ShopGlut_Module_Checkout_Fields';

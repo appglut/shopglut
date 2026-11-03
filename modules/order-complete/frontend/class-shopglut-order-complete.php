@@ -114,6 +114,13 @@ class ShopGlut_Order_Complete {
 				'order'     => $order,
 			)
 		);
+		/**
+		 * After the thank you layout (other modules add order details here, e.g. custom checkout fields).
+		 *
+		 * @param WC_Order $order  Order.
+		 * @param array    $layout Layout.
+		 */
+		do_action( 'shopglut_order_complete_after_layout', $order, $layout );
 		return (string) ob_get_clean();
 	}
 
